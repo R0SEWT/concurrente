@@ -60,13 +60,16 @@ Cada evaluación tiene su issue en beads con la semana en el título. `bd ready`
 - **Apuntes en español**, nombrados `week-NN-<tema-en-kebab>.md`. Copia `_template.md`.
 - **Material versionado**: `materials/` SÍ se commitea (misma decisión que en `cs-topics`).
 - **Los labs se escriben con TDD**: test primero, luego la goroutine o el modelo Promela.
-- **Go no está instalado en esta máquina.** Antes de correr `go test`, instalar (`dnf install golang`
-  o el tarball oficial). No asumas que `go` está en PATH; verifícalo.
+- **Toolchain**: Go 1.26.7 (`dnf`) y Spin 6.5.2 (compilado, `labs/spin/bootstrap.sh`) ya están
+  instalados. Spin vive en `~/.local/bin`, su fuente en `~/Code/herramientas/spin`.
 - **Concurrencia en Go se prueba con `go test -race`**, siempre. Un test que pasa sin `-race` no
   demuestra nada sobre una sección crítica.
 - **Spin no reemplaza al test ni al revés**: el modelo `.pml` verifica el *algoritmo* (safety y
   liveness sobre todos los entrelazados); el test en Go verifica la *implementación*. El curso pide ambos.
 - Los binarios que genera Spin (`pan`, `pan.*`) están gitignoreados — son artefactos, se regeneran.
+- **Verificar es local; ejecutar pesado es en gorgo.** Spin es memory-bound y esta laptop tiene
+  15 GB contra los 9.1 GB de gorgo. gorgo (11 núcleos, RTX 4060 Ti, `/home` al 97%) es para los
+  benchmarks de Go de la U2 y la investigación con GPU, no para `pan`.
 
 <!-- BEGIN BEADS INTEGRATION v:1 profile:minimal hash:6cd5cc61 -->
 ## Beads Issue Tracker

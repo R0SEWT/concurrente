@@ -8,6 +8,7 @@ labs/go/bin/
 labs/spin/pan
 labs/spin/pan.*
 labs/spin/*.trail
+labs/spin/*.nvr
 labs/spin/_spin_nvr.tmp
 
 # Beads / Dolt files (added by bd init)

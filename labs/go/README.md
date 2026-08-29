@@ -4,11 +4,7 @@ Módulo `upc.edu.pe/concurrente`. Un paquete por semana (`week01/`, `week02/`, �
 
 ## Requisitos
 
-Go **no viene instalado en esta máquina**. Verifica antes de correr nada:
-
-```bash
-go version || echo "instalar: sudo dnf install golang  (o https://go.dev/dl/)"
-```
+Go 1.26.7, instalado desde los repos de Fedora (`sudo dnf install golang`).
 
 ## Uso
 
