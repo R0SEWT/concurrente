@@ -1,44 +1,72 @@
 # concurrente — AI Agent Instructions
 
-## Domain / Scientific Context
+Repo del curso **Programación Concurrente y Distribuida (1ACC0065)**, UPC, ciclo 2026-20, NRC 8809.
+No es un proyecto de software con usuarios: es el cuaderno de trabajo de un ciclo.
+Repo hermano y mismo patrón: `../cs-topics`.
 
-<!-- The real-world problem this project addresses. State the claim/objective, the outcome,
-     and — critically — the data provenance (own data? regional/Peruvian domain? public source?).
-     This is the differentiator; be concrete. -->
+## Contexto
 
-- **Problem**: <!-- fill -->
-- **Outcome / target**: <!-- fill -->
-- **Data provenance**: <!-- fill: source, ownership, how acquired -->
+- **Qué es**: apuntes por sesión + material del Aula Virtual + código de las PCs, trabajos y el proyecto final.
+- **Temario**: U1 (semanas 1-8) construcción y verificación de concurrencia — Go, sección crítica,
+  semáforos, patrones, model checking con Spin/Promela. U2 (semanas 9-16) computación distribuida —
+  canales, servicios y algoritmos distribuidos, exclusión mutua distribuida, consenso, tiempo real.
+- **Logro del curso**: construir aplicaciones concurrentes y distribuidas de alto rendimiento.
+- **Docente**: Carlos Alberto Jara Garcia. 3 créditos, 16 semanas, presencial en laboratorio.
+- **Procedencia del material**: sílabo oficial en `materials/silabo-1ACC0065.pdf`; el resto sale del
+  Aula Virtual UPC. `manifest.json` es la fuente canónica de qué existe y qué falta. Material del
+  profesor: si se sube algo suyo, **el remoto debería ser privado**.
+- **Nota sobre IA**: el sílabo incorpora explícitamente prompt engineering como herramienta del curso
+  (U1 para diseño de algoritmos concurrentes e interpretación de Spin; U2 para algoritmos distribuidos
+  y consenso), siempre contrastando contra la teoría. Usar IA aquí es parte de la metodología, no un atajo.
 
-## Architecture
+## Arquitectura
 
-<!-- How the project runs. If it's a pipeline, describe the stages and the data flow between them. -->
+Estructura por tipo, no por semana — las unidades pueden reordenarse, los labs no.
 
 ```bash
-# e.g. uv run ingest && uv run features && uv run model
+notes/         # apuntes .md por sesión (_template.md es la plantilla)
+materials/     # PDFs y slides, carpeta por semana (week-NN/) + el sílabo
+labs/go/       # Go — un paquete por semana, go test como red de seguridad
+labs/spin/     # Promela — modelos .pml verificados con spin/ispin
 ```
 
-## Key Files
+Cada lab es una raíz independiente con su propio toolchain:
 
-| File | Purpose |
+```bash
+cd labs/go   && go test ./...                 # requiere Go (ver Convenciones)
+cd labs/spin && spin -a mutex.pml && gcc -o pan pan.c && ./pan   # verificación exhaustiva
+```
+
+## Archivos clave
+
+| Archivo | Propósito |
 |------|---------|
-| `src/concurrente/...` | <!-- fill --> |
-| `configs/...` | <!-- fill --> |
+| `manifest.json` | Inventario canónico del curso: unidades, cronograma de evaluación, material del Aula Virtual. Fuente de verdad para saber qué falta. |
+| `materials/silabo-1ACC0065.pdf` | Sílabo oficial. Pesos y semanas de evaluación salen de acá. |
+| `notes/_template.md` | Plantilla de apunte de sesión. |
+| `labs/go/go.mod` | Módulo Go del curso (`upc.edu.pe/concurrente`). Un paquete por semana. |
+| `labs/go/week01/critical_test.go` | Ejemplo de referencia: carrera de datos detectada con `-race`, luego corregida. |
+| `labs/spin/README.md` | Cómo correr Spin sobre un `.pml` y leer el contraejemplo. |
 
-## Data Conventions
+## Evaluación
 
-<!-- Adjust/remove if this is not a data project. Defaults reflect the medallion + polars/duckdb stack. -->
+`NF = 0.10·PC1 + 0.10·PC2 + 0.05·TB1 + 0.10·EA1 + 0.10·PC3 + 0.10·PC4 + 0.15·TB2 + 0.15·DD1 + 0.15·EB1`
 
-- **Layers**: raw → `data/bronze/`, cleaned → `data/silver/`, analytic → `data/gold/`. All gitignored.
-- **Polars over pandas** everywhere; only drop to numpy when a library requires it.
-- **DuckDB for SQL joins** across parquet; Polars for local transforms.
-- **Remote silver**: reference the remote root via `$SILVER` in SQL when pulling shared data.
-- Keep dates as typed `Date`, never strings, in intermediate tables.
+Cada evaluación tiene su issue en beads con la semana en el título. `bd ready` es el cronograma vivo;
+`manifest.json` guarda la tabla completa. Ninguna evaluación figura como recuperable en el sílabo.
 
-## Conventions
+## Convenciones
 
-<!-- Project-specific rules: ID normalization, seeds, temporal discipline, naming, etc. -->
-
+- **Apuntes en español**, nombrados `week-NN-<tema-en-kebab>.md`. Copia `_template.md`.
+- **Material versionado**: `materials/` SÍ se commitea (misma decisión que en `cs-topics`).
+- **Los labs se escriben con TDD**: test primero, luego la goroutine o el modelo Promela.
+- **Go no está instalado en esta máquina.** Antes de correr `go test`, instalar (`dnf install golang`
+  o el tarball oficial). No asumas que `go` está en PATH; verifícalo.
+- **Concurrencia en Go se prueba con `go test -race`**, siempre. Un test que pasa sin `-race` no
+  demuestra nada sobre una sección crítica.
+- **Spin no reemplaza al test ni al revés**: el modelo `.pml` verifica el *algoritmo* (safety y
+  liveness sobre todos los entrelazados); el test en Go verifica la *implementación*. El curso pide ambos.
+- Los binarios que genera Spin (`pan`, `pan.*`) están gitignoreados — son artefactos, se regeneran.
 
 <!-- BEGIN BEADS INTEGRATION v:1 profile:minimal hash:6cd5cc61 -->
 ## Beads Issue Tracker

@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T00:00:00Z",
+  "course": {
+    "name": "Programación Concurrente y Distribuida",
+    "code": "1ACC0065",
+    "term": "2620",
+    "nrc": "8809",
+    "credits": 3,
+    "weeks": 16,
+    "program": "Ciencias de la Computación",
+    "instructor": "Carlos Alberto Jara Garcia",
+    "mode": "Presencial (laboratorio de cómputo)",
+    "syllabus_status": "published",
+    "syllabus_local_path": "materials/silabo-1ACC0065.pdf",
+    "reading_list_url": "https://upc.alma.exlibrisgroup.com/leganto/readinglist/lists/12782611320003391?institute=51UPC_INST&auth=social",
+    "course_outcome": "Construye aplicaciones concurrentes y distribuidas de alto rendimiento de manera eficaz."
+  },
+  "calendar": {
+    "timezone": "America/Lima",
+    "class_schedule_status": "unknown",
+    "class_schedule": null
+  },
+  "units": [
+    {
+      "unit": 1,
+      "title": "Construcción y Verificación de Aplicaciones Concurrentes",
+      "weeks": "1-8",
+      "outcome": "Elabora el diseño de una solución basada en principios de verificación de aplicaciones concurrentes.",
+      "topics": [
+        "Conceptos básicos de computación concurrente",
+        "Introducción al lenguaje Go",
+        "Concurrencia como abstracción de programación",
+        "Problema de la sección crítica",
+        "Verificación de programas concurrentes",
+        "Verificador de modelos Spin / Promela",
+        "Algoritmos para el problema de la sección crítica",
+        "Semáforos",
+        "Patrones de concurrencia"
+      ],
+      "evidence": ["EA1", "PC1", "PC2", "TB1"]
+    },
+    {
+      "unit": 2,
+      "title": "Computación Distribuida y Trabajo en Equipos Multidisciplinarios",
+      "weeks": "9-16",
+      "outcome": "Construye aplicaciones distribuidas que dan solución a problemas en tópicos emergentes en tecnología.",
+      "topics": [
+        "Canales",
+        "Servicios distribuidos",
+        "Algoritmos distribuidos",
+        "Exclusión mutua distribuida",
+        "Consenso",
+        "Sistemas en tiempo real",
+        "Trabajo en equipos multidisciplinarios / presentación de trabajos finales"
+      ],
+      "evidence": ["DD1", "EB1", "PC3", "PC4", "TB2"]
+    }
+  ],
+  "grading": {
+    "formula": "NF = 0.10*PC1 + 0.10*PC2 + 0.05*TB1 + 0.10*EA1 + 0.10*PC3 + 0.10*PC4 + 0.15*TB2 + 0.15*DD1 + 0.15*EB1",
+    "items": [
+      {"id": "PC1", "name": "Práctica Calificada 1", "weight": 0.10, "week": 3,  "unit": 1, "recoverable": false},
+      {"id": "PC2", "name": "Práctica Calificada 2", "weight": 0.10, "week": 5,  "unit": 1, "recoverable": false},
+      {"id": "TB1", "name": "Trabajo 1",             "weight": 0.05, "week": 7,  "unit": 1, "recoverable": false},
+      {"id": "EA1", "name": "Evaluación Parcial 1",  "weight": 0.10, "week": 8,  "unit": 1, "recoverable": false},
+      {"id": "PC3", "name": "Práctica Calificada 3", "weight": 0.10, "week": 11, "unit": 2, "recoverable": false},
+      {"id": "PC4", "name": "Práctica Calificada 4", "weight": 0.10, "week": 13, "unit": 2, "recoverable": false},
+      {"id": "TB2", "name": "Trabajo 2",             "weight": 0.15, "week": 15, "unit": 2, "recoverable": false},
+      {"id": "DD1", "name": "Evaluación de Desempeño 1", "weight": 0.15, "week": 15, "unit": 2, "recoverable": false},
+      {"id": "EB1", "name": "Evaluación Final 1",    "weight": 0.15, "week": 16, "unit": 2, "recoverable": false}
+    ]
+  },
+  "bibliography": [
+    {"cite": "Ben-Ari, M. (2006). Principles of Concurrent and Distributed Programming. Pearson.", "units": [1, 2]},
+    {"cite": "Ben-Ari, M. (2008). Principles of the Spin Model Checker (Chapters 1-5). Springer.", "units": [1, 2]},
+    {"cite": "Downey, A. B. (2016). The Little Book of Semaphores (2a ed.).", "units": [1], "url": "http://greenteapress.com/semaphores/LittleBookOfSemaphores.pdf"},
+    {"cite": "Go programming language. A Tour of Go.", "units": [1], "url": "https://tour.golang.org/welcome/1"},
+    {"cite": "Cox-Buday, K. (2024). Concurrencia en Go. O'Reilly.", "units": [1]},
+    {"cite": "Pacheco, P. (2011). An Introduction to Parallel Programming. Elsevier.", "units": [1, 2], "doi": "10.1016/C2009-0-18471-4"},
+    {"cite": "Newmarch, J. (2022). Network Programming with Go Language (2nd ed.). Apress.", "units": [2], "doi": "10.1007/978-1-4842-8095-9"},
+    {"cite": "Anurag, V. N. (2018). Distributed Computing with Go. Packt.", "units": [2]},
+    {"cite": "Kanrar, S., Chaki, N., & Chattopadhyay, S. (2017). Concurrency Control in Distributed System Using Mutual Exclusion. Springer.", "units": [2], "doi": "10.1007/978-981-10-5559-1"},
+    {"cite": "Williams, A. (2012). C++ Concurrency in Action. Manning.", "units": [1, 2]}
+  ],
+  "downloads": [
+    {"name": "1ACC0065-Programacion_Concurrente_y_Distribuida-8809.pdf", "local_path": "materials/silabo-1ACC0065.pdf", "status": "downloaded"}
+  ],
+  "documents": []
+}
