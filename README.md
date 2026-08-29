@@ -1,9 +1,9 @@
 # concurrente
 
 Cuaderno de trabajo del curso **Programación Concurrente y Distribuida** (1ACC0065, NRC 8809),
-UPC — Ciencias de la Computación, ciclo 2026-20. Docente: Carlos Alberto Jara Garcia.
+UPC — Ciencias de la Computación, ciclo 2026-20. 
 
-Apuntes, material del curso y los labs de Go y Spin. Repo hermano: [`cs-topics`](https://github.com/R0SEWT/cs-topics).
+Apuntes, material del curso y los labs de Go y Spin. 
 
 ## Estructura
 
