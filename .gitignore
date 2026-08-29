@@ -1,21 +1,20 @@
-# Data layers (medallion) — never commit raw/intermediate data
-data/bronze/
-data/silver/
-data/gold/
-data/_metadata/
+# Go (labs/go)
+labs/go/bin/
+*.exe
+*.test
+*.out
 
-# Python
-__pycache__/
-*.pyc
-.venv/
-.ruff_cache/
-.pytest_cache/
-*.egg-info/
+# Spin (labs/spin) — el verificador y sus trazas se regeneran desde el .pml
+labs/spin/pan
+labs/spin/pan.*
+labs/spin/*.trail
+labs/spin/_spin_nvr.tmp
 
 # Beads / Dolt files (added by bd init)
 .dolt/
 *.db
 .beads-credential-key
-
-# Beads / Dolt files (added by bd init)
 .beads/proxieddb/
+
+# OS
+.DS_Store
