@@ -1,6 +1,7 @@
 # labs/go
 
-Módulo `upc.edu.pe/concurrente`. Un paquete por semana (`week01/`, `week02/`, …).
+Módulo `upc.edu.pe/concurrente`. Un paquete por semana (`week01/`, `week02/`, …),
+más `cofinanciamiento/`, que es el trabajo del curso y cruza las dos unidades.
 
 ## Requisitos
 
