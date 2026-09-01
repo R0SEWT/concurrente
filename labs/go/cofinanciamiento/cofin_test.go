@@ -155,3 +155,42 @@ func TestTopEsDeterministaYOrdenado(t *testing.T) {
 		t.Errorf("la arista más pesada fue %v, se esperaba Japan-USA con peso 2", top[0])
 	}
 }
+
+func TestTamaniosCuentaDonantesDistintos(t *testing.T) {
+	tam := alimentar(NuevoParcial(), fixture).Tamanios()
+	quiero := map[Grupo]int{
+		{Receptor: "Peru", Anio: "2010"}:    3, // USA, Japan, Spain (USA va repetido)
+		{Receptor: "Peru", Anio: "2011"}:    2,
+		{Receptor: "Bolivia", Anio: "2010"}: 2,
+		{Receptor: "Ecuador", Anio: "2010"}: 1,
+	}
+	if !reflect.DeepEqual(tam, quiero) {
+		t.Errorf("tamaños = %v\nse esperaba %v", tam, quiero)
+	}
+}
+
+func TestPorDecadaResumeElFixture(t *testing.T) {
+	// Los cuatro grupos del fixture caen en los 2010: tamaños 1, 2, 2, 3.
+	got := PorDecada(alimentar(NuevoParcial(), fixture).Tamanios())
+	quiero := []Fragmentacion{{Decada: 2010, Grupos: 4, Media: 2.0, Mediana: 2, Max: 3}}
+	if !reflect.DeepEqual(got, quiero) {
+		t.Errorf("por década = %+v\nse esperaba %+v", got, quiero)
+	}
+}
+
+func TestPorDecadaIgnoraAniosImposibles(t *testing.T) {
+	// AidData trae 59 filas con año 9999. No deben inventar una década.
+	p := NuevoParcial()
+	p.Agregar(Registro{Receptor: "Peru", Anio: "9999", Donante: "USA"})
+	p.Agregar(Registro{Receptor: "Peru", Anio: "sin dato", Donante: "USA"})
+	if got := PorDecada(p.Tamanios()); len(got) != 0 {
+		t.Errorf("años imposibles produjeron %+v, se esperaba nada", got)
+	}
+}
+
+func TestShardeadoDaLosMismosTamanios(t *testing.T) {
+	s := alimentar(NuevoShardeado(7), fixture)
+	if !reflect.DeepEqual(s.Tamanios(), alimentar(NuevoParcial(), fixture).Tamanios()) {
+		t.Error("shardeado y parcial difieren en los tamaños de grupo")
+	}
+}

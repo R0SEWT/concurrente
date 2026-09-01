@@ -17,6 +17,7 @@ package cofinanciamiento
 import (
 	"hash/fnv"
 	"sort"
+	"strconv"
 	"sync"
 )
 
@@ -55,6 +56,7 @@ type Red map[Arista]int
 type Acumulador interface {
 	Agregar(Registro)
 	Red() Red
+	Tamanios() map[Grupo]int
 }
 
 // conjuntos es el estado intermedio: por grupo, qué donantes se vieron.
@@ -93,6 +95,15 @@ func (c conjuntos) red() Red {
 	return out
 }
 
+// tamanios cuenta, por grupo, cuántos donantes distintos concurrieron.
+func (c conjuntos) tamanios() map[Grupo]int {
+	out := make(map[Grupo]int, len(c))
+	for g, donantes := range c {
+		out[g] = len(donantes)
+	}
+	return out
+}
+
 // Parcial es el acumulado de un solo worker. NO es seguro para uso
 // concurrente: cada goroutine debe tener el suyo y fusionarlos al final.
 // También sirve como implementación de referencia secuencial.
@@ -110,6 +121,9 @@ func (p *Parcial) Agregar(r Registro) { p.grupos.agregar(r) }
 
 // Red materializa la red de este parcial.
 func (p *Parcial) Red() Red { return p.grupos.red() }
+
+// Tamanios devuelve cuántos donantes distintos hubo en cada grupo.
+func (p *Parcial) Tamanios() map[Grupo]int { return p.grupos.tamanios() }
 
 // Fusionar une parciales por unión de conjuntos de donantes. La unión es
 // asociativa y conmutativa, que es justo lo que permite que cada worker
@@ -198,6 +212,18 @@ func (s *Shardeado) Red() Red {
 	return out
 }
 
+// Tamanios junta los shards. Como el sharding es por grupo, ningún grupo
+// aparece en dos shards y no hay nada que sumar.
+func (s *Shardeado) Tamanios() map[Grupo]int {
+	out := make(map[Grupo]int)
+	for _, sh := range s.shards {
+		for g, n := range sh.grupos.tamanios() {
+			out[g] = n
+		}
+	}
+	return out
+}
+
 // Peso devuelve el peso de un par en cualquier orden.
 func (r Red) Peso(x, y string) int { return r[NuevaArista(x, y)] }
 
@@ -233,3 +259,49 @@ var (
 	_ Acumulador = (*Parcial)(nil)
 	_ Acumulador = (*Shardeado)(nil)
 )
+
+// Fragmentacion resume una década: cuántos donantes distintos concurren sobre
+// un mismo receptor en un mismo año. La red mira pares; esto mira el tamaño
+// del grupo, que es la otra cara de la misma pregunta.
+type Fragmentacion struct {
+	Decada  int
+	Grupos  int
+	Media   float64
+	Mediana int
+	Max     int
+}
+
+// PorDecada resume los tamaños de grupo por década, en orden cronológico.
+//
+// Los grupos cuyo año no es un número se ignoran: AidData trae 59 filas con
+// año 9999. Tampoco es un filtro de calidad general, solo evita que una
+// década basura aparezca en la tabla.
+func PorDecada(tam map[Grupo]int) []Fragmentacion {
+	porDec := make(map[int][]int)
+	for g, n := range tam {
+		anio, err := strconv.ParseFloat(g.Anio, 64)
+		if err != nil || anio < 1900 || anio > 2100 {
+			continue
+		}
+		d := (int(anio) / 10) * 10
+		porDec[d] = append(porDec[d], n)
+	}
+
+	out := make([]Fragmentacion, 0, len(porDec))
+	for d, ns := range porDec {
+		sort.Ints(ns)
+		suma := 0
+		for _, n := range ns {
+			suma += n
+		}
+		out = append(out, Fragmentacion{
+			Decada:  d,
+			Grupos:  len(ns),
+			Media:   float64(suma) / float64(len(ns)),
+			Mediana: ns[len(ns)/2],
+			Max:     ns[len(ns)-1],
+		})
+	}
+	sort.Slice(out, func(i, j int) bool { return out[i].Decada < out[j].Decada })
+	return out
+}
