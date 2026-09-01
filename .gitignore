@@ -19,3 +19,7 @@ labs/spin/_spin_nvr.tmp
 
 # OS
 .DS_Store
+
+# Datos del TB (cofinanciamiento) — el CSV de AidData son 1,23 GB, se baja aparte
+labs/go/cofinanciamiento/data/
+aiddata*.csv
