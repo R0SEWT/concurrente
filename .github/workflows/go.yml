@@ -1,0 +1,36 @@
+name: Go labs
+
+on:
+  push:
+    paths:
+      - "labs/go/**"
+      - ".github/workflows/go.yml"
+  pull_request:
+    paths:
+      - "labs/go/**"
+      - ".github/workflows/go.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: labs/go
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v6
+        with:
+          go-version-file: labs/go/go.mod
+          cache: false
+
+      - name: Test with race detector
+        run: go test -race ./...
+
+      - name: Vet
+        run: go vet ./...
