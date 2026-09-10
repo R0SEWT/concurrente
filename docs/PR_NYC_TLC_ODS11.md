@@ -18,6 +18,8 @@ Fuente oficial:
 
 https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page
 
+https://learn.microsoft.com/en-us/azure/open-datasets/dataset-taxi-yellow 
+
 ------------------------------------------------------------------------
 
 ## Relación con ODS
