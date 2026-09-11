@@ -41,8 +41,9 @@ def construir_features(silver: pl.DataFrame) -> tuple[pl.DataFrame, dict]:
         media = base[col].mean()
         desv = base[col].std(ddof=0)
         escalado[col] = {"media": media, "desv": desv}
-        # sin variación no hay nada que estandarizar; dividir por 0 metería NaN al CSV de Go
-        z = (pl.col(col) - media) / desv if desv > 0 else pl.lit(0.0)
+        # sin filas (media None) o sin variación no hay nada que estandarizar;
+        # dividir por 0 metería NaN al CSV de Go
+        z = (pl.col(col) - media) / desv if desv else pl.lit(0.0)
         base = base.with_columns(z.alias(f"{col}_z"))
 
     return base.select(COLUMNAS_GOLD), escalado

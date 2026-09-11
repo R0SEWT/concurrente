@@ -5,6 +5,10 @@ def _pct(n: int, total: int) -> str:
     return f"{100 * n / total:.2f} %" if total else "—"
 
 
+def _num(x: float | None) -> str:
+    return "—" if x is None else f"{x:.6f}"
+
+
 def render_markdown(r: dict) -> str:
     f = r["fuente"]
     bronze = r["filas"]["bronze"]
@@ -60,7 +64,10 @@ def render_markdown(r: dict) -> str:
         "",
         "| Feature | Media | Desv. (poblacional) |",
         "|---|---:|---:|",
-        *(f"| `{col}` | {e['media']:.6f} | {e['desv']:.6f} |" for col, e in r["escalado"].items()),
+        *(
+            f"| `{col}` | {_num(e['media'])} | {_num(e['desv'])} |"
+            for col, e in r["escalado"].items()
+        ),
         "",
     ]
     return "\n".join(lineas)
