@@ -1,0 +1,15 @@
+# Parámetros del pipeline bronze → silver → gold.
+# Cambiar el mes o un umbral acá regenera todo con `uv run nyc-tlc all`;
+# el reporte en reports/ deja constancia de con qué valores se corrió.
+
+[fuente]
+flota = "yellow"
+mes = "2024-01"
+url_viajes = "https://d37ci6vzurychx.cloudfront.net/trip-data/{flota}_tripdata_{mes}.parquet"
+url_zonas = "https://d37ci6vzurychx.cloudfront.net/misc/taxi_zone_lookup.csv"
+
+[reglas]
+duracion_min_s = 60        # < 1 min: pruebas de taxímetro o viajes anulados
+duracion_max_s = 21600     # > 6 h: taxímetro que quedó corriendo
+distancia_max_mi = 100     # la ciudad cabe en ~35 mi de punta a punta; 100 deja margen a aeropuertos/afueras
+velocidad_max_mph = 80     # velocidad media implausible en tráfico urbano
