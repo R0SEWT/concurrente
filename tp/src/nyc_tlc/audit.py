@@ -36,7 +36,11 @@ _SQL = "select {} from read_parquet($ruta)".format(
 
 def auditar(parquet: Path, p: ParametrosLimpieza) -> dict[str, int]:
     inicio, fin = limites_del_mes(p.mes)
-    fila = duckdb.execute(
+    # nosemgrep va sin ID porque semgrep y opengrep nombran distinto la regla que silencia:
+    # python.sqlalchemy.security.sqlalchemy-execute-raw-query. Dispara por la forma
+    # execute(<no literal>), pero _SQL es constante (solo nombres de columnas) y los valores van
+    # como parámetros; test_audit.py lo verifica. Discusión en la PR #6.
+    fila = duckdb.execute(  # nosemgrep
         _SQL,
         {
             "ruta": str(parquet),
