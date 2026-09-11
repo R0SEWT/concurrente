@@ -84,6 +84,13 @@ def test_sin_variacion_el_z_score_es_cero_y_no_nan():
     assert f["log_distancia_z"] == 0.0
 
 
+def test_silver_vacio_da_gold_vacio_con_el_contrato_y_sin_escalado():
+    gold, escalado = construir_features(viajes())
+    assert gold.height == 0
+    assert gold.columns == list(COLUMNAS_GOLD)
+    assert escalado["log_duracion"] == {"media": None, "desv": None}
+
+
 def test_gold_trae_ids_para_volver_a_silver_y_solo_features_numericas():
     g, _ = construir_features(viajes(viaje(PULocationID=132, DOLocationID=48), viaje()))
     assert g.columns == list(COLUMNAS_GOLD)

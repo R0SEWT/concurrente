@@ -141,3 +141,16 @@ def test_una_segunda_corrida_no_vuelve_a_descargar_lo_que_ya_esta_en_bronze(ento
 
     assert segundo["fuente"]["viajes"]["sha256"] == primero["fuente"]["viajes"]["sha256"]
     assert segundo["filas"]["bronze"] == 7
+
+
+def test_si_ninguna_fila_sobrevive_el_pipeline_igual_deja_gold_y_reporte(entorno):
+    viajes(viaje(fare_amount=-1.0), viaje(DOLocationID=264)).write_parquet(
+        entorno["remoto"] / "yellow_tripdata_2024-01.parquet"
+    )
+    reporte = correr(entorno)
+
+    assert reporte["filas"] == {"bronze": 2, "silver": 0, "gold": 0}
+    with open(entorno["raiz"] / "data/gold/yellow_2024-01_features.csv", newline="") as f:
+        assert list(csv.reader(f)) == [list(COLUMNAS_GOLD)]
+    md = (entorno["raiz"] / "reports/limpieza_yellow_2024-01.md").read_text()
+    assert "NO cumple" in md
