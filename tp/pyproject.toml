@@ -1,0 +1,34 @@
+[project]
+name = "nyc-tlc"
+version = "0.1.0"
+description = "Ingesta y limpieza de NYC TLC Trip Record Data para el Trabajo Parcial de CC65 (K-means concurrente en Go)"
+requires-python = ">=3.11"
+dependencies = [
+    "polars>=1.0",
+    "duckdb>=1.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "ruff>=0.4"]
+
+[project.scripts]
+nyc-tlc = "nyc_tlc.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/nyc_tlc"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+# DTZ: los timestamps de TLC son hora local de NYC *sin* zona horaria por especificación
+# (diccionario de datos de yellow taxi). Compararlos contra datetimes naive es lo correcto.
+ignore = ["DTZ"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

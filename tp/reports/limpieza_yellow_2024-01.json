@@ -1,0 +1,107 @@
+{
+  "fuente": {
+    "flota": "yellow",
+    "mes": "2024-01",
+    "viajes": {
+      "url": "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2024-01.parquet",
+      "archivo": "yellow_tripdata_2024-01.parquet",
+      "bytes": 49961641,
+      "sha256": "c4d59da7bbc8abaeeeb1727947ee93d9891a71acb42854bd80db1571b2030510"
+    },
+    "zonas": {
+      "url": "https://d37ci6vzurychx.cloudfront.net/misc/taxi_zone_lookup.csv",
+      "archivo": "taxi_zone_lookup.csv",
+      "bytes": 12331,
+      "sha256": "1a99e105092230f8620f301edcca7f80d3080642ff404d28ed957d3fa222c8ed"
+    }
+  },
+  "parametros": {
+    "mes": "2024-01",
+    "duracion_min_s": 60,
+    "duracion_max_s": 21600,
+    "distancia_max_mi": 100,
+    "velocidad_max_mph": 80,
+    "zonas_validas": 263
+  },
+  "filas": {
+    "bronze": 2964624,
+    "silver": 2831486,
+    "gold": 2831486
+  },
+  "reglas": [
+    {
+      "regla": "requeridos",
+      "descripcion": "Sin nulos en las columnas que usa el pipeline",
+      "descartados": 0,
+      "restantes": 2964624
+    },
+    {
+      "regla": "mes",
+      "descripcion": "El viaje empieza dentro de 2024-01 (el archivo trae fechas sueltas de otros meses)",
+      "descartados": 18,
+      "restantes": 2964606
+    },
+    {
+      "regla": "duracion",
+      "descripcion": "Duración entre 60 s y 21600 s",
+      "descartados": 36893,
+      "restantes": 2927713
+    },
+    {
+      "regla": "distancia",
+      "descripcion": "Distancia en (0, 100] millas",
+      "descartados": 36284,
+      "restantes": 2891429
+    },
+    {
+      "regla": "velocidad",
+      "descripcion": "Velocidad media ≤ 80 mph",
+      "descartados": 100,
+      "restantes": 2891329
+    },
+    {
+      "regla": "montos",
+      "descripcion": "Tarifa y total positivos (los negativos son reembolsos o anulaciones)",
+      "descartados": 32272,
+      "restantes": 2859057
+    },
+    {
+      "regla": "zonas",
+      "descripcion": "Origen y destino son zonas conocidas de NYC (sin 'Unknown' ni 'Outside of NYC')",
+      "descartados": 27571,
+      "restantes": 2831486
+    }
+  ],
+  "auditoria": {
+    "bronze": {
+      "requeridos": 0,
+      "mes": 18,
+      "duracion": 36893,
+      "distancia": 60430,
+      "velocidad": 1921,
+      "montos": 38341,
+      "zonas": 31527
+    },
+    "silver": {
+      "requeridos": 0,
+      "mes": 0,
+      "duracion": 0,
+      "distancia": 0,
+      "velocidad": 0,
+      "montos": 0,
+      "zonas": 0
+    }
+  },
+  "escalado": {
+    "log_duracion": {
+      "media": 2.558153941705323,
+      "desv": 0.6389417133082955
+    },
+    "log_distancia": {
+      "media": 1.1704400695404638,
+      "desv": 0.6560886966217637
+    }
+  },
+  "minimo_requerido": 1000000,
+  "cumple_minimo": true
+}

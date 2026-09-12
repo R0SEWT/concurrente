@@ -1,0 +1,14 @@
+# Capas de datos (medallion): se regeneran con `uv run nyc-tlc all`.
+# Lo que sí se versiona es la evidencia chica: reports/ (conteos por regla, sha256).
+data/bronze/
+data/silver/
+data/gold/
+data/_metadata/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.ruff_cache/
+.pytest_cache/
+*.egg-info/
