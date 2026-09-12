@@ -6,12 +6,18 @@
 % Verificado el 2026-09-12. Discusión y fichas por paper: issue #5.
 %
 % CUOTA DEL ENUNCIADO (≤5 años): 9 entradas, 3 por integrante, agrupadas en los 3 temas del
-% informe. Tema 1: nigro2022, kwedlo2021, kwedlo2024. Tema 2: hess2023, voevodski2024,
-% bellavita2026. Tema 3: li2023, bellavita2025, mussabayev2023.
+% informe.
+%   Tema 1 · memoria compartida:   nigro2022, kwedlo2021, kwedlo2024
+%   Tema 2 · distribuido:          hess2023, bellavita2026, wan2021
+%   Tema 3 · memoria y poda:       li2023, bellavita2025, voevodski2024
 %
-% APOYO: recientes y citables, pero fuera de la cuota (he2022, wan2021, xu2021, mclaughlin2023,
-% paul2027). ANTECEDENTES (fuera de la ventana, van como fundamento): bahmani2012, ding2015,
-% mhembere2017.
+% Los 9 de la cuota son de ACCESO ABIERTO (gold, hybrid o arXiv): se descargan sin pasar por el
+% portal de la UPC. Por eso mussabayev2023 (Elsevier) y he2022 (Wiley), que son cerrados, quedan
+% en apoyo aunque encajen en el Tema 3.
+%
+% APOYO: recientes y citables, fuera de la cuota (mussabayev2023, he2022, xu2021, mclaughlin2023,
+% paul2027). ANTECEDENTES (fuera de la ventana de 5 años, van como fundamento): bahmani2012,
+% ding2015, mhembere2017.
 
 % ---------------------------------------------------------------------------
 % Tema 1 · Paralelismo de datos, reducción y sincronización en memoria compartida
@@ -73,23 +79,6 @@
   note      = {Código: \url{https://github.com/selotape/distributed_k_means}}
 }
 
-@article{voevodski2024,
-  title     = {Large-Scale {K}-Clustering},
-  author    = {Voevodski, Konstantin},
-  journal   = {ACM Transactions on Knowledge Discovery from Data},
-  volume    = {18},
-  number    = {9},
-  pages     = {1--23},
-  year      = {2024},
-  month     = nov,
-  issn      = {1556-472X},
-  publisher = {ACM},
-  doi       = {10.1145/3674508},
-  url       = {https://doi.org/10.1145/3674508},
-  note      = {Artículo 214, 23 páginas. Algoritmos paralelos de $k$-median, $k$-medoids y
-               $k$-means con aproximación de factor constante en instancias estables}
-}
-
 @inproceedings{bellavita2026,
   title     = {Communication-Avoiding Linear Algebraic Kernel {K}-Means on {GPUs}},
   author    = {Bellavita, Julian and Rubino, Matthew and Iyer, Nakul and Chang, Andrew and
@@ -103,6 +92,19 @@
   url       = {https://arxiv.org/abs/2601.17136},
   note      = {Aceptado en IPDPS 2026; se cita la versión de arXiv mientras no haya DOI.
                Código: \url{https://github.com/CornellHPC/Vivaldi}}
+}
+
+@article{wan2021,
+  title     = {A Novel Bearing Fault Diagnosis Method Using {Spark}-Based Parallel {ACO}-{K}-Means Clustering Algorithm},
+  author    = {Wan, Lanjun and Zhang, Gen and Li, Hongyang and Li, Changyun},
+  journal   = {IEEE Access},
+  volume    = {9},
+  pages     = {28753--28768},
+  year      = {2021},
+  issn      = {2169-3536},
+  publisher = {IEEE},
+  doi       = {10.1109/ACCESS.2021.3059221},
+  url       = {https://doi.org/10.1109/ACCESS.2021.3059221}
 }
 
 % ---------------------------------------------------------------------------
@@ -124,21 +126,6 @@
   note      = {Publicado online el 18 de octubre de 2022}
 }
 
-@article{mussabayev2023,
-  title     = {How to Use {K}-means for Big Data Clustering?},
-  author    = {Mussabayev, Rustam and Mladenovic, Nenad and Jarboui, Bassem and
-               Mussabayev, Ravil},
-  journal   = {Pattern Recognition},
-  volume    = {137},
-  pages     = {109269},
-  year      = {2023},
-  month     = may,
-  issn      = {0031-3203},
-  publisher = {Elsevier},
-  doi       = {10.1016/j.patcog.2022.109269},
-  url       = {https://doi.org/10.1016/j.patcog.2022.109269}
-}
-
 @inproceedings{bellavita2025,
   title     = {Popcorn: Accelerating Kernel {K}-means on {GPUs} through Sparse Linear Algebra},
   author    = {Bellavita, Julian and Pasquali, Thomas and Del Rio Martin, Laura and
@@ -155,9 +142,41 @@
                Artefacto: \url{https://doi.org/10.5281/zenodo.14219596}}
 }
 
+@article{voevodski2024,
+  title     = {Large-Scale {K}-Clustering},
+  author    = {Voevodski, Konstantin},
+  journal   = {ACM Transactions on Knowledge Discovery from Data},
+  volume    = {18},
+  number    = {9},
+  pages     = {1--23},
+  year      = {2024},
+  month     = nov,
+  issn      = {1556-472X},
+  publisher = {ACM},
+  doi       = {10.1145/3674508},
+  url       = {https://doi.org/10.1145/3674508},
+  note      = {Artículo 214, 23 páginas. Algoritmos paralelos de $k$-median, $k$-medoids y
+               $k$-means con aproximación de factor constante en instancias estables}
+}
+
 % ---------------------------------------------------------------------------
 % Apoyo · recientes y citables, pero fuera de la cuota de 9
 % ---------------------------------------------------------------------------
+
+@article{mussabayev2023,
+  title     = {How to Use {K}-means for Big Data Clustering?},
+  author    = {Mussabayev, Rustam and Mladenovic, Nenad and Jarboui, Bassem and
+               Mussabayev, Ravil},
+  journal   = {Pattern Recognition},
+  volume    = {137},
+  pages     = {109269},
+  year      = {2023},
+  month     = may,
+  issn      = {0031-3203},
+  publisher = {Elsevier},
+  doi       = {10.1016/j.patcog.2022.109269},
+  url       = {https://doi.org/10.1016/j.patcog.2022.109269}
+}
 
 @article{he2022,
   title     = {Parallel and accurate $k$-means algorithm on {CPU}-{GPU} architectures for spectral clustering},
@@ -174,19 +193,6 @@
   note      = {Publicado online el 29 de septiembre de 2021; el volumen 34(14) es del 25 de junio
                de 2022. Respalda la discusión de equivalencia numérica: suma en dos pasos contra
                el error de redondeo al actualizar centroides}
-}
-
-@article{wan2021,
-  title     = {A Novel Bearing Fault Diagnosis Method Using {Spark}-Based Parallel {ACO}-{K}-Means Clustering Algorithm},
-  author    = {Wan, Lanjun and Zhang, Gen and Li, Hongyang and Li, Changyun},
-  journal   = {IEEE Access},
-  volume    = {9},
-  pages     = {28753--28768},
-  year      = {2021},
-  issn      = {2169-3536},
-  publisher = {IEEE},
-  doi       = {10.1109/ACCESS.2021.3059221},
-  url       = {https://doi.org/10.1109/ACCESS.2021.3059221}
 }
 
 @article{xu2021,
