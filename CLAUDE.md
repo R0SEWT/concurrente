@@ -28,6 +28,7 @@ notes/         # apuntes .md por sesión (_template.md es la plantilla)
 materials/     # PDFs y slides, carpeta por semana (week-NN/) + el sílabo
 labs/go/       # Go — un paquete por semana, go test como red de seguridad
 labs/spin/     # Promela — modelos .pml verificados con spin/ispin
+tp/            # Trabajo Parcial: NYC TLC + K-means (ver tp/CLAUDE.md)
 ```
 
 Cada lab es una raíz independiente con su propio toolchain:
@@ -35,6 +36,7 @@ Cada lab es una raíz independiente con su propio toolchain:
 ```bash
 cd labs/go   && go test ./...                 # requiere Go (ver Convenciones)
 cd labs/spin && spin -a mutex.pml && gcc -o pan pan.c && ./pan   # verificación exhaustiva
+cd tp        && uv run nyc-tlc all && uv run pytest -q           # datos bronze → silver → gold
 ```
 
 ## Archivos clave
@@ -47,6 +49,8 @@ cd labs/spin && spin -a mutex.pml && gcc -o pan pan.c && ./pan   # verificación
 | `labs/go/go.mod` | Módulo Go del curso (`upc.edu.pe/concurrente`). Un paquete por semana. |
 | `labs/go/week01/critical_test.go` | Ejemplo de referencia: carrera de datos detectada con `-race`, luego corregida. |
 | `labs/spin/README.md` | Cómo correr Spin sobre un `.pml` y leer el contraejemplo. |
+| `tp/CLAUDE.md` | Contexto, procedencia de datos y arquitectura del Trabajo Parcial (PC1 + PC2 + TB1). |
+| `tp/docs/limpieza.md` | Procedimiento de limpieza del dataset, regla por regla (rúbrica de PC1). |
 
 ## Evaluación
 
