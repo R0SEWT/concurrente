@@ -66,6 +66,11 @@ un bug en una de ellas.
   bronze en miniatura servido por `file://`.
 - **Un nulo solo descarta el viaje si está en una columna que usamos.** Las 140 mil filas de Flex
   Fare (`payment_type = 0`) traen nulos en `RatecodeID`/`passenger_count` y se conservan.
+- **Los notebooks se versionan SIN salidas.** Un `.ipynb` ejecutado pesa megas por las imágenes
+  embebidas, hace ilegible el diff y nada garantiza que sus salidas correspondan al código.
+  `tests/test_notebooks.py` lo verifica en CI. Antes de commitear:
+  `uv run jupyter nbconvert --clear-output --inplace notebooks/*.ipynb`.
+  Las figuras que van al informe se exportan como archivos aparte (`reports/figuras/`).
 - **Los IDs de zona nunca entran a la distancia euclídea**: van en gold solo para agregar por zona
   después del clustering.
 - **Las features de gold son provisionales** (PC1). Se revisan en PC2 junto con el K-means en Go;
