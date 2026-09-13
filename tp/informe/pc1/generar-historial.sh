@@ -5,14 +5,31 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
-git fetch --quiet origin || echo "aviso: sin red, se usa el último fetch" >&2
+if ! git fetch --quiet origin; then
+  echo "aviso: git fetch falló; se usan las refs de origin del último fetch" >&2
+fi
+# Sin refs de origin, git log no encuentra commits y la tabla saldría vacía: mejor abortar.
+if [ -z "$(git for-each-ref --count=1 --format='%(refname)' refs/remotes/origin/)" ]; then
+  echo "error: no hay refs de origin; haz git fetch origin antes de generar el historial" >&2
+  exit 1
+fi
 
 out=generado/historial.tex
+tmp="$(mktemp "${out}.XXXXXX")"
+trap 'rm -f "$tmp"' EXIT
 mkdir -p generado
 rango=(--exclude='origin/__dolt*' --remotes=origin)
+# ../../../docs es el docs/ de la raíz: ahí están las propuestas de caso (PR #3 y #4). No es tp/docs,
+# que ya entra con ../../../tp. Con "--" delante, git no falla si la ruta no existe en alguna rama.
 rutas=(-- ../../../tp ../../../docs)
 
 escapar() { sed -e 's/\\/\//g' -e 's/[&%$#_{}]/\\&/g' -e 's/~/-/g' -e 's/\^/ /g'; }
+
+commits="$(git log "${rango[@]}" --format='%ad|%aN|%h|%s' --date=short "${rutas[@]}")"
+if [ -z "$commits" ]; then
+  echo "error: git log no devolvió commits del Trabajo Parcial; no se sobrescribe $out" >&2
+  exit 1
+fi
 
 {
   echo "% Generado por generar-historial.sh el $(date +%F). No editar a mano."
@@ -49,10 +66,11 @@ escapar() { sed -e 's/\\/\//g' -e 's/[&%$#_{}]/\\&/g' -e 's/~/-/g' -e 's/\^/ /g'
   echo '\endhead'
   echo '\bottomrule'
   echo '\endfoot'
-  git log "${rango[@]}" --format='%ad|%aN|%h|%s' --date=short "${rutas[@]}" \
-    | escapar | awk -F'|' '{print $1 " & " $2 " & \\texttt{" $3 "} & " $4 " \\\\"}'
+  printf '%s\n' "$commits" | escapar | awk -F'|' '{print $1 " & " $2 " & \\texttt{" $3 "} & " $4 " \\\\"}'
   echo '\end{xltabular}'
   echo '}'
-} > "$out"
+} > "$tmp"
 
+mv "$tmp" "$out"
+trap - EXIT
 echo "escrito $out"
