@@ -1,0 +1,21 @@
+\section*{Resumen}
+\addcontentsline{toc}{section}{Resumen}
+
+Este informe presenta el primer entregable del Trabajo Parcial de Programación Concurrente y
+Distribuida. El grupo propone aplicar K-means a los registros de viajes del taxi amarillo de Nueva
+York \parencite{nyctlc} para caracterizar patrones de movilidad urbana, un insumo para la
+planificación del transporte que persigue el Objetivo de Desarrollo Sostenible~11. El algoritmo se
+implementará en PC2 en Go, sin librerías de terceros, con goroutines, \texttt{sync.WaitGroup} y
+\texttt{sync.Mutex}.
+
+La revisión bibliográfica reúne nueve artículos publicados entre 2021 y 2026, tres por integrante.
+Se organizan en tres temas: paralelismo en memoria compartida, sincronización en entornos
+distribuidos y reducción del trabajo mediante poda o aproximación. Cada artículo tiene una ficha
+con los campos del enunciado, y cada tema cierra con una comparación que orienta el diseño del
+algoritmo concurrente.
+
+El dataset corresponde a enero de 2024. Un pipeline reproducible aplica siete reglas de limpieza,
+las contrasta con una auditoría independiente en SQL y conserva el 95,5\,\% de los viajes, muy por
+encima del millón de registros que exige el enunciado.
+
+\textit{Palabras clave:} K-means, programación concurrente, Go, NYC TLC, movilidad urbana, ODS 11.

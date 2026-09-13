@@ -1,0 +1,61 @@
+% ========================================================
+% TRABAJO EN GITHUB
+% ========================================================
+\section{Trabajo en GitHub}
+
+El proyecto se aloja en el repositorio público \url{https://github.com/R0SEWT/concurrente}. El
+Trabajo Parcial ocupa el directorio \texttt{tp/}, con su propio toolchain y una integración continua
+en GitHub Actions que corre las pruebas del pipeline en cada pull request.
+
+\subsection{Flujo Git Flow}
+
+El trabajo sigue Git Flow (Tabla~\ref{tab:ramas}): ningún cambio entra directamente a
+\texttt{develop} ni a \texttt{main}, sino por pull request desde una rama propia. La
+Tabla~\ref{tab:prs} lista los pull requests e issues del Trabajo Parcial.
+
+\begin{table}[H]
+\caption{Ramas del flujo de trabajo}\label{tab:ramas}
+\small
+\begin{tabularx}{\textwidth}{@{}L{3.4cm}Y@{}}
+\toprule
+\textbf{Rama} & \textbf{Uso} \\
+\midrule
+\texttt{main} & Versión entregada; recibe una fusión desde \texttt{develop} por entregable \\
+\texttt{develop} & Integración; todo cambio llega por pull request revisado \\
+\texttt{feature/*}, \texttt{feat/*} & Una rama por unidad de trabajo, que sale de \texttt{develop} y
+  vuelve a ella \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[H]
+\caption{Pull requests e issues del Trabajo Parcial}\label{tab:prs}
+\small
+\begin{tabularx}{\textwidth}{@{}lL{3.6cm}YL{2cm}@{}}
+\toprule
+\textbf{N.º} & \textbf{Autor} & \textbf{Contenido} & \textbf{Estado} \\
+\midrule
+\#3 & \nombreDayana & Propuesta de caso: SENAMHI y ODS 13 & Cerrada \\
+\#4 & \nombreDayana & Propuesta de caso: NYC TLC y ODS 11 & En revisión \\
+\#5 & \nombreRody & Issue de investigación bibliográfica & Abierta \\
+\#6 & \nombreRody & Limpieza del dataset & Fusionada \\
+\#7 & \nombreDayana & Análisis exploratorio (notebook) & En revisión \\
+\#8 & \nombreRody & Bibliografía en BibTeX & En revisión \\
+\#9 & \nombreRody & CI: notebooks sin salidas & En revisión \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\pendiente{actualizar el estado de las PR al momento de la entrega y fusionar \texttt{develop} en
+\texttt{main} con el tag \texttt{pc1}}
+
+\subsection{Historial de commits por integrante}
+
+Las Tablas~\ref{tab:commits-autor} y~\ref{tab:commits} se generan desde el repositorio con
+\texttt{./generar-historial.sh} y cuentan los commits que tocan el Trabajo Parcial en todas las
+ramas publicadas.
+
+\input{generado/historial}
+
+\pendiente{que el tercer integrante tenga commits propios: la rúbrica exige la participación de
+todos}

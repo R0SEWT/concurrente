@@ -1,0 +1,87 @@
+% Informe del Entregable 1 (PC1) — Trabajo Parcial CC65, 2026-20.
+% Compilar desde este directorio:  ./generar-historial.sh && latexmk
+% Estilo tomado de la plantilla de informes del grupo (pdflatex + lmodern + APA con biber).
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[spanish,es-tabla,es-nodecimaldot,es-noshorthands]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{geometry}
+\usepackage{setspace}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{xltabular}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{needspace}
+\usepackage{amsmath,amssymb}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage[most]{tcolorbox}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,calc}
+\usepackage{caption}
+\usepackage{hyperref}
+\usepackage{csquotes}
+\usepackage[backend=biber,style=apa,sorting=nyt]{biblatex}
+
+\addbibresource{../../docs/referencias.bib}
+% Los campos note del .bib son apuntes internos del equipo (con URLs y rutas que llevan "_"):
+% no van en las referencias APA.
+\AtEveryBibitem{\clearfield{note}\clearfield{addendum}}
+
+\geometry{margin=2.5cm}
+\onehalfspacing
+\setlist[itemize]{leftmargin=1.4em,itemsep=0.25em,topsep=0.25em}
+\setlength{\parskip}{0.45em}
+\setlength{\parindent}{0pt}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  citecolor=black,
+  urlcolor=blue,
+  pdftitle={CC65 PC1: K-means concurrente sobre NYC TLC}
+}
+
+% Tablas y figuras al estilo APA: número en negrita arriba, título en cursiva debajo.
+\captionsetup{labelfont=bf, textfont=it, labelsep=newline, justification=raggedright,
+              singlelinecheck=false, skip=4pt}
+
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\setcounter{tocdepth}{2}
+
+% Tablas y figuras con espaciado simple: el interlineado 1,5 es solo para el cuerpo del texto.
+\AtBeginEnvironment{tabular}{\setstretch{1.05}}
+\AtBeginEnvironment{tabularx}{\setstretch{1.05}}
+\AtBeginEnvironment{xltabular}{\setstretch{1.05}}
+\AtBeginEnvironment{tikzpicture}{\setstretch{1}}
+
+\input{preambulo/macros}
+
+\begin{document}
+
+\input{secciones/00-caratula}
+
+\tableofcontents
+\clearpage
+
+\input{secciones/01-resumen}
+\input{secciones/02-objetivos}
+\input{secciones/03-temas}
+\input{secciones/04-caso-de-uso}
+\input{secciones/05-limpieza}
+\input{secciones/06-github}
+\input{secciones/07-conclusiones}
+
+\clearpage
+\printbibliography[title={Referencias}]
+
+\end{document}
