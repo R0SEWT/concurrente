@@ -8,14 +8,18 @@
 % CUOTA DEL ENUNCIADO (≤5 años): 9 entradas, 3 por integrante, agrupadas en los 3 temas del
 % informe.
 %   Tema 1 · memoria compartida:   nigro2022, kwedlo2021, kwedlo2024
-%   Tema 2 · distribuido:          hess2023, bellavita2026, wan2021
+%   Tema 2 · distribuido:          hess2023, bellavita2026, xu2021
 %   Tema 3 · memoria y poda:       li2023, bellavita2025, voevodski2024
 %
 % Los 9 de la cuota son de ACCESO ABIERTO (gold, hybrid o arXiv): se descargan sin pasar por el
 % portal de la UPC. Por eso mussabayev2023 (Elsevier) y he2022 (Wiley), que son cerrados, quedan
 % en apoyo aunque encajen en el Tema 3.
 %
-% APOYO: recientes y citables, fuera de la cuota (mussabayev2023, he2022, xu2021, mclaughlin2023,
+% xu2021 reemplaza a wan2021 en el Tema 2 (2026-09-13): lo eligió Dayana en la issue #10, cumple
+% la ventana de 5 años y tiene versión abierta en arXiv (2004.14696). Ziaei & Ranjbar 2023 sigue
+% descartado por tema y paul2027 sigue en apoyo.
+%
+% APOYO: recientes y citables, fuera de la cuota (mussabayev2023, he2022, wan2021, mclaughlin2023,
 % paul2027). ANTECEDENTES (fuera de la ventana de 5 años, van como fundamento): bahmani2012,
 % ding2015, mhembere2017.
 
@@ -39,7 +43,7 @@
 
 @article{kwedlo2021,
   title     = {Accelerated {K}-Means Algorithms for Low-Dimensional Data on Parallel Shared-Memory Systems},
-  author    = {Kwedlo, Wojciech and Lubowicz, Michal},
+  author    = {Kwedlo, Wojciech and {\L}ubowicz, Micha{\l}},
   journal   = {IEEE Access},
   volume    = {9},
   pages     = {74286--74301},
@@ -318,4 +322,37 @@
   url    = {https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page},
   urldate = {2026-09-11},
   note   = {Yellow taxi, 2024-01. sha256 del Parquet en tp/reports/limpieza_yellow_2024-01.json}
+}
+
+% ---------------------------------------------------------------------------
+% Fundamentos de rendimiento paralelo (clásicos; se citan en el análisis de speedup)
+% BibTeX del editor vía content negotiation (2026-09-13).
+% ---------------------------------------------------------------------------
+
+@inproceedings{amdahl1967,
+  title     = {Validity of the single processor approach to achieving large scale computing
+               capabilities},
+  author    = {Amdahl, Gene M.},
+  booktitle = {Proceedings of the April 18-20, 1967, Spring Joint Computer Conference (AFIPS '67
+               Spring)},
+  pages     = {483--485},
+  year      = {1967},
+  publisher = {ACM},
+  doi       = {10.1145/1465482.1465560},
+  url       = {https://doi.org/10.1145/1465482.1465560}
+}
+
+@article{gustafson1988,
+  title     = {Reevaluating {Amdahl's} law},
+  author    = {Gustafson, John L.},
+  journal   = {Communications of the ACM},
+  volume    = {31},
+  number    = {5},
+  pages     = {532--533},
+  year      = {1988},
+  month     = may,
+  issn      = {1557-7317},
+  publisher = {ACM},
+  doi       = {10.1145/42411.42415},
+  url       = {https://doi.org/10.1145/42411.42415}
 }

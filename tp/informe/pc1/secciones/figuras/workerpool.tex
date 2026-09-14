@@ -1,0 +1,20 @@
+% Figura: worker pool de una iteración de Lloyd (sección 3.6).
+\begin{tikzpicture}[
+    font=\footnotesize,
+    caja/.style={draw, rounded corners=1pt, align=center, inner sep=3pt, minimum height=9mm},
+    flecha/.style={-Stealth, semithick}]
+  \node[caja, text width=18mm] (datos) at (0.6, 0) {Viajes gold\\$N$ filas\\6 features};
+  \node[caja, text width=44mm] (w1) at (5.2, 1.3) {Goroutine 1\\asigna y acumula $s_{1j}, n_{1j}$};
+  \node (dots) at (5.2, 0.1) {$\vdots$};
+  \node[caja, text width=44mm] (wP) at (5.2, -1.3) {Goroutine $P$\\asigna y acumula $s_{Pj}, n_{Pj}$};
+  \node[draw, fill=black!15, minimum width=2.5mm, minimum height=36mm, inner sep=0] (barrera) at (9.0, 0) {};
+  \node[above=1mm of barrera] {\texttt{sync.WaitGroup}};
+  \node[caja, text width=40mm] (reduce) at (12.3, 0) {Reducción\\$\mu_j = \sum_w s_{wj} \,/\, \sum_w n_{wj}$};
+  \draw[flecha] (datos.east) -- node[pos=0.55, above, sloped, font=\scriptsize] {$B_1$} (w1.west);
+  \draw[flecha] (datos.east) -- node[pos=0.55, below, sloped, font=\scriptsize] {$B_P$} (wP.west);
+  \draw[flecha] (w1.east) -- (w1.east -| barrera.west);
+  \draw[flecha] (wP.east) -- (wP.east -| barrera.west);
+  \draw[flecha] (barrera.east) -- (reduce.west);
+  \draw[flecha, dashed] (reduce.south) -- ++(0, -2.2)
+    -| node[pos=0.25, below] {nuevos centroides, de solo lectura en la siguiente iteración} (wP.south);
+\end{tikzpicture}

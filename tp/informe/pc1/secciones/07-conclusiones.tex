@@ -1,0 +1,85 @@
+% ========================================================
+% CONCLUSIONES
+% ========================================================
+\section{Conclusiones}
+
+\subsection{Conclusiones del grupo}
+
+La literatura reciente acelera K-means por dos vías que se combinan: repartir el trabajo entre más
+hilos, GPU o máquinas, y hacer menos trabajo. Lo que decide si se conserva el resultado del algoritmo
+secuencial no es la vía elegida, sino cuánto se relaja el algoritmo. La poda exacta de
+\textcite{li2023} y de \textcite{kwedlo2021} lo conserva; la aproximación de
+\textcite{voevodski2024} y los esquemas distribuidos que relajan la sincronización, como SOCCER y
+DBW, lo cambian. En PC2 implementaremos Lloyd exacto repartido entre goroutines, sin poda en la
+primera versión.
+
+El paralelismo no rescata a un algoritmo cuya complejidad es el verdadero límite. Popcorn choca con
+la memoria $O(n^2)$ de la matriz kernel, que con nuestros 2,8 millones de viajes ocuparía unos
+32~TB, y Voevodski con una parte serial $O(t^3)$ que acota el speedup. Nuestro Lloyd ocupa unos
+136~MB, así que su límite será la fracción serial y el costo de sincronizar: entre máquinas se mide
+en rondas y en volumen comunicado; en una sola máquina, en la espera en la barrera.
+
+Con eso respondemos, de forma provisional, la pregunta guía de la revisión: la granularidad del
+reparto pesa tanto como el número de hilos, y reducir por sumas y conteos permite repartir el
+trabajo sin perder la equivalencia con la versión secuencial, siempre que se compare con una
+tolerancia. PC2 lo pondrá a prueba.
+
+Las cifras de aceleración de los artículos van de 1,09 a 123,8, y buena parte de esa distancia se
+explica por la línea base elegida. Nuestra evaluación fijará como referencia la versión secuencial
+del mismo algoritmo, con la misma inicialización y la media recortada de varias ejecuciones, y medirá
+por separado la lectura y las iteraciones.
+
+El dataset ya está listo para el modelo: cada regla de limpieza está justificada, la verifican dos
+implementaciones independientes y el pipeline se reproduce con tres comandos.
+
+\subsection{Conclusiones individuales}
+
+\subsubsection*{\nombreRody{} (Tema 3)}
+Los tres trabajos de mi tema me dejaron una idea que no esperaba: las aceleraciones más llamativas
+no vienen solo del paralelismo. En 	extcite{li2023}, la ventaja real frente a otro K-means en GPU,
+de 1,7 a 2,1 veces, sale de omitir puntos con la desigualdad triangular; en
+	extcite{bellavita2025}, el 123,8x depende de compararse contra MATLAB de un solo hilo; y en
+	extcite{voevodski2024}, la escalabilidad se proyecta sin medirse en paralelo. También vi dos
+límites que ningún hilo resuelve: la memoria $O(n^2)$ de la matriz kernel y una parte serial
+$O(t^3)$ que, por la ley de Amdahl, pone techo al speedup.
+
+Para nuestro caso saco tres conclusiones. Primero, Lloyd exacto es la opción razonable: sus features
+caben en unos 136~MB y no justifican aceptar una aproximación. Segundo, el speedup que reportemos
+debe decir contra qué versión se mide y separar la lectura del CSV de las iteraciones, porque esa
+fracción serial fija el techo. Tercero, la poda de ASB es una mejora posible para después, pero
+primero mediría el Lloyd concurrente sin ella, para no confundir la mejora algorítmica con la que
+aporta la concurrencia.
+
+\subsubsection*{\nombreDayana{} (Tema 2)}
+El análisis de los tres trabajos me permitió concluir que en sistemas distribuidos, el principal
+límite de escalabilidad no necesariamente es cuánto cálculo puede ejecutarse en paralelo, sino
+cuánto cuesta coordinarlo. \textcite{hess2023} reducen el número de rondas, \textcite{bellavita2026} disminuyen el
+volumen de datos comunicado entre GPUs y \textcite{xu2021} atacan el tiempo perdido esperando a los
+\textit{stragglers}. En los tres casos, aumentar los recursos disponibles por sí solo no garantiza
+una mejora: la sincronización puede trasladar el cuello de botella desde el cálculo hacia la
+comunicación.
+
+Para nuestro caso, esta conclusión justifica mantener la sincronización fuera del procesamiento de
+cada bloque. Cada \textit{worker} debería calcular asignaciones, sumas y conteos en acumuladores
+privados y comunicarlos únicamente al finalizar la iteración, evitando un \texttt{Mutex} sobre cada
+actualización. Aun así, no adoptaría directamente mecanismos como SOCCER o DBW: ambos reducen
+sincronización a cambio de abandonar algún aspecto del Lloyd síncrono que queremos comparar contra
+la versión secuencial. Por ello, considero más relevante controlar el desbalance mediante bloques
+de tamaño similar y medir cuánto tiempo permanece cada \textit{worker} esperando en la barrera. Si
+esa espera crece al aumentar las \textit{goroutines}, el límite ya no estaría en la capacidad de
+cómputo, sino en la granularidad y coordinación del trabajo.
+
+\subsubsection*{\nombreRody{} (Tema 1, en reemplazo de \nombreTercero)}
+Los tres trabajos de memoria compartida coinciden en que la granularidad del reparto decide el
+rendimiento tanto como el número de hilos. \textcite{nigro2022} reparte bloques regulares y conserva el
+resultado exacto con una eficiencia cercana al 69\,\%; \textcite{kwedlo2021} adapta las tareas a la
+geometría de los datos, pero choca con el costo de gestionar tareas cada vez más pequeñas; y
+\textcite{kwedlo2024} muestra que abrir el paralelismo en otro nivel cambia el rendimiento hasta 15
+veces.
+
+Para nuestro caso concluyo tres cosas. Primero, repartiremos los viajes en bloques contiguos de tamaño
+parecido, porque en Lloyd cada viaje cuesta lo mismo y no hacen falta tareas recursivas. Segundo, el
+tamaño de bloque será una variable del experimento, para encontrar el punto en que dividir más cuesta
+más en coordinación de lo que aporta. Tercero, antes de agregar poda o paralelismo anidado mediremos
+el Lloyd concurrente simple y compararemos sus centroides con los de la versión secuencial, como hace
+\textcite{nigro2022}.
