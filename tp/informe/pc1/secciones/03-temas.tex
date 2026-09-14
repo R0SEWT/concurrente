@@ -190,6 +190,24 @@ los tres artículos de este tema buscan pagar menos por ella.
     mejor que el de k-means$\|$, aun cuando a este se le permiten más rondas, y el tiempo de cómputo
     en las máquinas es bastante menor.},
   integrante={\nombreDayana},
+  opinion={Al analizar este trabajo, considero que el principal aporte de la programación
+    concurrente no está en acelerar únicamente el cálculo de K-means, sino en reducir el costo de
+    coordinación entre máquinas. En sistemas distribuidos, cada ronda de comunicación requiere
+    sincronización entre participantes, generando tiempos de espera que pueden convertirse en el
+    principal cuello de botella. SOCCER aborda este problema reduciendo la cantidad de rondas
+    necesarias mediante un esquema coordinador--workers y un mecanismo de parada adaptativa,
+    logrando que en muchos casos naturales sean suficientes pocas rondas de comunicación.
+    \par El beneficio más importante es que permite escalar K-means cuando los datos ya están
+    distribuidos entre varias máquinas, aprovechando el procesamiento paralelo sin depender de una
+    comunicación constante. Sin embargo, esta estrategia también introduce limitaciones: el
+    coordinador concentra una parte importante del procesamiento y su capacidad de cómputo y memoria
+    influye directamente en el rendimiento del algoritmo. Además, aunque se reduzcan las
+    comunicaciones, no desaparece el costo asociado a transmitir muestras y sincronizar resultados.
+    \par Considero que este trabajo demuestra que la concurrencia no consiste simplemente en añadir
+    más máquinas, sino en diseñar algoritmos que minimicen la necesidad de coordinación. En
+    aplicaciones reales, sería necesario evaluar si el costo de comunicación justifica la
+    distribución, ya que en datasets pequeños el paralelismo podría incluso añadir complejidad
+    innecesaria.},
 }
 
 \tarjeta{bellavita2026}{Kernel K-means con poca comunicación entre GPUs}{
@@ -215,6 +233,24 @@ los tres artículos de este tema buscan pagar menos por ella.
     en strong scaling. El esquema 1.5D llega a ser 3,6 veces más rápido que el 1D, y baja de más de
     una hora a menos de dos segundos frente a una GPU con ventana deslizante.},
   integrante={\nombreDayana},
+  opinion={Al analizar este trabajo, considero que el principal aporte de la programación
+    concurrente no está únicamente en distribuir el cálculo de Kernel K-means entre varias GPUs,
+    sino en diseñar una arquitectura donde la comunicación entre ellas no limite la escalabilidad.
+    Inicialmente podría pensarse que aumentar la cantidad de GPUs siempre produce una mejora
+    proporcional; sin embargo, en algoritmos distribuidos el intercambio de matrices y la
+    sincronización pueden convertirse en el nuevo cuello de botella. Los autores muestran que
+    Kernel K-means presenta altos costos computacionales y de memoria debido al crecimiento
+    cuadrático de la matriz kernel, lo que limita las implementaciones en una sola GPU.
+    \par El beneficio principal de este trabajo es que la concurrencia permite ejecutar clustering
+    sobre datasets de millones de muestras mediante algoritmos distribuidos como el enfoque 1.5D,
+    que reduce la comunicación mediante esquemas de particionamiento especializados. Sin embargo,
+    esta solución también aumenta la complejidad del sistema, ya que requiere administrar
+    distribución de datos, balance de carga y sincronización entre dispositivos. Además, una mala
+    estrategia de particionamiento podría generar más comunicación que beneficio.
+    \par Considero que este trabajo demuestra que en computación paralela no basta con agregar más
+    hardware; es necesario diseñar algoritmos conscientes de la comunicación. La concurrencia aporta
+    escalabilidad, pero solo cuando el costo de coordinar múltiples dispositivos es menor que la
+    ganancia obtenida por paralelizar el cálculo.},
 }
 
 \tarjeta{xu2021}{workers de respaldo dinámicos}{
@@ -243,6 +279,23 @@ los tres artículos de este tema buscan pagar menos por ella.
   aporte={Elimina el ajuste previo de $b$ y entrena hasta 3 veces más rápido que la mejor
     configuración estática.},
   integrante={\nombreDayana},
+  opinion={Al analizar este trabajo, considero que el principal aporte de la programación
+    concurrente está en reducir el impacto de los retrasos dentro de los sistemas distribuidos de
+    aprendizaje automático. En un esquema tradicional basado en \textit{parameter server}, cada
+    iteración depende de recibir las actualizaciones de todos los trabajadores, por lo que un solo
+    nodo lento puede retrasar todo el entrenamiento.
+    \par La propuesta Dynamic Backup Workers (DBW) muestra que el paralelismo no consiste únicamente
+    en agregar más trabajadores, sino en gestionar mejor la sincronización entre ellos. Al permitir
+    que el servidor utilice las actualizaciones de los trabajadores más rápidos y considere al resto
+    como \textit{backup workers}, se reduce el tiempo perdido esperando nodos lentos. Sin embargo,
+    considero que esta ventaja tiene un costo: disminuir la cantidad de trabajadores sincronizados
+    puede introducir mayor variabilidad en los gradientes y afectar la estabilidad del entrenamiento.
+    \par El aspecto más interesante del trabajo es que convierte un problema de sincronización en una
+    decisión adaptativa del sistema. Aun así, no asumiría que DBW siempre es superior: en escenarios
+    con baja variabilidad entre trabajadores, la complejidad adicional del mecanismo dinámico podría
+    no justificar la mejora obtenida. Evaluaría primero cuánto tiempo se pierde realmente por
+    \textit{stragglers} antes de incorporar esta estrategia, ya que el beneficio depende directamente
+    del comportamiento del entorno distribuido.},
 }
 
 \paragraph{Síntesis.} Cada artículo reduce un componente distinto del costo de sincronizar
