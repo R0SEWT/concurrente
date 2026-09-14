@@ -316,6 +316,19 @@ una aproximación con garantía demostrada.
     ligeramente al Lloyd en GPU. Con los vectores de Twitter ($\approx$1~GB) usa 195~MB de memoria de
     GPU, frente a 1.055~MB de Lloyd en GPU y 4.719~MB de RAPIDS.},
   integrante={\nombreRody},
+  opinion={Al principio atribuí el 15x a la GPU, pero la comparación que importa es contra otro
+    K-means que también corre en GPU, y ahí la ventaja baja a 1,7--2,1 veces. El beneficio principal
+    no está en el paralelismo, sino en calcular menos: la desigualdad triangular descarta los puntos
+    que no pueden cambiar de cluster. La concurrencia aporta en otro punto, porque la CPU prepara el
+    siguiente lote mientras la GPU calcula, en vez de quedarse ociosa. Veo tres perjuicios. Esa
+    coordinación tiene un costo, y con lotes grandes la GPU termina esperando a la CPU. En las
+    primeras iteraciones casi todos los puntos cambian de cluster, así que la poda no ahorra nada.
+    Y la ventaja se diluye al subir la dimensión; en datasets chicos, Elkan con 8 hilos de CPU le
+    gana al Lloyd en GPU, lo que muestra que más hardware paralelo no garantiza más velocidad. Para
+    nuestro caso, las 6 dimensiones favorecen la poda y las cotas de cada punto caben en los
+    acumuladores privados de cada worker (unos 45~MB para 2,8 millones de viajes). Aun así, primero
+    mediría el Lloyd concurrente sin poda, para no mezclar la mejora algorítmica con el speedup de la
+    concurrencia.},
 }
 
 \tarjeta{bellavita2025}{Popcorn, Kernel K-means en GPU}{
