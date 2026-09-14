@@ -291,17 +291,30 @@ una aproximación con garantía demostrada.
     en la memoria de la GPU.},
   problema={Ejecutar K-means exacto sobre datasets mayores que esa memoria sin que las
     transferencias entre CPU y GPU dominen el tiempo.},
-  propuesta={ASB K-means (\textit{Asynchronous Selective Batched}) procesa por lotes y usa la
-    desigualdad triangular para omitir, en cada iteración, los puntos cuya asignación no puede
-    cambiar. Así reduce los datos que se transfieren.},
-  algoritmo={\paso{1}Mantener cotas de distancia de cada punto a los centroides.
-    \paso{2}Tras mover los centroides, actualizar las cotas y marcar los puntos que podrían cambiar
-    de cluster.
-    \paso{3}Enviar a la GPU solo esos candidatos, en lotes asíncronos.
-    \paso{4}Reasignarlos, recalcular los centroides y repetir.},
-  stack={CPU y GPU con CUDA, lotes asíncronos; comparación con el K-means de RAPIDS cuML.},
-  aporte={Hasta 15 veces más rápido que un K-means estándar en GPU, y más rápido que RAPIDS cuML en
-    todos los datasets probados.},
+  propuesta={ASB K-means (\textit{Asynchronous Selective Batched}) combina las cotas de Hamerly con
+    lotes y GPU. Cada punto guarda una cota superior de la distancia a su centro y una inferior de
+    la distancia a los demás; por la desigualdad triangular, si la superior no supera a la inferior,
+    el punto no puede cambiar de cluster y se omite. Solo los puntos restantes viajan a la GPU, por
+    lotes, mientras la CPU prepara el lote siguiente.},
+  algoritmo={\paso{1}Inicializar los centros con k-means++ y las cotas de cada punto (CPU).
+    \paso{2}Armar un lote con los puntos cuyas cotas no descartan un cambio de cluster (CPU).
+    \paso{3}Calcular en paralelo la distancia de cada punto del lote a todos los centros, y guardar
+    el más cercano y la distancia al segundo (GPU).
+    \paso{4}Acumular sumas y conteos por cluster y repetir 2--3 hasta cubrir los puntos (CPU).
+    \paso{5}Recalcular los centros (CPU), actualizar las cotas con lo que se movió cada uno (GPU) y
+    repetir hasta converger.},
+  stack={CUDA 10.2 con \textit{streams} asíncronos y memoria \textit{pinned}; GPU NVIDIA Titan X
+    (3.584 núcleos, 12~GB) y CPU Intel Core i7 con 64~GB de RAM. Lotes de 35.840 puntos, 10 veces
+    los núcleos de la GPU: con lotes mayores, seleccionar en la CPU tarda más que calcular en la GPU,
+    que queda esperando. Compara contra RAPIDS cuML, Lloyd en GPU y Elkan y Hamerly en CPU, con los
+    mismos centros iniciales y 300 iteraciones.},
+  aporte={Produce el mismo resultado que K-means estándar, y tras las primeras iteraciones el
+    90\,\% o más de los puntos no cambia de cluster, así que a la GPU llega poco. Es hasta 15 veces
+    más rápido que Lloyd en GPU en su mejor caso, pero en las pruebas sintéticas y de imágenes que
+    detalla la ventaja es de 1,7 a 2,1 veces. Frente a RAPIDS va de 1,65 veces (vectores de 50
+    dimensiones) a 1,09 (200 dimensiones), y en los datasets chicos Elkan con 8 hilos de CPU supera
+    ligeramente al Lloyd en GPU. Con los vectores de Twitter ($\approx$1~GB) usa 195~MB de memoria de
+    GPU, frente a 1.055~MB de Lloyd en GPU y 4.719~MB de RAPIDS.},
   integrante={\nombreRody},
 }
 
@@ -356,7 +369,9 @@ una aproximación con garantía demostrada.
 }
 
 \paragraph{Síntesis.} Las cifras de este tema no son comparables entre sí, porque cada artículo
-mide algo distinto (Tabla~\ref{tab:sintesis3}). ASB acelera sin perder exactitud. Voevodski cambia
+mide algo distinto (Tabla~\ref{tab:sintesis3}). ASB acelera sin perder exactitud, y frente a otro
+K-means que también corre en GPU su ventaja es de 1,7 a 2,1 veces en las pruebas que detalla (15 en
+el mejor caso): buena parte de la aceleración viene de omitir puntos, no de la GPU. Voevodski cambia
 exactitud por una garantía de aproximación y reporta calidad del clustering, no tiempo. Popcorn deja
 la lección de evaluación que más nos afecta: 123,8 y 2,6 describen el mismo sistema contra dos
 líneas base distintas. Por eso, nuestra tabla de speedup declarará siempre contra qué versión se
@@ -370,7 +385,7 @@ mide.
 \textbf{Artículo} & \textbf{Qué evita} & \textbf{Resultado frente al exacto} & \textbf{Aceleración reportada} \\
 \midrule
 \textcite{li2023} & Distancias y transferencias CPU--GPU & Exacto
-  & Hasta 15 veces frente a K-means estándar en GPU \\
+  & Hasta 15 veces frente a Lloyd en GPU; de 1,09 a 1,65 frente a RAPIDS \\
 \addlinespace
 \textcite{bellavita2025} & Operaciones densas sobre la matriz kernel & Mismo modelo, otra representación
   & 123,8 veces frente a CPU; 2,6 frente a GPU densa \\
