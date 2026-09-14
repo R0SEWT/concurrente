@@ -364,9 +364,11 @@ una aproximación con garantía demostrada.
     Me convence delegar la concurrencia en cuBLAS y cuSPARSE, porque se escribe muy poco CUDA y se
     hereda el trabajo de optimización de NVIDIA. El costo es perder control: el propio artículo
     muestra que SpMM no usa la memoria compartida de la GPU y mueve más datos, y además quedas atado
-    a un proveedor. Me gustaría medirlo con submuestras de nuestros viajes, para mostrar que más
-    paralelismo baja el tiempo pero no la memoria, y que la salida pasa por repartir la matriz entre
-    varias GPU, como proponen \textcite{bellavita2026}.},
+    a un proveedor. Me gustaría medirlo con submuestras de nuestros viajes: en Go, con
+    goroutines, sobre los 15~GB de RAM de mi laptop, donde según mi cálculo la matriz deja de caber
+    cerca de los 60.000 puntos, y con una prueba rápida en la GPU de gorgo. La idea es mostrar que
+    más goroutines bajan el tiempo pero no la memoria, y que la salida pasa por repartir la matriz
+    entre varias GPU, como proponen \textcite{bellavita2026}.},
 }
 
 \tarjeta{voevodski2024}{clustering $k$ a gran escala con aproximación}{
