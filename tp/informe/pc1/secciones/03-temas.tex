@@ -346,11 +346,27 @@ una aproximación con garantía demostrada.
     \paso{2}Codificar la asignación en una matriz dispersa indicadora $\mathbf{V}$.
     \paso{3}Obtener las distancias con el producto disperso $\mathbf{K}\mathbf{V}$.
     \paso{4}Actualizar $\mathbf{V}$ y repetir.},
-  stack={GPU con bibliotecas de álgebra lineal dispersa; artefacto reproducible publicado en
-    Zenodo.},
-  aporte={Hasta 123,8 veces más rápido que una implementación en CPU, pero hasta 2,6 veces frente a
-    una implementación en GPU sin matrices dispersas.},
+  stack={CUDA 12.2 con cuBLAS (matriz kernel, eligiendo GEMM o SYRK según n/d), cuSPARSE (SpMM y
+    SpMV) y thrust; menos de 50 líneas de CUDA escritas a mano. GPU NVIDIA A100 con CPU AMD EPYC
+    7763 de 64 núcleos; 6 datasets de libSVM de hasta 78.823 puntos, 30 iteraciones fijas y kernel
+    polinomial. Artefacto reproducible publicado en Zenodo.},
+  aporte={Hasta 123,8 veces más rápido que PRMLT, una implementación en MATLAB de un solo hilo.
+    Frente a una implementación CUDA propia sin matrices dispersas, es de 1,6 a 2,6 veces más rápido
+    en el algoritmo completo; la base CUDA, a su vez, supera a PRMLT normalmente entre 11 y 21 veces.},
   integrante={\nombreRody},
+  opinion={El 123,8x me parece parcialmente engañoso: compara una A100 contra MATLAB de un solo hilo,
+    en una máquina con 64 núcleos. La comparación honesta es contra otra GPU, y ahí la ventaja es de
+    1,6 a 2,6 veces. El \textit{kernel trick} es muy potente, porque compara los puntos como si
+    vivieran en un espacio de muchas más dimensiones sin construirlo, pero lo cobra en memoria: la
+    matriz kernel crece con $n^2$. Con 78.823 puntos ya ocupa casi 25~GB en precisión simple, y con
+    nuestros 2,8 millones de viajes serían unos 32~TB. Ninguna cantidad de hilos ni de GPU reduce
+    ese costo cuadrático: el paralelismo acelera el cálculo, pero no achica lo que hay que guardar.
+    Me convence delegar la concurrencia en cuBLAS y cuSPARSE, porque se escribe muy poco CUDA y se
+    hereda el trabajo de optimización de NVIDIA. El costo es perder control: el propio artículo
+    muestra que SpMM no usa la memoria compartida de la GPU y mueve más datos, y además quedas atado
+    a un proveedor. Me gustaría medirlo con submuestras de nuestros viajes, para mostrar que más
+    paralelismo baja el tiempo pero no la memoria, y que la salida pasa por repartir la matriz entre
+    varias GPU, como proponen \textcite{bellavita2026}.},
 }
 
 \tarjeta{voevodski2024}{clustering $k$ a gran escala con aproximación}{
