@@ -450,6 +450,19 @@ una aproximación con garantía demostrada.
     clusterings que las construcciones de coresets del estado del arte con muestras del mismo
     tamaño.},
   integrante={\nombreRody},
+  opinion={Me parece interesante que cada celda de Voronoi se resuma con conteos y sumas calculados en
+    paralelo: es el mismo patrón de nuestros acumuladores, pero con una sola ronda de comunicación en
+    lugar de una barrera por iteración. Aun así, no aceptaría una aproximación de hasta 10 veces el
+    óptimo cuando Lloyd exacto cabe en mi laptop: las 6 features de 2,8 millones de viajes ocupan
+    unos 136~MB. Tampoco creo que nuestros viajes cumplan la estabilidad que exige la garantía. La
+    movilidad cambia con feriados, eventos, obras, fines de semana y políticas públicas como el cobro
+    por congestión, y esa mezcla produce tipos de viaje que se solapan, justo lo contrario de los
+    clusters bien separados que supone el artículo. En cuanto a la concurrencia, el beneficio es
+    repartir la pasada $O(n)$ entre muchas máquinas; el perjuicio es que el árbol y la programación
+    dinámica, $O(t^3)$, corren en una sola y, por la ley de Amdahl, ponen techo al speedup. Lo que el
+    autor afirma es escalamiento débil (más datos en el mismo tiempo), y lo proyecta sin medirlo en
+    paralelo; él mismo reconoce que sus algoritmos no son necesariamente más rápidos que las
+    alternativas.},
 }
 
 \paragraph{Síntesis.} Las cifras de este tema no son comparables entre sí, porque cada artículo
@@ -478,6 +491,42 @@ mide.
   & Mejor calidad que coresets del mismo tamaño \\
 \bottomrule
 \end{tabularx}
+\end{table}
+
+Popcorn y Voevodski muestran los dos límites que el paralelismo no resuelve
+(Tabla~\ref{tab:limites}). Popcorn conserva el algoritmo exacto y paraleliza casi todo su trabajo en
+la GPU, así que la ley de Amdahl \parencite{amdahl1967} no lo frena; lo frena la memoria, porque la
+matriz kernel crece con $n^2$. Voevodski esquiva ese muro resumiendo los datos en unas pocas
+semillas, pero paga con una garantía que depende de la estabilidad de los datos y con una parte
+serial, $O(t^3)$, que acota el speedup; lo que ofrece a cambio es escalamiento débil, más datos en el
+mismo tiempo \parencite{gustafson1988}, que proyecta sin medir en paralelo. Uno mantiene el algoritmo
+y choca con la memoria; el otro cambia el algoritmo para no chocar y choca con Amdahl. Nuestro Lloyd
+exacto no tiene ninguno de los dos problemas de memoria: su límite será la fracción serial y la
+granularidad del reparto (sección~\ref{sec:diseno}).
+
+\begin{table}[H]
+\caption{Qué limita a cada enfoque frente a nuestro Lloyd}\label{tab:limites}
+\small
+\begin{tabularx}{\textwidth}{@{}L{3cm}YYY@{}}
+\toprule
+ & \textbf{Popcorn} & \textbf{Voevodski} & \textbf{Nuestro Lloyd} \\
+\midrule
+Resultado & Exacto (Kernel K-means) & Aproximado: hasta 10 veces el óptimo en $k$-means, si hay
+  estabilidad & Exacto \\
+\addlinespace
+Qué se paraleliza & Casi todo: matriz kernel y distancias en la GPU & Solo la pasada $O(n)$ de
+  Voronoi & La asignación $O(nk)$ de cada iteración \\
+\addlinespace
+Qué lo limita & Memoria $O(n^2)$ de la matriz kernel & Parte serial $O(t^3)$ y supuesto de
+  estabilidad & Fracción serial (lectura, barrera, reducción) y granularidad \\
+\addlinespace
+Memoria con 2,8 millones de viajes & Unos 32~TB & Resúmenes de $t$ semillas & Unos 136~MB \\
+\bottomrule
+\end{tabularx}
+
+{\footnotesize\textit{Nota.} La memoria de Popcorn corresponde a la matriz kernel densa en precisión
+simple; la de Lloyd, a las 6 features en doble precisión. Cálculo propio a partir de los tamaños
+del dataset limpio.\par}
 \end{table}
 
 % --------------------------------------------------------

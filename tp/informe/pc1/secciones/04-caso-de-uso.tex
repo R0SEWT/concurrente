@@ -139,7 +139,7 @@ iteración.
 \end{algorithmic}
 \end{algorithm}
 
-La revisión bibliográfica fija tres decisiones de la evaluación. Primero, la versión concurrente
+La revisión bibliográfica fija cuatro decisiones de la evaluación. Primero, la versión concurrente
 suma en otro orden que la secuencial, y en punto flotante eso altera los últimos dígitos; por eso
 compararemos centroides e inercia con una tolerancia explícita \parencite{he2022}, partiendo de la
 misma inicialización y el mismo criterio de parada \parencite{nigro2022}. Segundo, el tamaño de
@@ -148,6 +148,20 @@ el rendimiento tanto como la cantidad de hilos \parencite{kwedlo2021,kwedlo2024}
 speedup ($T_{\text{secuencial}} / T_{\text{concurrente}}$) se medirá contra la versión secuencial
 del mismo algoritmo, con media recortada de varias ejecuciones, porque la cifra depende del
 denominador \parencite{bellavita2025}.
+
+Cuarto, la parte serial pone techo al speedup. Según la ley de Amdahl \parencite{amdahl1967}, si
+una fracción $f$ del trabajo es paralelizable, con $P$ goroutines el speedup es
+\[
+  S(P) = \frac{1}{(1-f) + f/P}, \qquad S(P) < \frac{1}{1-f}.
+\]
+En nuestro diseño son seriales la lectura del CSV de gold, la preparación de los bloques, la
+barrera y la actualización de centroides. Si, por ejemplo, el 14\,\% del tiempo total fuera
+serial, con 8 goroutines el speedup no pasaría de unas 4 veces, y ni con infinitas llegaría a 7.
+Por eso mediremos por separado la lectura y el tiempo por iteración, para estimar $f$. Además del
+escalamiento fuerte (el mismo problema con más goroutines), reportaremos el escalamiento débil
+(más viajes en el mismo tiempo al sumar goroutines), que describe la ley de Gustafson
+\parencite{gustafson1988}. La memoria, en cambio, no es el límite: las 6 features de 2,8 millones
+de viajes ocupan unos 136~MB en doble precisión.
 
 Como contraste, PC2 medirá una variante con acumuladores compartidos protegidos por
 \texttt{sync.Mutex}, para cuantificar el costo de la contención. La barrera se modelará en Promela
