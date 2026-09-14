@@ -5,21 +5,32 @@
 
 \subsection{Conclusiones del grupo}
 
-La literatura reciente acelera K-means por dos vías. Una reparte el mismo trabajo entre más hilos o
-máquinas; la otra hace menos trabajo mediante poda, otra representación del cálculo o
-aproximación. Solo la primera conserva por construcción el resultado del algoritmo secuencial, y
-es la que implementaremos en PC2.
+La literatura reciente acelera K-means por dos vías que se combinan: repartir el trabajo entre más
+hilos, GPU o máquinas, y hacer menos trabajo. Lo que decide si se conserva el resultado del algoritmo
+secuencial no es la vía elegida, sino cuánto se relaja el algoritmo. La poda exacta de
+\textcite{li2023} y de \textcite{kwedlo2021} lo conserva; la aproximación de
+\textcite{voevodski2024} y los esquemas distribuidos que relajan la sincronización, como SOCCER y
+DBW, lo cambian. En PC2 implementaremos Lloyd exacto repartido entre goroutines, sin poda en la
+primera versión.
 
-En todas las escalas revisadas, el costo de sincronizar condiciona el diseño. Entre máquinas se
-mide en rondas y en volumen comunicado; en una sola máquina, en contención sobre el estado
-compartido. Nuestro diseño lo acota con acumuladores privados y una única barrera por iteración.
+El paralelismo no rescata a un algoritmo cuya complejidad es el verdadero límite. Popcorn choca con
+la memoria $O(n^2)$ de la matriz kernel, que con nuestros 2,8 millones de viajes ocuparía unos
+32~TB, y Voevodski con una parte serial $O(t^3)$ que acota el speedup. Nuestro Lloyd ocupa unos
+136~MB, así que su límite será la fracción serial y el costo de sincronizar: entre máquinas se mide
+en rondas y en volumen comunicado; en una sola máquina, en la espera en la barrera.
 
-Las cifras de aceleración de los artículos van de 1,3 a 123,8, y buena parte de esa distancia se
+Con eso respondemos, de forma provisional, la pregunta guía de la revisión: la granularidad del
+reparto pesa tanto como el número de hilos, y reducir por sumas y conteos permite repartir el
+trabajo sin perder la equivalencia con la versión secuencial, siempre que se compare con una
+tolerancia. PC2 lo pondrá a prueba.
+
+Las cifras de aceleración de los artículos van de 1,09 a 123,8, y buena parte de esa distancia se
 explica por la línea base elegida. Nuestra evaluación fijará como referencia la versión secuencial
-del mismo algoritmo, con la misma inicialización y la media recortada de varias ejecuciones.
+del mismo algoritmo, con la misma inicialización y la media recortada de varias ejecuciones, y medirá
+por separado la lectura y las iteraciones.
 
 El dataset ya está listo para el modelo: cada regla de limpieza está justificada, la verifican dos
-implementaciones independientes y todo el proceso se reproduce con un comando.
+implementaciones independientes y el pipeline se reproduce con tres comandos.
 
 \subsection{Conclusiones individuales}
 

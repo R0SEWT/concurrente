@@ -32,7 +32,9 @@ hora.
 K-means figura en la lista de modelos del enunciado y se ajusta a un problema sin variable objetivo.
 Su costo, además, justifica la concurrencia. Cada iteración de Lloyd calcula la distancia de cada
 viaje a cada centroide; con cerca de 2,8 millones de viajes y, por ejemplo, $K = 8$, son unos 22,6
-millones de distancias en 6 dimensiones por iteración.
+millones de distancias en 6 dimensiones por iteración. El valor de $K$ se fijará en PC2
+comparando la inercia y el coeficiente de silueta para varios valores sobre una muestra, y la
+inicialización será k-means++ con semilla fija, la misma para las versiones secuencial y concurrente.
 
 Dos propiedades hacen que se paralelice bien. La asignación de un viaje no depende de ningún otro,
 así que los datos pueden repartirse en bloques entre goroutines, como en \textcite{nigro2022}. Y la
@@ -98,6 +100,12 @@ Licencia & Datos abiertos de la ciudad de Nueva York \\
 local de Nueva York, sin zona horaria.}
 \end{table}
 
+El dataset cubre un solo mes, y eso limita lo que los clusters pueden decir. Enero de 2024 incluye
+dos feriados, Año Nuevo (lunes 1) y el Día de Martin Luther King (lunes 15), además del invierno.
+Las features de hora y día de la semana capturan parte de esa variación, pero un feriado se confunde
+con un día laborable del mismo día de la semana. Los tipos de viaje que encontremos describen enero
+de 2024; comprobar si se repiten en otro mes queda como validación para el TP.
+
 \subsection{Diseño concurrente de referencia}\label{sec:diseno}
 
 La implementación de PC2 partirá de un \emph{worker pool} de goroutines
@@ -156,7 +164,7 @@ una fracción $f$ del trabajo es paralelizable, con $P$ goroutines el speedup es
 \]
 En nuestro diseño son seriales la lectura del CSV de gold, la preparación de los bloques, la
 barrera y la actualización de centroides. Si, por ejemplo, el 14\,\% del tiempo total fuera
-serial, con 8 goroutines el speedup no pasaría de unas 4 veces, y ni con infinitas llegaría a 7.
+serial, con 8 goroutines el speedup sería de unas 4 veces, y ni con infinitas goroutines pasaría de unas 7.
 Por eso mediremos por separado la lectura y el tiempo por iteración, para estimar $f$. Además del
 escalamiento fuerte (el mismo problema con más goroutines), reportaremos el escalamiento débil
 (más viajes en el mismo tiempo al sumar goroutines), que describe la ley de \textcite{gustafson1988}. La memoria, en cambio, no es el límite: las 6 features de 2,8 millones

@@ -5,8 +5,8 @@ Este informe presenta el primer entregable del Trabajo Parcial de Programación 
 Distribuida. El grupo propone aplicar K-means a los registros de viajes del taxi amarillo de Nueva
 York \parencite{nyctlc} para caracterizar patrones de movilidad urbana, un insumo para la
 planificación del transporte que persigue el Objetivo de Desarrollo Sostenible~11. El algoritmo se
-implementará en PC2 en Go, sin librerías de terceros, con goroutines, \texttt{sync.WaitGroup} y
-\texttt{sync.Mutex}.
+implementará en PC2 en Go, sin librerías de terceros, con goroutines y \texttt{sync.WaitGroup}, más una variante con
+\texttt{sync.Mutex} para medir el costo de la contención.
 
 La revisión bibliográfica reúne nueve artículos publicados entre 2021 y 2026, tres por integrante.
 Se organizan en tres temas: paralelismo en memoria compartida, sincronización en entornos

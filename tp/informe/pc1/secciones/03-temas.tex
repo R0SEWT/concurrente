@@ -419,7 +419,7 @@ una aproximación con garantía demostrada.
     muestra que SpMM no usa la memoria compartida de la GPU y mueve más datos, y además quedas atado
     a un proveedor. Me gustaría medirlo con submuestras de nuestros viajes: en Go, con
     goroutines, sobre los 15~GB de RAM de mi laptop, donde según mi cálculo la matriz deja de caber
-    cerca de los 60.000 puntos, y con una prueba rápida en la GPU de gorgo. La idea es mostrar que
+    cerca de los 60.000 puntos, y con una prueba rápida en una GPU RTX 4060 Ti de 16~GB. La idea es mostrar que
     más goroutines bajan el tiempo pero no la memoria, y que la salida pasa por repartir la matriz
     entre varias GPU, como proponen \textcite{bellavita2026}.},
 }
@@ -500,8 +500,7 @@ matriz kernel crece con $n^2$. Voevodski esquiva ese muro resumiendo los datos e
 semillas, pero paga con una garantía que depende de la estabilidad de los datos y con una parte
 serial, $O(t^3)$, que acota el speedup; lo que ofrece a cambio es escalamiento débil, más datos en el
 mismo tiempo \parencite{gustafson1988}, que proyecta sin medir en paralelo. Uno mantiene el algoritmo
-y choca con la memoria; el otro cambia el algoritmo para no chocar y choca con Amdahl. Nuestro Lloyd
-exacto no tiene ninguno de los dos problemas de memoria: su límite será la fracción serial y la
+y choca con la memoria; el otro cambia el algoritmo para no chocar y choca con Amdahl. Nuestro Lloyd exacto no enfrenta el muro de memoria de Popcorn ni necesita la aproximación de Voevodski: su límite será la fracción serial y la
 granularidad del reparto (sección~\ref{sec:diseno}).
 
 \begin{table}[H]
