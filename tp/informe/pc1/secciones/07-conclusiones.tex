@@ -35,8 +35,20 @@ implementaciones independientes y el pipeline se reproduce con tres comandos.
 \subsection{Conclusiones individuales}
 
 \subsubsection*{\nombreRody{} (Tema 3)}
-\pendiente{análisis y conclusiones propias sobre poda, localidad y aproximación, y su relación con
-el caso}
+Los tres trabajos de mi tema me dejaron una idea que no esperaba: las aceleraciones más llamativas
+no vienen solo del paralelismo. En 	extcite{li2023}, la ventaja real frente a otro K-means en GPU,
+de 1,7 a 2,1 veces, sale de omitir puntos con la desigualdad triangular; en
+	extcite{bellavita2025}, el 123,8x depende de compararse contra MATLAB de un solo hilo; y en
+	extcite{voevodski2024}, la escalabilidad se proyecta sin medirse en paralelo. También vi dos
+límites que ningún hilo resuelve: la memoria $O(n^2)$ de la matriz kernel y una parte serial
+$O(t^3)$ que, por la ley de Amdahl, pone techo al speedup.
+
+Para nuestro caso saco tres conclusiones. Primero, Lloyd exacto es la opción razonable: sus features
+caben en unos 136~MB y no justifican aceptar una aproximación. Segundo, el speedup que reportemos
+debe decir contra qué versión se mide y separar la lectura del CSV de las iteraciones, porque esa
+fracción serial fija el techo. Tercero, la poda de ASB es una mejora posible para después, pero
+primero mediría el Lloyd concurrente sin ella, para no confundir la mejora algorítmica con la que
+aporta la concurrencia.
 
 \subsubsection*{\nombreDayana{} (Tema 2)}
 El análisis de los tres trabajos me permitió concluir que en sistemas distribuidos, el principal
