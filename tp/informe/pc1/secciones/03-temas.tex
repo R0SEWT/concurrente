@@ -495,7 +495,7 @@ mide.
 
 Popcorn y Voevodski muestran los dos límites que el paralelismo no resuelve
 (Tabla~\ref{tab:limites}). Popcorn conserva el algoritmo exacto y paraleliza casi todo su trabajo en
-la GPU, así que la ley de Amdahl \parencite{amdahl1967} no lo frena; lo frena la memoria, porque la
+la GPU, así que la ley de \textcite{amdahl1967} no lo frena; lo frena la memoria, porque la
 matriz kernel crece con $n^2$. Voevodski esquiva ese muro resumiendo los datos en unas pocas
 semillas, pero paga con una garantía que depende de la estabilidad de los datos y con una parte
 serial, $O(t^3)$, que acota el speedup; lo que ofrece a cambio es escalamiento débil, más datos en el

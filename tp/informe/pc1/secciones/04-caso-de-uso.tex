@@ -149,7 +149,7 @@ speedup ($T_{\text{secuencial}} / T_{\text{concurrente}}$) se medirá contra la 
 del mismo algoritmo, con media recortada de varias ejecuciones, porque la cifra depende del
 denominador \parencite{bellavita2025}.
 
-Cuarto, la parte serial pone techo al speedup. Según la ley de Amdahl \parencite{amdahl1967}, si
+Cuarto, la parte serial pone techo al speedup. Según la ley de \textcite{amdahl1967}, si
 una fracción $f$ del trabajo es paralelizable, con $P$ goroutines el speedup es
 \[
   S(P) = \frac{1}{(1-f) + f/P}, \qquad S(P) < \frac{1}{1-f}.
@@ -159,8 +159,7 @@ barrera y la actualización de centroides. Si, por ejemplo, el 14\,\% del tiempo
 serial, con 8 goroutines el speedup no pasaría de unas 4 veces, y ni con infinitas llegaría a 7.
 Por eso mediremos por separado la lectura y el tiempo por iteración, para estimar $f$. Además del
 escalamiento fuerte (el mismo problema con más goroutines), reportaremos el escalamiento débil
-(más viajes en el mismo tiempo al sumar goroutines), que describe la ley de Gustafson
-\parencite{gustafson1988}. La memoria, en cambio, no es el límite: las 6 features de 2,8 millones
+(más viajes en el mismo tiempo al sumar goroutines), que describe la ley de \textcite{gustafson1988}. La memoria, en cambio, no es el límite: las 6 features de 2,8 millones
 de viajes ocupan unos 136~MB en doble precisión.
 
 Como contraste, PC2 medirá una variante con acumuladores compartidos protegidos por
