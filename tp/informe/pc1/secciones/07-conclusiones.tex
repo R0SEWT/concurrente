@@ -28,8 +28,23 @@ implementaciones independientes y todo el proceso se reproduce con un comando.
 el caso}
 
 \subsubsection*{\nombreDayana{} (Tema 2)}
-\pendiente{análisis y conclusiones propias sobre sincronización distribuida, y su relación con el
-caso}
+El análisis de los tres trabajos me permitió concluir que en sistemas distribuidos, el principal
+límite de escalabilidad no necesariamente es cuánto cálculo puede ejecutarse en paralelo, sino
+cuánto cuesta coordinarlo. Hess et al. reducen el número de rondas, Bellavita et al. disminuyen el
+volumen de datos comunicado entre GPUs y Xu et al. atacan el tiempo perdido esperando a los
+\textit{stragglers}. En los tres casos, aumentar los recursos disponibles por sí solo no garantiza
+una mejora: la sincronización puede trasladar el cuello de botella desde el cálculo hacia la
+comunicación.
+
+Para nuestro caso, esta conclusión justifica mantener la sincronización fuera del procesamiento de
+cada bloque. Cada \textit{worker} debería calcular asignaciones, sumas y conteos en acumuladores
+privados y comunicarlos únicamente al finalizar la iteración, evitando un \texttt{Mutex} sobre cada
+actualización. Aun así, no adoptaría directamente mecanismos como SOCCER o DBW, ambos reducen
+sincronización a cambio de abandonar algún aspecto del Lloyd síncrono que queremos comparar contra
+la versión secuencial. Por ello, considero más relevante controlar el desbalance mediante bloques
+de tamaño similar y medir cuánto tiempo permanece cada \textit{worker} esperando en la barrera. Si
+esa espera crece al aumentar las \textit{goroutines}, el límite ya no estaría en la capacidad de
+cómputo, sino en la granularidad y coordinación del trabajo.
 
 \subsubsection*{\nombreTercero{} (Tema 1)}
 \pendiente{análisis y conclusiones propias sobre paralelismo en memoria compartida, y su relación
