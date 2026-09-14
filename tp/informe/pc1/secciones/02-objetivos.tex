@@ -1,0 +1,25 @@
+\section{Objetivos}
+
+\subsection{Objetivo general}
+
+Sustentar un caso de uso de machine learning concurrente sobre un dataset real de más de un millón
+de registros, fundamentado en literatura académica reciente. El caso servirá de base para
+implementar en Go, sin librerías de terceros, una versión secuencial y otra concurrente de K-means
+en los entregables siguientes.
+
+\subsection{Objetivos específicos}
+
+\begin{itemize}
+  \item Revisar nueve artículos académicos publicados entre 2021 y 2026, tres por integrante, sobre
+        modelos de machine learning paralelizados. En cada uno, identificar qué mecanismo de
+        concurrencia usa y qué beneficio le aporta al modelo.
+  \item Organizar la revisión en tres temas con preguntas aplicables a nuestra implementación: cómo
+        repartir y reducir el trabajo en memoria compartida, cuánto cuesta sincronizar entre nodos y
+        cuándo conviene hacer menos trabajo en lugar de repartirlo.
+  \item Justificar la elección de K-means sobre los viajes de taxi de Nueva York y su relación con
+        el ODS 11.
+  \item Seleccionar y limpiar un mes completo del dataset con reglas explícitas, verificables y
+        reproducibles, dejando más de un millón de registros válidos.
+  \item Preparar las features y el formato de entrada (CSV) que consumirá la implementación en Go.
+  \item Evidenciar el trabajo de todos los integrantes en GitHub con el flujo Git Flow.
+\end{itemize}

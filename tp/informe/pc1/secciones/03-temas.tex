@@ -1,0 +1,578 @@
+% ========================================================
+% INVESTIGACIÓN BIBLIOGRÁFICA: 3 TEMAS, 3 PAPERS POR INTEGRANTE
+% ========================================================
+\section{Investigación bibliográfica}
+
+\subsection{Pregunta guía y criterios de selección}
+
+La revisión parte de una pregunta que el experimento de PC2 podrá contrastar: \textit{¿cómo afectan
+la granularidad del trabajo y la estrategia de reducción al rendimiento y a la equivalencia numérica
+de K-means sobre más de un millón de registros?}
+
+Con esa pregunta como filtro, seleccionamos artículos publicados desde 2021 cuyo tema central fuera
+un modelo de machine learning acelerado con concurrencia. Todos provienen de revistas o conferencias
+arbitradas de IEEE, ACM, Springer, Elsevier, MDPI o PMLR. Verificamos el DOI, los autores y el año
+contra el registro de cada editor, y preferimos versiones de acceso abierto para que cualquier lector
+pueda consultar la fuente.
+Seis de los nueve venues están en el primer cuartil de SCImago o en el rango A de ICORE
+(Tabla~\ref{tab:ranking}); las excepciones son la revista \textit{Algorithms} (Q2) y las conferencias
+ICPP y PPoPP (rango B).
+Los trabajos clásicos de la línea, anteriores a esa ventana, se citan como antecedentes en la
+sección~\ref{sec:antecedentes}.
+
+\input{secciones/ranking}
+
+La Tabla~\ref{tab:reparto} muestra el reparto de artículos. En cada ficha, el campo \emph{aporte de
+la concurrencia} recoge el resultado que el artículo atribuye al paralelismo; su relación con
+nuestro diseño se discute al cierre de cada tema.
+
+\begin{table}[H]
+\caption{Reparto de los nueve artículos entre temas e integrantes}\label{tab:reparto}
+\small
+\begin{tabularx}{\textwidth}{@{}L{4.4cm}L{3.4cm}Y@{}}
+\toprule
+\textbf{Tema} & \textbf{Responsable} & \textbf{Artículos} \\
+\midrule
+1. Paralelismo en memoria compartida & \nombreTercero
+  & \textcite{nigro2022}; \textcite{kwedlo2021}; \textcite{kwedlo2024} \\
+\addlinespace
+2. Sincronización distribuida & \nombreDayana
+  & \textcite{hess2023}; \textcite{bellavita2026}; \textcite{xu2021} \\
+\addlinespace
+3. Poda, localidad y aproximación & \nombreRody
+  & \textcite{li2023}; \textcite{bellavita2025}; \textcite{voevodski2024} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+% --------------------------------------------------------
+\subsection{Tema 1: paralelismo de datos y sincronización en memoria compartida}
+% --------------------------------------------------------
+
+\textbf{Responsable:} \nombreTercero. Las opiniones críticas y la conclusión de este tema las
+redactó \nombreRody, porque el integrante asignado no las entregó.
+
+Es el tema más cercano a nuestra implementación: una máquina, varios núcleos y el dataset completo
+en memoria. Interesa cómo se reparte la asignación de puntos entre hilos, cómo se combinan los
+resultados parciales y cuánto pesa la coordinación frente al cálculo.
+
+\tarjeta{nigro2022}{K-means paralelo en Java}{
+  titulo={Performance of Parallel K-Means Algorithms in Java},
+  autores={Libero Nigro},
+  fuente={2022, \textit{Algorithms} (MDPI), 15(4), 117},
+  link={\url{https://doi.org/10.3390/a15040117}},
+  motivacion={K-means se encarece al crecer los registros, la dimensión y el número de clusters,
+    mientras que las máquinas multinúcleo ya son hardware común.},
+  problema={Paralelizar K-means en una sola máquina y determinar qué modelo de concurrencia de Java
+    rinde más sin alterar el resultado.},
+  propuesta={Compara dos versiones de Lloyd: map/reduce con \textit{parallel streams}, donde el
+    runtime decide el particionado, y actores sin locks con Theatre, donde cada hilo es una unidad
+    gruesa asignada a un núcleo.},
+  algoritmo={\paso{1}Inicializar $K$ centroides.
+    \paso{2}Asignar cada punto en paralelo (\textit{map}).
+    \paso{3}Sumar puntos y conteos por cluster (\textit{reduce}).
+    \paso{4}Recalcular centroides hasta que se muevan menos de $10^{-10}$ o se llegue a 1000
+    iteraciones.},
+  stack={Java, Streams API y biblioteca de actores Theatre; patrones map/reduce y modelo de
+    actores.},
+  aporte={Con US Census 1990 (2.458.285 registros, 68 dimensiones) y 16 hilos, logra un speedup
+    cercano a 11 con \textit{streams} ($K=80$) y de 10,63 con Theatre ($K=120$). Ambas versiones
+    reproducen exactamente los centroides y el número de iteraciones de la versión secuencial.},
+  integrante={\nombreRody},
+  opinion={De los tres trabajos del tema, este es el que más se parece a lo que haremos en
+    Go. El beneficio de la concurrencia es claro: con 16 hilos logra un speedup cercano a 11 y
+    reproduce exactamente los centroides y las iteraciones de la versión secuencial, que es el criterio
+    de corrección que adoptamos. Pero 11 sobre 16 es una eficiencia cercana al 69\,\%: casi un tercio
+    del potencial se pierde en partes seriales y en coordinar hilos, algo que la ley de Amdahl ayuda a
+    explicar. También me deja una duda sobre el control: con \textit{parallel streams} el runtime decide
+    el particionado, cómodo pero opaco, mientras que en Go nosotros elegimos el tamaño de bloque y
+    podemos medirlo. Por último, sus puntos tienen 68 dimensiones y los nuestros 6; con menos cálculo
+    por viaje, sospecho que el costo de coordinar pesará más en proporción y nuestra eficiencia será
+    menor.},
+}
+
+\tarjeta{kwedlo2021}{K-means acelerado en memoria compartida}{
+  titulo={Accelerated K-Means Algorithms for Low-Dimensional Data on Parallel Shared-Memory
+    Systems},
+  autores={Wojciech Kwedlo, Michał Łubowicz},
+  fuente={2021, \textit{IEEE Access}, 9, 74286--74301},
+  link={\url{https://doi.org/10.1109/ACCESS.2021.3080821}},
+  motivacion={Los K-means acelerados evitan distancias innecesarias, pero cuestan más de
+    paralelizar: la carga de trabajo por punto deja de ser uniforme.},
+  problema={Paralelizar un K-means exacto para datos de baja dimensión sin que la gestión de
+    tareas limite la escalabilidad.},
+  propuesta={Versión paralela del \textit{filtering algorithm}. Un kd-tree descarta los centroides
+    que no pueden ser los más cercanos a ningún punto de una celda; la construcción del árbol y su
+    recorrido se reparten en tareas OpenMP, una por llamada recursiva.},
+  algoritmo={\texttt{Filter}($u$, $C$):
+    \paso{1}En una hoja, iterar Lloyd solo con los candidatos $C$.
+    \paso{2}En un nodo interno, quitar de $C$ los centroides más lejanos de toda la celda que el más
+    cercano a su punto medio.
+    \paso{3}Con un solo candidato, asignar la celda entera usando la suma y el conteo del nodo.
+    \paso{4}Si quedan varios, recorrer los dos hijos como tareas paralelas.},
+  stack={C/C++ con OpenMP \textit{tasking}; divide y vencerás sobre memoria compartida.},
+  aporte={En 24 núcleos, con 6 datasets sintéticos (hasta $10^9$ puntos) y 7 reales, alcanza una
+    eficiencia paralela satisfactoria o alta y tiempos mucho menores que Lloyd paralelo, una versión
+    en GPU y dos métodos basados en la desigualdad triangular. La ventaja cae rápido al aumentar la
+    dimensión.},
+  integrante={\nombreRody},
+  opinion={Me interesa porque ataca un problema que en Lloyd no existe: con poda, cada punto
+    cuesta distinto, y repartir bloques iguales ya no reparte trabajo igual. Crear una tarea por llamada
+    recursiva adapta la granularidad a la geometría de los datos, y el resultado sigue siendo exacto, lo
+    que es un beneficio real. El perjuicio lo reconocen los propios autores: a medida que el algoritmo
+    avanza, cada tarea hace menos trabajo, pero el costo de gestionar el \textit{pool} de tareas no baja
+    y puede limitar la escalabilidad. En Go las goroutines son baratas, pero no gratis, así que abrir una
+    por cada subárbol diminuto repetiría el problema; habría que fijar un umbral por debajo del cual se
+    recorre en serie. También noto que la ventaja cae al subir la dimensión y que construir el kd-tree
+    agrega memoria y preprocesamiento. Con nuestras 6 dimensiones la idea encaja, pero la dejaría para
+    después de medir el Lloyd concurrente simple.},
+}
+
+\tarjeta{kwedlo2024}{IMM paralelo en memoria compartida}{
+  titulo={Parallel Iterative Mistake Minimization (IMM) clustering algorithm for shared-memory
+    systems},
+  autores={Wojciech Kwedlo},
+  fuente={2024, ICPP '24 (ACM), 1--10},
+  link={\url{https://doi.org/10.1145/3673038.3673057}},
+  motivacion={Un árbol de decisión compacto vuelve legibles los clusters de K-means, pero
+    construirlo con IMM es costoso.},
+  problema={Paralelizar IMM, el algoritmo que genera ese árbol explicativo a partir de los
+    centroides.},
+  propuesta={Dos versiones con OpenMP. Una paraleliza el bucle externo sobre las features, como la
+    implementación de referencia; la otra agrega paralelismo anidado para buscar en paralelo el
+    corte óptimo dentro de cada feature.},
+  algoritmo={\paso{1}Obtener los centroides con K-means.
+    \paso{2}En cada nodo, evaluar los umbrales de cada feature y contar los puntos que quedarían
+    separados de su centroide.
+    \paso{3}Dividir por el corte con menos errores.
+    \paso{4}Repetir hasta que cada hoja tenga un solo centroide.},
+  stack={C/C++ con OpenMP y paralelismo anidado; nodos de 48 núcleos y 9 datasets sintéticos.},
+  aporte={La versión con paralelismo anidado es entre 1,3 y 15 veces más rápida que la
+    re-implementación de referencia, según la dimensión del espacio de features.},
+  integrante={\nombreRody},
+  opinion={Este trabajo muestra, mejor que los otros dos, que el nivel en que se abre el
+    paralelismo importa tanto como la cantidad de hilos: el mismo algoritmo, con paralelismo anidado,
+    pasa a ser entre 1,3 y 15 veces más rápido que la re-implementación de referencia. El beneficio,
+    sin embargo, depende de la dimensión del espacio de features, y la evaluación usa solo 9 datasets
+    sintéticos, así que no sé cuánto de esa ganancia se sostendría con datos reales. El paralelismo
+    anidado también tiene un costo: si no se controla, más hilos compiten por los mismos núcleos.
+    Además, el artículo no acelera K-means en sí, sino la explicación de sus clusters. Eso no entra en
+    PC2, pero me parece útil después: describir cada tipo de viaje con cortes simples de hora, duración
+    o distancia haría más legible el análisis por zona.},
+}
+
+\paragraph{Síntesis.} Los tres trabajos corren sobre memoria compartida, pero reparten unidades
+de trabajo muy distintas (Tabla~\ref{tab:sintesis1}). Esa elección pesa tanto como el número de
+hilos: el mismo algoritmo IMM cambia hasta 15 veces de rendimiento según el nivel en que se abre el
+paralelismo \parencite{kwedlo2024}. Para PC2, esto significa variar el tamaño de bloque además del
+número de goroutines. De \textcite{nigro2022} tomamos el criterio de corrección: la versión
+concurrente debe reproducir los centroides de la secuencial.
+
+\begin{table}[H]
+\caption{Comparación de los artículos del Tema 1}\label{tab:sintesis1}
+\small
+\begin{tabularx}{\textwidth}{@{}L{3.3cm}YYY@{}}
+\toprule
+\textbf{Artículo} & \textbf{Mecanismo} & \textbf{Unidad que se reparte} & \textbf{Aceleración reportada} \\
+\midrule
+\textcite{nigro2022} & \textit{Parallel streams} y actores & Bloques regulares de puntos
+  & Speedup cercano a 11 con 16 hilos, frente a la versión secuencial \\
+\addlinespace
+\textcite{kwedlo2021} & Tareas OpenMP recursivas & Subárboles del kd-tree, de tamaño variable
+  & Menor tiempo que Lloyd paralelo, GPU y dos métodos con desigualdad triangular \\
+\addlinespace
+\textcite{kwedlo2024} & OpenMP anidado & Features y umbrales candidatos
+  & Entre 1,3 y 15 veces frente a la re-implementación de referencia \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+% --------------------------------------------------------
+\subsection{Tema 2: sincronización en entornos distribuidos}
+% --------------------------------------------------------
+
+\textbf{Responsable:} \nombreDayana.
+
+Cuando el trabajo se reparte entre máquinas, el costo dominante deja de ser el cálculo. Cada
+barrera de sincronización obliga a comunicar resultados y a esperar al participante más lento, y
+los tres artículos de este tema buscan pagar menos por ella.
+
+\tarjeta{hess2023}{K-means distribuido en pocas rondas}{
+  titulo={Fast Distributed $k$-Means with a Small Number of Rounds},
+  autores={Tom Hess, Ron Visbord, Sivan Sabato},
+  fuente={2023, AISTATS, PMLR 206, 850--874},
+  link={\url{https://proceedings.mlr.press/v206/hess23a.html}},
+  motivacion={En K-means distribuido, una ronda de comunicación entre máquinas cuesta mucho más que
+    el cómputo local.},
+  problema={Obtener un clustering con garantía de aproximación usando pocas rondas de
+    comunicación.},
+  propuesta={SOCCER, un esquema coordinador--workers cuyo factor de aproximación y número de rondas
+    dependen solo de la capacidad del coordinador. Un criterio de parada incorporado ahorra rondas
+    cuando los datos lo permiten.},
+  algoritmo={\paso{1}Cada máquina envía una muestra de sus puntos al coordinador.
+    \paso{2}El coordinador agrupa la muestra y obtiene centros.
+    \paso{3}Las máquinas descartan los puntos ya bien cubiertos por esos centros.
+    \paso{4}Se repite con los restantes hasta la parada y se combinan los centros.},
+  stack={Coordinador--workers (maestro--esclavo); código oficial en Python
+    (\url{https://github.com/selotape/distributed_k_means}); comparación con k-means$\|$
+    \parencite{bahmani2012}.},
+  aporte={En muchos datasets naturales bastan de 1 a 4 rondas. El costo del clustering suele ser
+    mejor que el de k-means$\|$, aun cuando a este se le permiten más rondas, y el tiempo de cómputo
+    en las máquinas es bastante menor.},
+  integrante={\nombreDayana},
+  opinion={Al analizar este trabajo, considero que el principal aporte de la programación
+    concurrente no está en acelerar únicamente el cálculo de K-means, sino en reducir el costo de
+    coordinación entre máquinas. En sistemas distribuidos, cada ronda de comunicación requiere
+    sincronización entre participantes, generando tiempos de espera que pueden convertirse en el
+    principal cuello de botella. SOCCER aborda este problema reduciendo la cantidad de rondas
+    necesarias mediante un esquema coordinador--workers y un mecanismo de parada adaptativa,
+    logrando que en muchos casos naturales sean suficientes pocas rondas de comunicación.
+    \par El beneficio más importante es que permite escalar K-means cuando los datos ya están
+    distribuidos entre varias máquinas, aprovechando el procesamiento paralelo sin depender de una
+    comunicación constante. Sin embargo, esta estrategia también introduce limitaciones: el
+    coordinador concentra una parte importante del procesamiento y su capacidad de cómputo y memoria
+    influye directamente en el rendimiento del algoritmo. Además, aunque se reduzcan las
+    comunicaciones, no desaparece el costo asociado a transmitir muestras y sincronizar resultados.
+    \par Considero que este trabajo demuestra que la concurrencia no consiste simplemente en añadir
+    más máquinas, sino en diseñar algoritmos que minimicen la necesidad de coordinación. En
+    aplicaciones reales, sería necesario evaluar si el costo de comunicación justifica la
+    distribución, ya que en datasets pequeños el paralelismo podría incluso añadir complejidad
+    innecesaria.},
+}
+
+\tarjeta{bellavita2026}{Kernel K-means con poca comunicación entre GPUs}{
+  titulo={Communication-Avoiding Linear Algebraic Kernel K-Means on GPUs},
+  autores={Julian Bellavita, Matthew Rubino, Nakul Iyer, Andrew Chang, Aditya Devarakonda, Flavio
+    Vella, Giulia Guidi},
+  fuente={2026, IEEE IPDPS; se cita la versión de arXiv mientras no haya DOI},
+  link={\url{https://arxiv.org/abs/2601.17136}},
+  motivacion={La versión para una sola GPU \parencite{bellavita2025} no pasa de unas 80.000
+    muestras, porque la matriz kernel no cabe en memoria.},
+  problema={Escalar Kernel K-means a millones de puntos en muchas GPUs sin que la comunicación
+    domine el tiempo.},
+  propuesta={Algoritmos de memoria distribuida con particionado 1D y 1.5D, que componen primitivas
+    de álgebra lineal comunicando lo mínimo entre GPUs.},
+  algoritmo={\paso{1}Particionar la matriz kernel entre GPUs (1D o 1.5D).
+    \paso{2}Multiplicar en cada GPU su bloque por la matriz dispersa de pertenencia a clusters.
+    \paso{3}Intercambiar solo los resultados parciales necesarios para las distancias.
+    \paso{4}Reasignar los puntos y repetir hasta converger.},
+  stack={Multi-GPU con memoria distribuida, software Vivaldi
+    (\url{https://github.com/CornellHPC/Vivaldi}); particionado de datos y álgebra lineal
+    dispersa.},
+  aporte={En 256 GPUs alcanza 79,7\,\% de eficiencia media en weak scaling y un speedup medio de 4,2
+    en strong scaling. El esquema 1.5D llega a ser 3,6 veces más rápido que el 1D, y baja de más de
+    una hora a menos de dos segundos frente a una GPU con ventana deslizante.},
+  integrante={\nombreDayana},
+  opinion={En este trabajo, el aporte central de la programación concurrente no está
+    únicamente en distribuir el cálculo de Kernel K-means entre varias GPUs,
+    sino en diseñar una arquitectura donde la comunicación entre ellas no limite la escalabilidad.
+    Inicialmente podría pensarse que aumentar la cantidad de GPUs siempre produce una mejora
+    proporcional; sin embargo, en algoritmos distribuidos el intercambio de matrices y la
+    sincronización pueden convertirse en el nuevo cuello de botella. Los autores muestran que
+    Kernel K-means presenta altos costos computacionales y de memoria debido al crecimiento
+    cuadrático de la matriz kernel, lo que limita las implementaciones en una sola GPU.
+    \par El beneficio principal de este trabajo es que la concurrencia permite ejecutar clustering
+    sobre datasets de millones de muestras mediante algoritmos distribuidos como el enfoque 1.5D,
+    que reduce la comunicación mediante esquemas de particionamiento especializados. Sin embargo,
+    esta solución también aumenta la complejidad del sistema, ya que requiere administrar
+    distribución de datos, balance de carga y sincronización entre dispositivos. Además, una mala
+    estrategia de particionamiento podría generar más comunicación que beneficio.
+    \par Considero que este trabajo demuestra que en computación paralela no basta con agregar más
+    hardware; es necesario diseñar algoritmos conscientes de la comunicación. La concurrencia aporta
+    escalabilidad, pero solo cuando el costo de coordinar múltiples dispositivos es menor que la
+    ganancia obtenida por paralelizar el cálculo.},
+}
+
+\tarjeta{xu2021}{workers de respaldo dinámicos}{
+  titulo={Dynamic backup workers for parallel machine learning},
+  autores={Chuan Xu, Giovanni Neglia, Nicola Sebastianelli},
+  fuente={2021, \textit{Computer Networks} (Elsevier), 188, 107846},
+  link={\url{https://doi.org/10.1016/j.comnet.2021.107846}; versión abierta:
+    \url{https://arxiv.org/abs/2004.14696}},
+  motivacion={Con un servidor de parámetros síncrono, basta un worker lento (\textit{straggler}) para
+    alargar cada iteración. La lentitud puede venir de contención de recursos, actividad del sistema
+    operativo o recolección de basura.},
+  problema={Esperar solo las $n-b$ actualizaciones más rápidas mitiga el problema, pero el $b$
+    óptimo depende del clúster, la carga, el tamaño de lote y la etapa del entrenamiento. Fijarlo de
+    antemano exige experimentos costosos y resulta frágil.},
+  propuesta={DBW (\textit{Dynamic Backup Workers}) decide en cada iteración cuántas actualizaciones
+    esperar, sin conocer el clúster, maximizando la reducción de la pérdida por unidad de tiempo.},
+  algoritmo={\paso{1}El servidor envía los parámetros a los $n$ workers.
+    \paso{2}Cada worker calcula el gradiente de un mini-lote.
+    \paso{3}DBW estima, para cada $k$, la duración de la iteración y la bajada de la pérdida, y
+    elige el $k$ con mayor progreso por unidad de tiempo.
+    \paso{4}El servidor agrega las primeras $k$ actualizaciones y descarta las demás.},
+  stack={PyTorch con backend MPI; servidor de parámetros (coordinador--workers) con barrera de
+    sincronización parcial. Experimentos en un clúster real de CPU y GPU (GeForce GTX 1080 Ti, GTX
+    Titan X y Tesla V100) con 16 workers: una red convolucional sobre MNIST y ResNet18 sobre CIFAR10.
+    Código: \url{https://gitlab.inria.fr/chxu/dbw}.},
+  aporte={Elimina el ajuste previo de $b$ y entrena hasta 3 veces más rápido que la mejor
+    configuración estática.},
+  integrante={\nombreDayana},
+  opinion={Para mí, lo que aporta la programación concurrente en este trabajo es reducir el
+    impacto de los retrasos dentro de los sistemas distribuidos de
+    aprendizaje automático. En un esquema tradicional basado en \textit{parameter server}, cada
+    iteración depende de recibir las actualizaciones de todos los trabajadores, por lo que un solo
+    nodo lento puede retrasar todo el entrenamiento.
+    \par La propuesta Dynamic Backup Workers (DBW) muestra que el paralelismo no consiste únicamente
+    en agregar más trabajadores, sino en gestionar mejor la sincronización entre ellos. Al permitir
+    que el servidor utilice las actualizaciones de los trabajadores más rápidos y considere al resto
+    como \textit{backup workers}, se reduce el tiempo perdido esperando nodos lentos. Sin embargo,
+    considero que esta ventaja tiene un costo: disminuir la cantidad de trabajadores sincronizados
+    puede introducir mayor variabilidad en los gradientes y afectar la estabilidad del entrenamiento.
+    \par El aspecto más interesante del trabajo es que convierte un problema de sincronización en una
+    decisión adaptativa del sistema. Aun así, no asumiría que DBW siempre es superior: en escenarios
+    con baja variabilidad entre trabajadores, la complejidad adicional del mecanismo dinámico podría
+    no justificar la mejora obtenida. Evaluaría primero cuánto tiempo se pierde realmente por
+    \textit{stragglers} antes de incorporar esta estrategia, ya que el beneficio depende directamente
+    del comportamiento del entorno distribuido.},
+}
+
+\paragraph{Síntesis.} Cada artículo reduce un componente distinto del costo de sincronizar
+(Tabla~\ref{tab:sintesis2}), y no todos conservan el algoritmo original. SOCCER entrega una
+aproximación en lugar de las iteraciones de Lloyd, y DBW actualiza los parámetros con información
+incompleta. Nuestra barrera con \texttt{sync.WaitGroup} espera a todos los workers, así que el
+bloque más lento fija la duración de cada iteración. En un K-means exacto preferimos pagar esa
+espera, y acotarla con bloques de tamaño parecido, antes que perder la equivalencia con la versión
+secuencial.
+
+\begin{table}[H]
+\caption{Comparación de los artículos del Tema 2}\label{tab:sintesis2}
+\small
+\begin{tabularx}{\textwidth}{@{}L{3.3cm}YYY@{}}
+\toprule
+\textbf{Artículo} & \textbf{Qué reduce} & \textbf{Qué cede a cambio} & \textbf{Aceleración reportada} \\
+\midrule
+\textcite{hess2023} & Número de rondas de comunicación & Aproxima; no replica Lloyd
+  & De 1 a 4 rondas, con mejor costo que k-means$\|$ \\
+\addlinespace
+\textcite{bellavita2026} & Volumen comunicado entre GPUs & Particionado más complejo (1D, 1.5D)
+  & Speedup medio de 4,2 en strong scaling con 256 GPUs \\
+\addlinespace
+\textcite{xu2021} & Espera en cada barrera & Descarta las actualizaciones más lentas
+  & Hasta 3 veces frente al mejor $b$ estático \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+% --------------------------------------------------------
+\subsection{Tema 3: poda, localidad y aproximación}
+% --------------------------------------------------------
+
+\textbf{Responsable:} \nombreRody.
+
+Paralelizar no es la única forma de acelerar K-means. Los artículos de este tema reducen el
+trabajo en sí: omiten distancias y transferencias, cambian la representación del cálculo o aceptan
+una aproximación con garantía demostrada.
+
+\tarjeta{li2023}{K-means a gran escala en GPU}{
+  titulo={Large scale K-means clustering using GPUs},
+  autores={Mi Li, Eibe Frank, Bernhard Pfahringer},
+  fuente={2023, \textit{Data Mining and Knowledge Discovery} (Springer), 37(1), 67--109},
+  link={\url{https://doi.org/10.1007/s10618-022-00869-6}},
+  motivacion={La mayoría de las implementaciones de K-means en GPU exigen cargar el dataset completo
+    en la memoria de la GPU.},
+  problema={Ejecutar K-means exacto sobre datasets mayores que esa memoria sin que las
+    transferencias entre CPU y GPU dominen el tiempo.},
+  propuesta={ASB K-means (\textit{Asynchronous Selective Batched}) combina las cotas de Hamerly con
+    lotes y GPU. Cada punto guarda una cota superior de la distancia a su centro y una inferior de
+    la distancia a los demás; por la desigualdad triangular, si la superior no supera a la inferior,
+    el punto no puede cambiar de cluster y se omite. Solo los puntos restantes viajan a la GPU, por
+    lotes, mientras la CPU prepara el lote siguiente.},
+  algoritmo={\paso{1}Inicializar los centros con k-means++ y las cotas de cada punto (CPU).
+    \paso{2}Armar un lote con los puntos cuyas cotas no descartan un cambio de cluster (CPU).
+    \paso{3}Calcular en paralelo la distancia de cada punto del lote a todos los centros, y guardar
+    el más cercano y la distancia al segundo (GPU).
+    \paso{4}Acumular sumas y conteos por cluster y repetir 2--3 hasta cubrir los puntos (CPU).
+    \paso{5}Recalcular los centros (CPU), actualizar las cotas con lo que se movió cada uno (GPU) y
+    repetir hasta converger.},
+  stack={CUDA 10.2 con \textit{streams} asíncronos y memoria \textit{pinned}; GPU NVIDIA Titan X
+    (3.584 núcleos, 12~GB) y CPU Intel Core i7 con 64~GB de RAM. Lotes de 35.840 puntos, 10 veces
+    los núcleos de la GPU: con lotes mayores, seleccionar en la CPU tarda más que calcular en la GPU,
+    que queda esperando. Compara contra RAPIDS cuML, Lloyd en GPU y Elkan y Hamerly en CPU, con los
+    mismos centros iniciales y 300 iteraciones.},
+  aporte={Produce el mismo resultado que K-means estándar, y tras las primeras iteraciones el
+    90\,\% o más de los puntos no cambia de cluster, así que a la GPU llega poco. Es hasta 15 veces
+    más rápido que Lloyd en GPU en su mejor caso, pero en las pruebas sintéticas y de imágenes que
+    detalla la ventaja es de 1,7 a 2,1 veces. Frente a RAPIDS va de 1,65 veces (vectores de 50
+    dimensiones) a 1,09 (200 dimensiones), y en los datasets chicos Elkan con 8 hilos de CPU supera
+    ligeramente al Lloyd en GPU. Con los vectores de Twitter ($\approx$1~GB) usa 195~MB de memoria de
+    GPU, frente a 1.055~MB de Lloyd en GPU y 4.719~MB de RAPIDS.},
+  integrante={\nombreRody},
+  opinion={Al principio atribuí el 15x a la GPU, pero la comparación que importa es contra otro
+    K-means que también corre en GPU, y ahí la ventaja baja a 1,7--2,1 veces. El beneficio principal
+    no está en el paralelismo, sino en calcular menos: la desigualdad triangular descarta los puntos
+    que no pueden cambiar de cluster. La concurrencia aporta en otro punto, porque la CPU prepara el
+    siguiente lote mientras la GPU calcula, en vez de quedarse ociosa. Veo tres perjuicios. Esa
+    coordinación tiene un costo, y con lotes grandes la GPU termina esperando a la CPU. En las
+    primeras iteraciones casi todos los puntos cambian de cluster, así que la poda no ahorra nada.
+    Y la ventaja se diluye al subir la dimensión; en datasets chicos, Elkan con 8 hilos de CPU le
+    gana al Lloyd en GPU, lo que muestra que más hardware paralelo no garantiza más velocidad. Para
+    nuestro caso, las 6 dimensiones favorecen la poda y las cotas de cada punto caben en los
+    acumuladores privados de cada worker (unos 45~MB para 2,8 millones de viajes). Aun así, primero
+    mediría el Lloyd concurrente sin poda, para no mezclar la mejora algorítmica con el speedup de la
+    concurrencia.},
+}
+
+\tarjeta{bellavita2025}{Popcorn, Kernel K-means en GPU}{
+  titulo={Popcorn: Accelerating Kernel K-means on GPUs through Sparse Linear Algebra},
+  autores={Julian Bellavita, Thomas Pasquali, Laura Del Rio Martin, Flavio Vella, Giulia Guidi},
+  fuente={2025, PPoPP '25 (ACM), 426--440},
+  link={\url{https://doi.org/10.1145/3710848.3710887}; versión abierta:
+    \url{https://arxiv.org/abs/2501.05587}},
+  motivacion={Kernel K-means encuentra clusters que no son linealmente separables, pero su costo
+    crece de forma cuadrática con el tamaño del dataset.},
+  problema={Acelerar Kernel K-means en GPU con poco esfuerzo de programación.},
+  propuesta={Reformular el algoritmo con primitivas de álgebra lineal dispersa (SpMM y SpMV). Es la
+    primera implementación de código abierto de Kernel K-means en GPU.},
+  algoritmo={\paso{1}Calcular la matriz kernel $\mathbf{K}$.
+    \paso{2}Codificar la asignación en una matriz dispersa indicadora $\mathbf{V}$.
+    \paso{3}Obtener las distancias con el producto disperso $\mathbf{K}\mathbf{V}$.
+    \paso{4}Actualizar $\mathbf{V}$ y repetir.},
+  stack={CUDA 12.2 con cuBLAS (matriz kernel, eligiendo GEMM o SYRK según n/d), cuSPARSE (SpMM y
+    SpMV) y thrust; menos de 50 líneas de CUDA escritas a mano. GPU NVIDIA A100 con CPU AMD EPYC
+    7763 de 64 núcleos; 6 datasets de libSVM de hasta 78.823 puntos, 30 iteraciones fijas y kernel
+    polinomial. Artefacto reproducible publicado en Zenodo.},
+  aporte={Hasta 123,8 veces más rápido que PRMLT, una implementación en MATLAB de un solo hilo.
+    Frente a una implementación CUDA propia sin matrices dispersas, es de 1,6 a 2,6 veces más rápido
+    en el algoritmo completo; la base CUDA, a su vez, supera a PRMLT normalmente entre 11 y 21 veces.},
+  integrante={\nombreRody},
+  opinion={El 123,8x me parece parcialmente engañoso: compara una A100 contra MATLAB de un solo hilo,
+    en una máquina con 64 núcleos. La comparación honesta es contra otra GPU, y ahí la ventaja es de
+    1,6 a 2,6 veces. El \textit{kernel trick} es muy potente, porque compara los puntos como si
+    vivieran en un espacio de muchas más dimensiones sin construirlo, pero lo cobra en memoria: la
+    matriz kernel crece con $n^2$. Con 78.823 puntos ya ocupa casi 25~GB en precisión simple, y con
+    nuestros 2,8 millones de viajes serían unos 32~TB. Ninguna cantidad de hilos ni de GPU reduce
+    ese costo cuadrático: el paralelismo acelera el cálculo, pero no achica lo que hay que guardar.
+    Me convence delegar la concurrencia en cuBLAS y cuSPARSE, porque se escribe muy poco CUDA y se
+    hereda el trabajo de optimización de NVIDIA. El costo es perder control: el propio artículo
+    muestra que SpMM no usa la memoria compartida de la GPU y mueve más datos, y además quedas atado
+    a un proveedor. Me gustaría medirlo con submuestras de nuestros viajes: en Go, con
+    goroutines, sobre los 15~GB de RAM de mi laptop, donde según mi cálculo la matriz deja de caber
+    cerca de los 60.000 puntos, y con una prueba rápida en una GPU RTX 4060 Ti de 16~GB. La idea es mostrar que
+    más goroutines bajan el tiempo pero no la memoria, y que la salida pasa por repartir la matriz
+    entre varias GPU, como proponen \textcite{bellavita2026}.},
+}
+
+\tarjeta{voevodski2024}{clustering $k$ a gran escala con aproximación}{
+  titulo={Large-Scale K-Clustering},
+  autores={Konstantin Voevodski},
+  fuente={2024, \textit{ACM Transactions on Knowledge Discovery from Data}, 18(9), art. 214, 1--23},
+  link={\url{https://doi.org/10.1145/3674508}},
+  motivacion={Con colecciones de miles de millones de puntos, los algoritmos de clustering con
+    garantías teóricas dejan de escalar.},
+  problema={Diseñar algoritmos paralelos de $k$-median, $k$-medoids y $k$-means que conserven una
+    garantía de calidad frente a la solución óptima.},
+  propuesta={Agrupar solo una muestra de semillas y estimar el costo sobre todo el dataset con un
+    resumen de la celda de Voronoi de cada semilla. El autor demuestra una aproximación de factor
+    constante en instancias \emph{estables}, cuyo clustering óptimo no cambia ante pequeñas
+    perturbaciones.},
+  algoritmo={\paso{1}Muestrear $t$ semillas al azar.
+    \paso{2}Calcular en paralelo la descomposición de Voronoi: cada máquina recibe las semillas y
+    devuelve el tamaño y el costo de cada celda, que luego se suman.
+    \paso{3}Construir un árbol jerárquico de las semillas con distancia minimax.
+    \paso{4}Elegir con programación dinámica la mejor poda de $k$ grupos.},
+  stack={Particionado de datos con reducción por suma (parte paralela) y cálculo en memoria de una sola
+    máquina (árbol y programación dinámica, $O(t^3)$). El artículo no nombra lenguaje ni framework:
+    mide en una CPU Intel Xeon de 2,20~GHz sobre Covertype, Quantum Physics y Protein Homology, y
+    proyecta la parte paralela a $m$ máquinas.},
+  aporte={Además de la garantía teórica, sus algoritmos de $k$-median y $k$-means encuentran mejores
+    clusterings que las construcciones de coresets del estado del arte con muestras del mismo
+    tamaño.},
+  integrante={\nombreRody},
+  opinion={Me parece interesante que cada celda de Voronoi se resuma con conteos y sumas calculados en
+    paralelo: es el mismo patrón de nuestros acumuladores, pero con una sola ronda de comunicación en
+    lugar de una barrera por iteración. Aun así, no aceptaría una aproximación de hasta 10 veces el
+    óptimo cuando Lloyd exacto cabe en mi laptop: las 6 features de 2,8 millones de viajes ocupan
+    unos 136~MB. Tampoco creo que nuestros viajes cumplan la estabilidad que exige la garantía. La
+    movilidad cambia con feriados, eventos, obras, fines de semana y políticas públicas como el cobro
+    por congestión, y esa mezcla produce tipos de viaje que se solapan, justo lo contrario de los
+    clusters bien separados que supone el artículo. En cuanto a la concurrencia, el beneficio es
+    repartir la pasada $O(n)$ entre muchas máquinas; el perjuicio es que el árbol y la programación
+    dinámica, $O(t^3)$, corren en una sola y, por la ley de Amdahl, ponen techo al speedup. Lo que el
+    autor afirma es escalamiento débil (más datos en el mismo tiempo), y lo proyecta sin medirlo en
+    paralelo; él mismo reconoce que sus algoritmos no son necesariamente más rápidos que las
+    alternativas.},
+}
+
+\paragraph{Síntesis.} Las cifras de este tema no son comparables entre sí, porque cada artículo
+mide algo distinto (Tabla~\ref{tab:sintesis3}). ASB acelera sin perder exactitud, y frente a otro
+K-means que también corre en GPU su ventaja es de 1,7 a 2,1 veces en las pruebas que detalla (15 en
+el mejor caso): buena parte de la aceleración viene de omitir puntos, no de la GPU. Voevodski cambia
+exactitud por una garantía de aproximación y reporta calidad del clustering, no tiempo. Popcorn deja
+la lección de evaluación que más nos afecta: 123,8 y 2,6 describen el mismo sistema contra dos
+líneas base distintas. Por eso, nuestra tabla de speedup declarará siempre contra qué versión se
+mide.
+
+\begin{table}[H]
+\caption{Comparación de los artículos del Tema 3}\label{tab:sintesis3}
+\small
+\begin{tabularx}{\textwidth}{@{}L{3.3cm}YYY@{}}
+\toprule
+\textbf{Artículo} & \textbf{Qué evita} & \textbf{Resultado frente al exacto} & \textbf{Aceleración reportada} \\
+\midrule
+\textcite{li2023} & Distancias y transferencias CPU--GPU & Exacto
+  & Hasta 15 veces frente a Lloyd en GPU; de 1,09 a 1,65 frente a RAPIDS \\
+\addlinespace
+\textcite{bellavita2025} & Operaciones densas sobre la matriz kernel & Mismo modelo, otra representación
+  & 123,8 veces frente a CPU; 2,6 frente a GPU densa \\
+\addlinespace
+\textcite{voevodski2024} & Agrupar todos los puntos: agrupa solo una muestra & Aproximación de factor constante
+  & Mejor calidad que coresets del mismo tamaño \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Popcorn y Voevodski muestran los dos límites que el paralelismo no resuelve
+(Tabla~\ref{tab:limites}). Popcorn conserva el algoritmo exacto y paraleliza casi todo su trabajo en
+la GPU, así que la ley de \textcite{amdahl1967} no lo frena; lo frena la memoria, porque la
+matriz kernel crece con $n^2$. Voevodski esquiva ese muro resumiendo los datos en unas pocas
+semillas, pero paga con una garantía que depende de la estabilidad de los datos y con una parte
+serial, $O(t^3)$, que acota el speedup; lo que ofrece a cambio es escalamiento débil, más datos en el
+mismo tiempo \parencite{gustafson1988}, que proyecta sin medir en paralelo. Uno mantiene el algoritmo
+y choca con la memoria; el otro cambia el algoritmo para no chocar y choca con Amdahl. Nuestro Lloyd exacto no enfrenta el muro de memoria de Popcorn ni necesita la aproximación de Voevodski: su límite será la fracción serial y la
+granularidad del reparto (sección~\ref{sec:diseno}).
+
+\begin{table}[H]
+\caption{Qué limita a cada enfoque frente a nuestro Lloyd}\label{tab:limites}
+\small
+\begin{tabularx}{\textwidth}{@{}L{3cm}YYY@{}}
+\toprule
+ & \textbf{Popcorn} & \textbf{Voevodski} & \textbf{Nuestro Lloyd} \\
+\midrule
+Resultado & Exacto (Kernel K-means) & Aproximado: hasta 10 veces el óptimo en $k$-means, si hay
+  estabilidad & Exacto \\
+\addlinespace
+Qué se paraleliza & Casi todo: matriz kernel y distancias en la GPU & Solo la pasada $O(n)$ de
+  Voronoi & La asignación $O(nk)$ de cada iteración \\
+\addlinespace
+Qué lo limita & Memoria $O(n^2)$ de la matriz kernel & Parte serial $O(t^3)$ y supuesto de
+  estabilidad & Fracción serial (lectura, barrera, reducción) y granularidad \\
+\addlinespace
+Memoria con 2,8 millones de viajes & Unos 32~TB & Resúmenes de $t$ semillas & Unos 136~MB \\
+\bottomrule
+\end{tabularx}
+
+{\footnotesize\textit{Nota.} La memoria de Popcorn corresponde a la matriz kernel densa en precisión
+simple; la de Lloyd, a las 6 features en doble precisión. Cálculo propio a partir de los tamaños
+del dataset limpio.\par}
+\end{table}
+
+% --------------------------------------------------------
+\subsection{Antecedentes y fuentes de apoyo}\label{sec:antecedentes}
+% --------------------------------------------------------
+
+Tres trabajos anteriores a la ventana de cinco años explican de dónde viene esta línea y se citan
+solo como fundamento. k-means$\|$ \parencite{bahmani2012} paraleliza la inicialización en pocas
+rondas y es la línea base de SOCCER. Yinyang K-means \parencite{ding2015} evita distancias con cotas
+y garantiza el mismo resultado que K-means estándar, un antecedente directo de la poda de ASB. knor
+\parencite{mhembere2017} adapta K-means a arquitecturas NUMA y minimiza las barreras de
+sincronización, lo que plantea cuándo una sola máquina bien aprovechada compite con un clúster.
+
+Entre las fuentes recientes que no forman parte de la cuota, \textcite{he2022} controlan el error de
+redondeo al actualizar centroides con una suma en dos pasos, lo que respalda nuestra prueba de
+equivalencia numérica. \textcite{mussabayev2023} discuten estrategias de K-means para big data,
+\textcite{wan2021} aplican un K-means paralelo sobre Spark al diagnóstico de fallas y
+\textcite{mclaughlin2023} proponen un clustering adaptativo paralelo para flujos de datos. La
+documentación de NVIDIA \parencite{nvidia2025cuml,rapids2026dask} se usa solo como referencia de
+implementaciones de producción, y sus cifras se leen como benchmarks del propio proveedor.

@@ -1,0 +1,4 @@
+$pdf_mode = 1;          # pdflatex, igual que la plantilla del grupo
+$bibtex_use = 2;        # biber, y borra sus archivos en `latexmk -c`
+$out_dir = 'build';
+@default_files = ('main.tex');
