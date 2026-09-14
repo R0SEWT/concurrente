@@ -1,0 +1,321 @@
+% Bibliografía del Trabajo Parcial CC65 — K-means concurrente sobre NYC TLC.
+%
+% Las entradas con DOI vienen del BibTeX oficial del editor, vía content negotiation:
+%   curl -LH "Accept: application/x-bibtex" https://doi.org/<DOI>
+% Las de PMLR y arXiv están escritas a mano desde la página oficial, porque no tienen DOI.
+% Verificado el 2026-09-12. Discusión y fichas por paper: issue #5.
+%
+% CUOTA DEL ENUNCIADO (≤5 años): 9 entradas, 3 por integrante, agrupadas en los 3 temas del
+% informe.
+%   Tema 1 · memoria compartida:   nigro2022, kwedlo2021, kwedlo2024
+%   Tema 2 · distribuido:          hess2023, bellavita2026, wan2021
+%   Tema 3 · memoria y poda:       li2023, bellavita2025, voevodski2024
+%
+% Los 9 de la cuota son de ACCESO ABIERTO (gold, hybrid o arXiv): se descargan sin pasar por el
+% portal de la UPC. Por eso mussabayev2023 (Elsevier) y he2022 (Wiley), que son cerrados, quedan
+% en apoyo aunque encajen en el Tema 3.
+%
+% APOYO: recientes y citables, fuera de la cuota (mussabayev2023, he2022, xu2021, mclaughlin2023,
+% paul2027). ANTECEDENTES (fuera de la ventana de 5 años, van como fundamento): bahmani2012,
+% ding2015, mhembere2017.
+
+% ---------------------------------------------------------------------------
+% Tema 1 · Paralelismo de datos, reducción y sincronización en memoria compartida
+% ---------------------------------------------------------------------------
+
+@article{nigro2022,
+  title   = {Performance of Parallel {K}-Means Algorithms in {Java}},
+  author  = {Nigro, Libero},
+  journal = {Algorithms},
+  volume  = {15},
+  number  = {4},
+  pages   = {117},
+  year    = {2022},
+  month   = mar,
+  issn    = {1999-4893},
+  doi     = {10.3390/a15040117},
+  url     = {https://doi.org/10.3390/a15040117}
+}
+
+@article{kwedlo2021,
+  title     = {Accelerated {K}-Means Algorithms for Low-Dimensional Data on Parallel Shared-Memory Systems},
+  author    = {Kwedlo, Wojciech and Lubowicz, Michal},
+  journal   = {IEEE Access},
+  volume    = {9},
+  pages     = {74286--74301},
+  year      = {2021},
+  issn      = {2169-3536},
+  publisher = {IEEE},
+  doi       = {10.1109/ACCESS.2021.3080821},
+  url       = {https://doi.org/10.1109/ACCESS.2021.3080821}
+}
+
+@inproceedings{kwedlo2024,
+  title     = {Parallel Iterative Mistake Minimization ({IMM}) clustering algorithm for shared-memory systems},
+  author    = {Kwedlo, Wojciech},
+  booktitle = {Proceedings of the 53rd International Conference on Parallel Processing (ICPP '24)},
+  pages     = {1--10},
+  year      = {2024},
+  month     = aug,
+  publisher = {ACM},
+  doi       = {10.1145/3673038.3673057},
+  url       = {https://doi.org/10.1145/3673038.3673057}
+}
+
+% ---------------------------------------------------------------------------
+% Tema 2 · Comunicación distribuida e inicialización paralela
+% ---------------------------------------------------------------------------
+
+@inproceedings{hess2023,
+  title     = {Fast Distributed $k$-Means with a Small Number of Rounds},
+  author    = {Hess, Tom and Visbord, Ron and Sabato, Sivan},
+  booktitle = {Proceedings of the 26th International Conference on Artificial Intelligence and Statistics (AISTATS)},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {206},
+  pages     = {850--874},
+  year      = {2023},
+  publisher = {PMLR},
+  url       = {https://proceedings.mlr.press/v206/hess23a.html},
+  note      = {Código: \url{https://github.com/selotape/distributed_k_means}}
+}
+
+@inproceedings{bellavita2026,
+  title     = {Communication-Avoiding Linear Algebraic Kernel {K}-Means on {GPUs}},
+  author    = {Bellavita, Julian and Rubino, Matthew and Iyer, Nakul and Chang, Andrew and
+               Devarakonda, Aditya and Vella, Flavio and Guidi, Giulia},
+  booktitle = {IEEE International Parallel and Distributed Processing Symposium (IPDPS)},
+  year      = {2026},
+  publisher = {IEEE},
+  eprint    = {2601.17136},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.DC},
+  url       = {https://arxiv.org/abs/2601.17136},
+  note      = {Aceptado en IPDPS 2026; se cita la versión de arXiv mientras no haya DOI.
+               Código: \url{https://github.com/CornellHPC/Vivaldi}}
+}
+
+@article{wan2021,
+  title     = {A Novel Bearing Fault Diagnosis Method Using {Spark}-Based Parallel {ACO}-{K}-Means Clustering Algorithm},
+  author    = {Wan, Lanjun and Zhang, Gen and Li, Hongyang and Li, Changyun},
+  journal   = {IEEE Access},
+  volume    = {9},
+  pages     = {28753--28768},
+  year      = {2021},
+  issn      = {2169-3536},
+  publisher = {IEEE},
+  doi       = {10.1109/ACCESS.2021.3059221},
+  url       = {https://doi.org/10.1109/ACCESS.2021.3059221}
+}
+
+% ---------------------------------------------------------------------------
+% Tema 3 · Memoria, localidad, poda y aproximación
+% ---------------------------------------------------------------------------
+
+@article{li2023,
+  title     = {Large scale {K}-means clustering using {GPUs}},
+  author    = {Li, Mi and Frank, Eibe and Pfahringer, Bernhard},
+  journal   = {Data Mining and Knowledge Discovery},
+  volume    = {37},
+  number    = {1},
+  pages     = {67--109},
+  year      = {2023},
+  issn      = {1573-756X},
+  publisher = {Springer},
+  doi       = {10.1007/s10618-022-00869-6},
+  url       = {https://doi.org/10.1007/s10618-022-00869-6},
+  note      = {Publicado online el 18 de octubre de 2022}
+}
+
+@inproceedings{bellavita2025,
+  title     = {Popcorn: Accelerating Kernel {K}-means on {GPUs} through Sparse Linear Algebra},
+  author    = {Bellavita, Julian and Pasquali, Thomas and Del Rio Martin, Laura and
+               Vella, Flavio and Guidi, Giulia},
+  booktitle = {Proceedings of the 30th ACM SIGPLAN Annual Symposium on Principles and
+               Practice of Parallel Programming (PPoPP '25)},
+  pages     = {426--440},
+  year      = {2025},
+  month     = feb,
+  publisher = {ACM},
+  doi       = {10.1145/3710848.3710887},
+  url       = {https://doi.org/10.1145/3710848.3710887},
+  note      = {Texto completo: \url{https://arxiv.org/abs/2501.05587}.
+               Artefacto: \url{https://doi.org/10.5281/zenodo.14219596}}
+}
+
+@article{voevodski2024,
+  title     = {Large-Scale {K}-Clustering},
+  author    = {Voevodski, Konstantin},
+  journal   = {ACM Transactions on Knowledge Discovery from Data},
+  volume    = {18},
+  number    = {9},
+  pages     = {1--23},
+  year      = {2024},
+  month     = nov,
+  issn      = {1556-472X},
+  publisher = {ACM},
+  doi       = {10.1145/3674508},
+  url       = {https://doi.org/10.1145/3674508},
+  note      = {Artículo 214, 23 páginas. Algoritmos paralelos de $k$-median, $k$-medoids y
+               $k$-means con aproximación de factor constante en instancias estables}
+}
+
+% ---------------------------------------------------------------------------
+% Apoyo · recientes y citables, pero fuera de la cuota de 9
+% ---------------------------------------------------------------------------
+
+@article{mussabayev2023,
+  title     = {How to Use {K}-means for Big Data Clustering?},
+  author    = {Mussabayev, Rustam and Mladenovic, Nenad and Jarboui, Bassem and
+               Mussabayev, Ravil},
+  journal   = {Pattern Recognition},
+  volume    = {137},
+  pages     = {109269},
+  year      = {2023},
+  month     = may,
+  issn      = {0031-3203},
+  publisher = {Elsevier},
+  doi       = {10.1016/j.patcog.2022.109269},
+  url       = {https://doi.org/10.1016/j.patcog.2022.109269}
+}
+
+@article{he2022,
+  title     = {Parallel and accurate $k$-means algorithm on {CPU}-{GPU} architectures for spectral clustering},
+  author    = {He, Guanlin and Vialle, Stephane and Baboulin, Marc},
+  journal   = {Concurrency and Computation: Practice and Experience},
+  volume    = {34},
+  number    = {14},
+  year      = {2022},
+  month     = jun,
+  issn      = {1532-0634},
+  publisher = {Wiley},
+  doi       = {10.1002/cpe.6621},
+  url       = {https://doi.org/10.1002/cpe.6621},
+  note      = {Publicado online el 29 de septiembre de 2021; el volumen 34(14) es del 25 de junio
+               de 2022. Respalda la discusión de equivalencia numérica: suma en dos pasos contra
+               el error de redondeo al actualizar centroides}
+}
+
+@article{xu2021,
+  title     = {Dynamic backup workers for parallel machine learning},
+  author    = {Xu, Chuan and Neglia, Giovanni and Sebastianelli, Nicola},
+  journal   = {Computer Networks},
+  volume    = {188},
+  pages     = {107846},
+  year      = {2021},
+  month     = apr,
+  issn      = {1389-1286},
+  publisher = {Elsevier},
+  doi       = {10.1016/j.comnet.2021.107846},
+  url       = {https://doi.org/10.1016/j.comnet.2021.107846}
+}
+
+@article{mclaughlin2023,
+  title     = {A new parallel adaptive clustering and its application to streaming data},
+  author    = {McLaughlin, Benjamin and Kang, Sung Ha},
+  journal   = {Journal of Computational Science},
+  volume    = {66},
+  pages     = {101911},
+  year      = {2023},
+  month     = jan,
+  issn      = {1877-7503},
+  publisher = {Elsevier},
+  doi       = {10.1016/j.jocs.2022.101911},
+  url       = {https://doi.org/10.1016/j.jocs.2022.101911}
+}
+
+@article{paul2027,
+  title     = {A generic algorithm integrating parallel processing and block-based {I/O} for
+               large-scale {AI} analytics},
+  author    = {Paul, Dipta Chandra and Quadir, Hashirul and Bellatreche, Ladjel and
+               Ordonez, Carlos},
+  journal   = {Data \& Knowledge Engineering},
+  volume    = {167},
+  pages     = {102646},
+  year      = {2027},
+  month     = jan,
+  issn      = {0169-023X},
+  publisher = {Elsevier},
+  doi       = {10.1016/j.datak.2026.102646},
+  url       = {https://doi.org/10.1016/j.datak.2026.102646},
+  note      = {Crossref lo asigna al número de enero de 2027 y el DOI es de 2026; confirmar el
+               año al citarlo. Queda fuera de la cuota por eso y porque todavía no tiene citas}
+}
+
+% ---------------------------------------------------------------------------
+% Antecedentes (fuera de la ventana de 5 años; van como fundamento)
+% ---------------------------------------------------------------------------
+
+@article{bahmani2012,
+  title     = {Scalable {K}-Means++},
+  author    = {Bahmani, Bahman and Moseley, Benjamin and Vattani, Andrea and Kumar, Ravi and
+               Vassilvitskii, Sergei},
+  journal   = {Proceedings of the VLDB Endowment},
+  volume    = {5},
+  number    = {7},
+  pages     = {622--633},
+  year      = {2012},
+  issn      = {2150-8097},
+  doi       = {10.14778/2180912.2180915},
+  url       = {https://doi.org/10.14778/2180912.2180915}
+}
+
+@inproceedings{ding2015,
+  title     = {Yinyang {K}-Means: A Drop-In Replacement of the Classic {K}-Means with Consistent Speedup},
+  author    = {Ding, Yufei and Zhao, Yue and Shen, Xipeng and Musuvathi, Madanlal and
+               Mytkowicz, Todd},
+  booktitle = {Proceedings of the 32nd International Conference on Machine Learning (ICML)},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {37},
+  pages     = {579--587},
+  year      = {2015},
+  publisher = {PMLR},
+  url       = {https://proceedings.mlr.press/v37/ding15.html}
+}
+
+@inproceedings{mhembere2017,
+  title     = {knor: A {NUMA}-Optimized In-Memory, Distributed and Semi-External-Memory
+               $k$-means Library},
+  author    = {Mhembere, Disa and Zheng, Da and Priebe, Carey E. and Vogelstein, Joshua T. and
+               Burns, Randal},
+  booktitle = {Proceedings of the 26th International Symposium on High-Performance Parallel
+               and Distributed Computing (HPDC '17)},
+  pages     = {67--78},
+  year      = {2017},
+  month     = jun,
+  publisher = {ACM},
+  doi       = {10.1145/3078597.3078607},
+  url       = {https://doi.org/10.1145/3078597.3078607},
+  note      = {Preprint: \url{https://arxiv.org/abs/1606.08905}}
+}
+
+% ---------------------------------------------------------------------------
+% Divulgación técnica (fuentes del proveedor; NO cuentan para la cuota académica)
+% ---------------------------------------------------------------------------
+
+@online{nvidia2025cuml,
+  title  = {{NVIDIA} {cuML} Brings Zero Code Change Acceleration to scikit-learn},
+  author = {Sharma, Siddharth and Becker, Nick and Tepera, Brian and Gama Dessavre, Dante},
+  year   = {2025},
+  month  = mar,
+  day    = {18},
+  organization = {NVIDIA Technical Blog},
+  url    = {https://developer.nvidia.com/blog/nvidia-cuml-brings-zero-code-change-acceleration-to-scikit-learn/},
+  urldate = {2026-09-11}
+}
+
+@online{rapids2026dask,
+  title  = {Dask Multi-{GPU} Guide},
+  author = {{RAPIDS cuML}},
+  year   = {2026},
+  organization = {NVIDIA cuML documentation},
+  url    = {https://docs.nvidia.com/cuml/latest/dask_multigpu_guide/},
+  urldate = {2026-09-11}
+}
+
+@online{nyctlc,
+  title  = {{TLC} Trip Record Data},
+  author = {{New York City Taxi and Limousine Commission}},
+  url    = {https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page},
+  urldate = {2026-09-11},
+  note   = {Yellow taxi, 2024-01. sha256 del Parquet en tp/reports/limpieza_yellow_2024-01.json}
+}
