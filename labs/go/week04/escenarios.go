@@ -18,7 +18,9 @@
 package week04
 
 import (
+	"encoding/csv"
 	"fmt"
+	"strconv"
 	"strings"
 )
 
@@ -203,6 +205,31 @@ func Markdown(t Traza) string {
 			q = celda
 		}
 		fmt.Fprintf(&b, "| %d | %s | %s | %d |\n", i+1, p, q, paso.N)
+	}
+	return b.String()
+}
+
+// CSV exporta la traza con encabezado, una fila por paso. Es la entrada del
+// gráfico de la entrega (grafico/escenarios.py).
+func CSV(escenario string, t Traza) string {
+	return "escenario,paso,proceso,etiqueta,detalle,n\n" + FilasCSV(escenario, t)
+}
+
+// FilasCSV es CSV sin el encabezado, para juntar varios escenarios en un
+// mismo archivo.
+func FilasCSV(escenario string, t Traza) string {
+	var b strings.Builder
+	w := csv.NewWriter(&b)
+	for i, paso := range t {
+		// Escribir en un strings.Builder no falla; el error de csv se revisa abajo.
+		_ = w.Write([]string{
+			escenario, strconv.Itoa(i + 1), paso.Proceso, paso.Etiqueta,
+			paso.Detalle, strconv.Itoa(paso.N),
+		})
+	}
+	w.Flush()
+	if err := w.Error(); err != nil {
+		panic(err)
 	}
 	return b.String()
 }

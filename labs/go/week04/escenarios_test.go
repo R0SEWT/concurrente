@@ -163,6 +163,39 @@ func TestMarkdownEsLaTablaDeEscenarios(t *testing.T) {
 	}
 }
 
+// El gráfico de la entrega se dibuja desde este CSV, así que sale del mismo
+// modelo que las tablas y no puede contradecirlas.
+func TestCSVTraeUnaFilaPorPaso(t *testing.T) {
+	e := NuevaEjecucion()
+	traza, err := e.Correr("qp")
+	if err != nil {
+		t.Fatalf("Correr: %v", err)
+	}
+
+	got := CSV("8x", traza)
+	quiero := strings.Join([]string{
+		"escenario,paso,proceso,etiqueta,detalle,n",
+		"8x,1,q,q1,1 >= 0 → verdadero,1",
+		"8x,2,p,p1,1 < 1 → falso,1",
+		"",
+	}, "\n")
+	if got != quiero {
+		t.Errorf("CSV devolvió:\n%s\nse esperaba:\n%s", got, quiero)
+	}
+}
+
+func TestCSVSinEncabezadoParaConcatenar(t *testing.T) {
+	e := NuevaEjecucion()
+	traza, err := e.Correr("q")
+	if err != nil {
+		t.Fatalf("Correr: %v", err)
+	}
+
+	if got := FilasCSV("8x", traza); got != "8x,1,q,q1,1 >= 0 → verdadero,1\n" {
+		t.Errorf("FilasCSV = %q", got)
+	}
+}
+
 // La matriz de escenarios que se entrega es un archivo generado: si el modelo
 // cambia, este test falla en vez de dejar el .md desactualizado.
 func TestArchivoEscenariosEstaAlDia(t *testing.T) {
