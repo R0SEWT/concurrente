@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"time"
+	"sync"
 )
 
 var n int
@@ -19,11 +19,19 @@ func Q() {
 }
 
 func main() {
-	n = 0
+	var x int
+	var wg sync.WaitGroup
 
-	go P()
-	go Q()
+	wg.Add(2)
 
-	time.Sleep(time.Millisecond * 100) //espera 100 milisegundos para que las gorutinas terminen de ejecutarse
-	fmt.Printf("El valor de n es %d\n", n)
+	go func() {
+		x = 1
+		wg.Done()
+	}()
+
+	go func() {
+		fmt.Println(x)
+		wg.Done()
+	}()
+
 }
