@@ -62,7 +62,10 @@ Cada evaluación tiene su issue en beads con la semana en el título. `bd ready`
 ## Convenciones
 
 - **Apuntes en español**, nombrados `week-NN-<tema-en-kebab>.md`. Copia `_template.md`.
-- **Material versionado**: `materials/` SÍ se commitea (misma decisión que en `cs-topics`).
+- **Material NO versionado**: `materials/` está en `.gitignore` (a diferencia de `cs-topics`):
+  el remoto es público y el material es del profesor. Lo que se versiona es el índice —
+  `manifest.json` guarda nombre, ruta, tamaño y sha256 de cada adjunto — y `aula sync`
+  reconstruye la carpeta. El sílabo es la excepción: ya estaba commiteado y sigue estándolo.
 - **Los labs se escriben con TDD**: test primero, luego la goroutine o el modelo Promela.
 - **Toolchain**: Go 1.26.7 (`dnf`) y Spin 6.5.2 (compilado, `labs/spin/bootstrap.sh`) ya están
   instalados. Spin vive en `~/.local/bin`, su fuente en `~/Code/herramientas/spin`.

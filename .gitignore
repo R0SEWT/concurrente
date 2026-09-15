@@ -19,3 +19,18 @@ labs/spin/_spin_nvr.tmp
 
 # OS
 .DS_Store
+
+# Material descargado del Aula Virtual — lo reconstruye `aula sync`.
+# El índice sí se versiona: manifest.json guarda nombre, ruta, tamaño y sha256
+# de cada adjunto, así que el repo sabe qué debería haber sin cargar los bytes.
+# materials/* y no materials/: con la carpeta excluida git no entra a mirar
+# adentro y la excepción del sílabo no tendría efecto.
+materials/*
+!materials/silabo-1ACC0065.pdf
+
+# whatsapp-web.js (wpp-mcp, el puente al grupo del TP) deja su caché y su
+# sesión en el directorio desde el que se lo corre. El caché son copias de la
+# página de WhatsApp Web; .wwebjs_auth es la sesión y no debe salir nunca de
+# esta máquina. Nada de esto es del curso.
+.wwebjs_cache/
+.wwebjs_auth/
