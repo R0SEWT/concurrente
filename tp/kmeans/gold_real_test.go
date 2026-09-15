@@ -1,6 +1,7 @@
 package kmeans
 
 import (
+	"math"
 	"os"
 	"testing"
 	"time"
@@ -85,4 +86,57 @@ func TestSecuencialSobreElGoldReal(t *testing.T) {
 		(tardo / time.Duration(r.Iteraciones)).Round(time.Millisecond), r.Paro, r.Vacios)
 	t.Logf("inercia: %.4g → %.4g (final con centroides finales: %.4g)",
 		r.Inercias[0], r.Inercias[len(r.Inercias)-1], r.Inercia)
+}
+
+// TestPilotoSpeedupSobreElGoldReal es un piloto, NO el benchmark de la PC2:
+// una sola corrida por configuración, sin media recortada ni orden alternado.
+// Sirve para ver si el speedup aparece y para dimensionar el harness real
+// (concurrente-3r8.9), que es el que produce los números del informe.
+func TestPilotoSpeedupSobreElGoldReal(t *testing.T) {
+	if testing.Short() {
+		t.Skip("-short: no se corre sobre el gold completo")
+	}
+	if _, err := os.Stat(rutaGoldReal); err != nil {
+		t.Skipf("no está el gold en %s: %v", rutaGoldReal, err)
+	}
+
+	d, err := LeerGoldArchivo(rutaGoldReal)
+	if err != nil {
+		t.Fatalf("LeerGoldArchivo: %v", err)
+	}
+	const (
+		k           = 8
+		iteraciones = 10
+		chunk       = 16384
+	)
+	cent, _, err := KMeansPP(d, k, 2024)
+	if err != nil {
+		t.Fatalf("KMeansPP: %v", err)
+	}
+	op := Opciones{K: k, MaxIter: iteraciones, TolAbs: 1e-9, TolRel: 1e-9}
+
+	inicio := time.Now()
+	sec, err := Secuencial(d, cent, op)
+	if err != nil {
+		t.Fatalf("Secuencial: %v", err)
+	}
+	tSec := time.Since(inicio)
+	t.Logf("secuencial: %s (%d iteraciones, inercia %.6g)",
+		tSec.Round(time.Millisecond), sec.Iteraciones, sec.Inercia)
+
+	for _, p := range []int{1, 2, 4, 8} {
+		inicio := time.Now()
+		con, err := Concurrente(d, cent, OpcionesConc{Opciones: op, Workers: p, Chunk: chunk})
+		if err != nil {
+			t.Fatalf("Concurrente P=%d: %v", p, err)
+		}
+		tCon := time.Since(inicio)
+
+		if rel := math.Abs(con.Inercia-sec.Inercia) / math.Abs(sec.Inercia); rel > 1e-12 {
+			t.Errorf("P=%d: la inercia difiere del secuencial en %.3g relativo", p, rel)
+		}
+		t.Logf("P=%-2d: %s · speedup %.2fx · eficiencia %.0f%%",
+			p, tCon.Round(time.Millisecond),
+			tSec.Seconds()/tCon.Seconds(), 100*tSec.Seconds()/tCon.Seconds()/float64(p))
+	}
 }
