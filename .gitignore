@@ -19,3 +19,11 @@ labs/spin/_spin_nvr.tmp
 
 # OS
 .DS_Store
+
+# Material descargado del Aula Virtual — lo reconstruye `aula sync`.
+# El índice sí se versiona: manifest.json guarda nombre, ruta, tamaño y sha256
+# de cada adjunto, así que el repo sabe qué debería haber sin cargar los bytes.
+# materials/* y no materials/: con la carpeta excluida git no entra a mirar
+# adentro y la excepción del sílabo no tendría efecto.
+materials/*
+!materials/silabo-1ACC0065.pdf
