@@ -1,0 +1,176 @@
+% ========================================================
+% ANÁLISIS DEL CASO DE USO
+% ========================================================
+\section{Análisis del caso de uso}\label{sec:caso}
+
+\subsection{Contexto y relación con el ODS 11}
+
+El ODS~11 busca ciudades inclusivas, seguras, resilientes y sostenibles, y su meta~11.2 apunta a
+sistemas de transporte seguros, asequibles, accesibles y sostenibles. Planificar ese transporte
+requiere saber cuándo, cuánto y entre qué zonas se mueve la gente. Los registros de taxi responden
+en parte a esa pregunta, porque cada viaje deja su hora de inicio y fin, su distancia y sus zonas
+de origen y destino.
+
+La \textit{Taxi and Limousine Commission} (TLC) de Nueva York publica estos registros como datos
+abiertos \parencite{nyctlc}, con un diccionario de datos oficial y millones de viajes por mes. Ese
+volumen hace que la concurrencia sea una necesidad del problema y no un requisito agregado.
+
+\subsection{Pregunta del caso}
+
+\begin{quote}
+\textit{¿Qué tipos de viaje, según hora del día, día de la semana, duración y distancia, componen la
+movilidad en taxi amarillo de Nueva York, y cómo se distribuyen entre las zonas de la ciudad?}
+\end{quote}
+
+Los tipos de viaje son los clusters de K-means. Su distribución por zona se obtiene después,
+agregando las asignaciones por zona de origen y de destino, de modo que cada zona queda descrita
+por su mezcla de tipos de viaje: un aeropuerto, por ejemplo, concentraría viajes largos a cualquier
+hora.
+
+\subsection{Por qué K-means}
+
+K-means figura en la lista de modelos del enunciado y se ajusta a un problema sin variable objetivo.
+Su costo, además, justifica la concurrencia. Cada iteración de Lloyd calcula la distancia de cada
+viaje a cada centroide; con cerca de 2,8 millones de viajes y, por ejemplo, $K = 8$, son unos 22,6
+millones de distancias en 6 dimensiones por iteración. El valor de $K$ se fijará en PC2
+comparando la inercia y el coeficiente de silueta para varios valores sobre una muestra, y la
+inicialización será k-means++ con semilla fija, la misma para las versiones secuencial y concurrente.
+
+Dos propiedades hacen que se paralelice bien. La asignación de un viaje no depende de ningún otro,
+así que los datos pueden repartirse en bloques entre goroutines, como en \textcite{nigro2022}. Y la
+actualización de centroides se reduce a sumas y conteos por cluster, operaciones asociativas que
+cada worker acumula por separado. Gracias a eso se puede comprobar que la versión concurrente
+produce los mismos centroides que la secuencial.
+
+\subsection{Alternativas consideradas}
+
+El grupo evaluó primero un caso con datos de calidad del aire de SENAMHI, ligado al ODS~13, y optó
+por NYC TLC por su volumen, su documentación y la trazabilidad de la fuente (PR~\#3 y PR~\#4 del
+repositorio).
+
+La primera versión de la propuesta agrupaba \emph{zonas}, con un punto por zona. Pero la ciudad
+tiene 263 zonas identificables, y un K-means sobre 263 puntos no ejercita la concurrencia ni usa el
+millón de registros que exige el enunciado. El modelo final agrupa \emph{viajes} y deja el análisis
+por zona como agregación posterior. Esa decisión evita además un error de modelado: un
+identificador de zona no es una coordenada, y usarlo en la distancia euclídea haría
+\enquote{vecinas} a la zona 100 y a la 101 sin que lo sean.
+
+El caso es la propuesta del grupo; el enunciado prevé que el docente asigne formalmente el caso y el
+modelo.
+
+\subsection{Dataset seleccionado}
+
+La Tabla~\ref{tab:dataset} resume el dataset. De sus 19 columnas, el caso usa siete
+(Tabla~\ref{tab:columnas}); las demás, como proveedor, pasajeros, tipo de tarifa, medio de pago y
+recargos, no intervienen en las reglas ni en las features.
+
+\begin{table}[H]
+\caption{Características del dataset}\label{tab:dataset}
+\small
+\begin{tabularx}{\textwidth}{@{}L{3.2cm}Y@{}}
+\toprule
+\textbf{Característica} & \textbf{Valor} \\
+\midrule
+Fuente & NYC Taxi \& Limousine Commission, \textit{TLC Trip Record Data} \\
+Flota y periodo & Taxi amarillo (\textit{yellow}), enero de 2024 \\
+Volumen & 2.964.624 viajes y 19 columnas en el archivo original \\
+Formato & Parquet (49.961.641 bytes) y la tabla de zonas \texttt{taxi\_zone\_lookup.csv} \\
+Licencia & Datos abiertos de la ciudad de Nueva York \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[H]
+\caption{Columnas del dataset que usa el caso}\label{tab:columnas}
+\small
+\begin{tabularx}{\textwidth}{@{}L{4.6cm}YL{4.2cm}@{}}
+\toprule
+\textbf{Columna} & \textbf{Contenido} & \textbf{Uso} \\
+\midrule
+\texttt{tpep\_pickup\_datetime}  & Inicio del viaje      & Reglas; hora, día y duración \\
+\texttt{tpep\_dropoff\_datetime} & Fin del viaje         & Reglas; duración \\
+\texttt{trip\_distance}          & Distancia en millas   & Reglas; feature \\
+\texttt{PULocationID}            & Zona de origen        & Regla; agregación por zona \\
+\texttt{DOLocationID}            & Zona de destino       & Regla; agregación por zona \\
+\texttt{fare\_amount}            & Tarifa del taxímetro  & Regla de montos \\
+\texttt{total\_amount}           & Monto total cobrado   & Regla de montos \\
+\bottomrule
+\end{tabularx}
+
+{\footnotesize\textit{Nota.} Nombres del diccionario de datos de TLC. Los timestamps están en hora
+local de Nueva York, sin zona horaria.}
+\end{table}
+
+El dataset cubre un solo mes, y eso limita lo que los clusters pueden decir. Enero de 2024 incluye
+dos feriados, Año Nuevo (lunes 1) y el Día de Martin Luther King (lunes 15), además del invierno.
+Las features de hora y día de la semana capturan parte de esa variación, pero un feriado se confunde
+con un día laborable del mismo día de la semana. Los tipos de viaje que encontremos describen enero
+de 2024; comprobar si se repiten en otro mes queda como validación para el TP.
+
+\subsection{Diseño concurrente de referencia}\label{sec:diseno}
+
+La implementación de PC2 partirá de un \emph{worker pool} de goroutines
+(Figura~\ref{fig:workerpool}). Durante la asignación, los centroides son de solo lectura y cada
+worker escribe únicamente en sus acumuladores privados, de modo que el bucle principal no comparte
+estado mutable y no necesita \texttt{sync.Mutex}. La única sincronización ocurre al final de cada
+iteración, en la barrera con \texttt{sync.WaitGroup}. El Algoritmo~\ref{alg:lloyd} detalla una
+iteración.
+
+\begin{figure}[H]
+\caption{Worker pool para una iteración de Lloyd}\label{fig:workerpool}
+\centering
+\small
+\input{secciones/figuras/workerpool}
+\end{figure}
+
+\begin{algorithm}[tbp]
+\caption{Una iteración de Lloyd con worker pool y acumuladores privados}\label{alg:lloyd}
+\begin{algorithmic}[1]
+\Require viajes $X = \{x_1, \dots, x_N\} \subset \mathbb{R}^6$, centroides $\mu_1, \dots, \mu_K$,
+         $P$ workers
+\Ensure centroides actualizados e inercia $J$
+\State Partir $X$ en $P$ bloques contiguos $B_1, \dots, B_P$ de tamaño similar
+\ForAll{worker $w \in \{1, \dots, P\}$} \Comment{una goroutine; $\mu$ es de solo lectura}
+  \State $s_{wj} \gets \mathbf{0}$, \ $n_{wj} \gets 0$ para $j = 1, \dots, K$; \ $J_w \gets 0$
+  \ForAll{$x \in B_w$}
+    \State $j^{*} \gets \arg\min_j \lVert x - \mu_j \rVert^2$
+    \State $s_{wj^{*}} \gets s_{wj^{*}} + x$; \ $n_{wj^{*}} \gets n_{wj^{*}} + 1$;
+           \ $J_w \gets J_w + \lVert x - \mu_{j^{*}} \rVert^2$
+  \EndFor
+\EndFor
+\State Esperar a los $P$ workers \Comment{barrera: \texttt{sync.WaitGroup}}
+\ForAll{cluster $j$}
+  \If{$\sum_w n_{wj} > 0$}
+    \State $\mu_j \gets \sum_w s_{wj} \,/\, \sum_w n_{wj}$ \Comment{sumas y conteos, nunca promedios de promedios}
+  \EndIf
+\EndFor
+\State \Return $\mu$, \ $J = \sum_w J_w$
+\end{algorithmic}
+\end{algorithm}
+
+La revisión bibliográfica fija cuatro decisiones de la evaluación. Primero, la versión concurrente
+suma en otro orden que la secuencial, y en punto flotante eso altera los últimos dígitos; por eso
+compararemos centroides e inercia con una tolerancia explícita \parencite{he2022}, partiendo de la
+misma inicialización y el mismo criterio de parada \parencite{nigro2022}. Segundo, el tamaño de
+bloque será una variable del experimento junto con el número de workers, porque el reparto afecta
+el rendimiento tanto como la cantidad de hilos \parencite{kwedlo2021,kwedlo2024}. Tercero, el
+speedup ($T_{\text{secuencial}} / T_{\text{concurrente}}$) se medirá contra la versión secuencial
+del mismo algoritmo, con media recortada de varias ejecuciones, porque la cifra depende del
+denominador \parencite{bellavita2025}.
+
+Cuarto, la parte serial pone techo al speedup. Según la ley de \textcite{amdahl1967}, si
+una fracción $f$ del trabajo es paralelizable, con $P$ goroutines el speedup es
+\[
+  S(P) = \frac{1}{(1-f) + f/P}, \qquad S(P) < \frac{1}{1-f}.
+\]
+En nuestro diseño son seriales la lectura del CSV de gold, la preparación de los bloques, la
+barrera y la actualización de centroides. Si, por ejemplo, el 14\,\% del tiempo total fuera
+serial, con 8 goroutines el speedup sería de unas 4 veces, y ni con infinitas goroutines pasaría de unas 7.
+Por eso mediremos por separado la lectura y el tiempo por iteración, para estimar $f$. Además del
+escalamiento fuerte (el mismo problema con más goroutines), reportaremos el escalamiento débil
+(más viajes en el mismo tiempo al sumar goroutines), que describe la ley de \textcite{gustafson1988}. La memoria, en cambio, no es el límite: las 6 features de 2,8 millones
+de viajes ocupan unos 136~MB en doble precisión.
+
+Como contraste, PC2 medirá una variante con acumuladores compartidos protegidos por
+\texttt{sync.Mutex}, para cuantificar el costo de la contención. La barrera se modelará en Promela
+para verificar que no hay condiciones de carrera.
