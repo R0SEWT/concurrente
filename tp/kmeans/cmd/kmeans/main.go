@@ -20,28 +20,30 @@ import (
 
 type salida struct {
 	kmeans.Metadatos
-	Datos          string  `json:"datos"`
-	DatosSha256    string  `json:"datos_sha256,omitempty"`
-	N              int     `json:"n"`
-	D              int     `json:"d"`
-	Modo           string  `json:"modo"`
-	K              int     `json:"k"`
-	KEfectivo      int     `json:"k_efectivo"`
-	Semilla        int64   `json:"semilla"`
-	Workers        int     `json:"workers,omitempty"`
-	Chunk          int     `json:"chunk,omitempty"`
-	MaxIter        int     `json:"max_iter"`
-	TolAbs         float64 `json:"tol_abs"`
-	TolRel         float64 `json:"tol_rel"`
-	CentroidesHash string  `json:"centroides_iniciales_sha256"`
-	MsCarga        float64 `json:"ms_carga"`
-	MsInicializar  float64 `json:"ms_inicializacion"`
-	MsClustering   float64 `json:"ms_clustering"`
-	MsTotal        float64 `json:"ms_total"`
-	Iteraciones    int     `json:"iteraciones"`
-	Paro           string  `json:"paro"`
-	Vacios         int     `json:"clusters_vacios"`
-	Inercia        float64 `json:"inercia"`
+	Datos          string          `json:"datos"`
+	DatosSha256    string          `json:"datos_sha256,omitempty"`
+	N              int             `json:"n"`
+	D              int             `json:"d"`
+	Modo           string          `json:"modo"`
+	K              int             `json:"k"`
+	KEfectivo      int             `json:"k_efectivo"`
+	Semilla        int64           `json:"semilla"`
+	Workers        int             `json:"workers,omitempty"`
+	Chunk          int             `json:"chunk,omitempty"`
+	MaxIter        int             `json:"max_iter"`
+	TolAbs         float64         `json:"tol_abs"`
+	TolRel         float64         `json:"tol_rel"`
+	CentroidesHash string          `json:"centroides_iniciales_sha256"`
+	MsCarga        float64         `json:"ms_carga"`
+	MsInicializar  float64         `json:"ms_inicializacion"`
+	MsClustering   float64         `json:"ms_clustering"`
+	MsTotal        float64         `json:"ms_total"`
+	Iteraciones    int             `json:"iteraciones"`
+	Paro           string          `json:"paro"`
+	Vacios         int             `json:"clusters_vacios"`
+	Inercia        float64         `json:"inercia"`
+	TrasCarga      kmeans.Recursos `json:"recursos_tras_carga"`
+	Final          kmeans.Recursos `json:"recursos_finales"`
 }
 
 func main() {
@@ -97,6 +99,8 @@ func correr(ruta, modo string, k, maxIter int, tolAbs, tolRel float64,
 	}
 	s.MsCarga = ms(time.Since(t0))
 	s.N, s.D = d.N, d.D
+	// Foto después de cargar: separa el costo de parsear el CSV del clustering.
+	s.TrasCarga = kmeans.MedirRecursos()
 
 	t0 = time.Now()
 	cent, kEfectivo, err := centroidesIniciales(d, k, semilla, rutaCent)
@@ -122,6 +126,7 @@ func correr(ruta, modo string, k, maxIter int, tolAbs, tolRel float64,
 	s.MsClustering = ms(time.Since(t0))
 	s.MsTotal = ms(time.Since(inicio))
 	s.Iteraciones, s.Paro, s.Vacios, s.Inercia = r.Iteraciones, r.Paro, r.Vacios, r.Inercia
+	s.Final = kmeans.MedirRecursos()
 	s.GOMAXPROCS = runtime.GOMAXPROCS(0)
 
 	if enJSON {
@@ -188,6 +193,11 @@ func imprimir(s salida) {
 		s.Maquina, s.VersionGo, s.GOMAXPROCS, s.CPUsLogicas)
 	fmt.Printf("tiempos     carga %.0f ms · init %.0f ms · clustering %.0f ms · total %.0f ms\n",
 		s.MsCarga, s.MsInicializar, s.MsClustering, s.MsTotal)
+	fmt.Printf("memoria     heap tras carga %.0f MB · heap final %.0f MB · RSS máximo %.0f MB · %d GC\n",
+		s.TrasCarga.HeapMB, s.Final.HeapMB, s.Final.MaxRSSMB, s.Final.NumGC)
+	fmt.Printf("cpu         usuario %.2f s · sistema %.2f s · pared %.2f s → %.1f núcleos efectivos\n",
+		s.Final.CPUUsuarioS, s.Final.CPUSistemaS, s.MsTotal/1000,
+		(s.Final.CPUUsuarioS+s.Final.CPUSistemaS)/(s.MsTotal/1000))
 	fmt.Printf("resultado   %d iteraciones (paro=%s) · %d clusters vacíos · inercia %.6e\n",
 		s.Iteraciones, s.Paro, s.Vacios, s.Inercia)
 }
