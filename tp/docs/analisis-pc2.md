@@ -173,3 +173,73 @@ El contraste con la misma carga sin paralelismo es lo que le da sentido:
 Esto es lo que describe la ley de Gustafson, y conviene enunciarlo con cuidado:
 **no** dice que el problema fijo escale linealmente —eso lo desmiente la sección
 3— sino que, si el problema crece con los recursos, el tiempo se sostiene.
+
+## 8. Tamaño de chunk
+
+La PC1 comprometió el tamaño de bloque como variable del experimento, junto con
+la cantidad de workers. Con P=8 fijo sobre el dataset completo, en gorgo:
+
+| Chunk | Cantidad de chunks | Tiempo | Speedup [IC 95 %] |
+|---:|---:|---:|:--|
+| 1 024 | 2766 | 190,0 ms | 5,84x [5,79, 5,88] |
+| 4 096 | 692 | 188,5 ms | 5,87x [5,80, 5,93] |
+| 16 384 | 173 | 196,0 ms | 5,71x [5,63, 5,83] |
+| 65 536 | 44 | 199,5 ms | 5,56x [5,49, 5,63] |
+| 262 144 | 11 | 232,4 ms | 4,79x [4,65, 4,91] |
+| 1 048 576 | 3 | 439,0 ms | 2,54x [2,52, 2,56] |
+
+El resultado contradice la intuición de que trocear fino cuesta caro: con 2766
+chunks el rendimiento es el mejor del barrido, empatado con 692. Mandar un
+índice por un canal buffereado es baratísimo comparado con procesar mil viajes.
+
+El castigo aparece del otro lado. Con 3 chunks y 8 workers, **cinco workers se
+quedan sin trabajo**: el speedup cae a 2,54x, que es aproximadamente lo que se
+esperaría de tres workers ocupados. El problema del chunk grande no es el
+tamaño, es que deja de haber suficientes unidades para repartir.
+
+De ahí la regla práctica: **muchos más chunks que workers**. El óptimo es una
+meseta ancha (de 1024 a 16384 viajes por chunk), así que el parámetro no es
+delicado mientras se respete esa condición. El valor por defecto del código,
+16384, está dentro de la meseta aunque no en su mejor punto: 4096 rinde un 4 %
+más. Las corridas oficiales de las secciones anteriores usaron 16384.
+
+## 9. Trade-offs y límites
+
+**Lo que se gana.** Sobre el dataset del trabajo, 3,80x con 4 workers y 95 % de
+eficiencia. Con 8 workers, 5,82x. El problema es suficientemente grande para que
+la concurrencia pague.
+
+**Lo que se paga.**
+
+- Un 3 % de sobrecosto fijo, visible en que P=1 concurrente es más lento que el
+  secuencial.
+- Más tiempo total de CPU: 5,05 s contra 9,07 s en la laptop, a cambio de
+  terminar en menos tiempo de pared.
+- Complejidad: el código concurrente necesita el contrato de fases, la barrera y
+  la reducción ordenada, más el modelo en Promela para justificar que es
+  correcto.
+- Debajo de 20 000 viajes, el paralelismo **cuesta más de lo que rinde**.
+
+**Lo que decidimos pagar a propósito.** Acumular por chunk y reducir en orden de
+índice cuesta unos 66 KB con la configuración oficial. A cambio, sobre el gold
+completo con k=8 y 10 iteraciones:
+
+| | Inercia | Dónde |
+|---|---|---|
+| Secuencial | 4531798,74797024 | idéntica en laptop y en gorgo |
+| Concurrente | 4531798,747970126 | idéntica en laptop y en gorgo, **para P = 1, 2, 4, 8 y 16** |
+
+Es decir: el resultado concurrente no depende de la cantidad de workers, ni del
+planificador, ni de la máquina. La única diferencia es entre secuencial y
+concurrente, y es de 2,53e-14 en términos relativos: el redondeo de sumar en otro
+orden, que es exactamente lo que la PC1 anticipó y la razón por la que la
+equivalencia se comprueba con tolerancia y no bit a bit.
+
+Sin esa decisión de diseño, dos corridas idénticas darían números distintos en
+los últimos dígitos y la comparación entre versiones sería una inspección a ojo
+con tolerancias elegidas después de ver el resultado.
+
+**Hasta dónde llega esto.** Un mes de una flota, una arquitectura por plataforma,
+k=8, y la elección de k todavía por cerrar. Las cifras de la laptop son un
+piloto, no una medición bajo el protocolo. Nada de esto dice qué pasa con varios
+meses, con otra distribución de datos ni con más de 11 núcleos.

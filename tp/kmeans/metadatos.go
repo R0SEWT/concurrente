@@ -5,8 +5,10 @@ import (
 	"encoding/hex"
 	"io"
 	"os"
+	"os/exec"
 	"runtime"
 	"runtime/debug"
+	"strings"
 	"time"
 )
 
@@ -49,7 +51,25 @@ func RecolectarMetadatos() Metadatos {
 			}
 		}
 	}
+	if m.Commit == "" {
+		// Go no incrusta la revisión cuando compila desde un worktree de git
+		// (ahí .git es un archivo, no un directorio). Como sin commit el
+		// resultado no se puede reproducir, se pregunta directamente.
+		m.Commit, m.ArbolSucio = commitDeGit()
+	}
 	return m
+}
+
+func commitDeGit() (string, bool) {
+	rev, err := exec.Command("git", "rev-parse", "HEAD").Output()
+	if err != nil {
+		return "", false
+	}
+	sucio := false
+	if estado, err := exec.Command("git", "status", "--porcelain").Output(); err == nil {
+		sucio = len(strings.TrimSpace(string(estado))) > 0
+	}
+	return strings.TrimSpace(string(rev)), sucio
 }
 
 // Sha256Archivo identifica los datos de entrada de una corrida.

@@ -49,3 +49,15 @@ func TestRecolectarMetadatosTraeLoQueElBenchmarkNecesita(t *testing.T) {
 		t.Error("Momento sin fecha")
 	}
 }
+
+func TestMetadatosTraenElCommitAunqueSeCompileDesdeUnWorktree(t *testing.T) {
+	// Go no incrusta vcs.revision cuando compila desde un worktree de git, y
+	// sin commit el resultado del benchmark no se puede reproducir.
+	m := RecolectarMetadatos()
+	if m.Commit == "" {
+		t.Skip("no hay git disponible o no estamos en un repo")
+	}
+	if len(m.Commit) != 40 {
+		t.Errorf("Commit = %q, se esperaba un sha1 de 40 caracteres", m.Commit)
+	}
+}
