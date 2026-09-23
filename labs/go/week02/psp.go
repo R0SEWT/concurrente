@@ -107,11 +107,11 @@ func validarHorario(hora int) bool {
 
 // Transaccion reúne los datos que necesitan las funciones del caso integrador.
 type Transaccion struct {
-	Monto   float64
-	Moneda  string
-	Activo  bool
-	Metodo  string
-	Pais    string
+	Monto  float64
+	Moneda string
+	Activo bool
+	Metodo string
+	Pais   string
 }
 
 // ResultadoTransaccion conserva tanto el resultado exitoso como la causa de un
