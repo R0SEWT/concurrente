@@ -1,3 +1,5 @@
+//go:build ignore
+
 package main
 
 import (
@@ -10,7 +12,7 @@ var n int
 func P() {
 	k1 := 1
 	time.Sleep(time.Millisecond * 50) //espera 50 milisegundos para que la gorutina Q se ejecute primero
-	n = k1 //q1
+	n = k1                            //q1
 }
 
 func Q() {
