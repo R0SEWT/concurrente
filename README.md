@@ -79,10 +79,11 @@ orden barajado, media recortada al 10 % e intervalos de confianza por bootstrap.
 |---|---:|---:|---:|---:|
 | VM en Proxmox: Ryzen 5 7600X (6 núcleos), 11 vCPU, 9 GB de RAM | 1,1 s | 3,80× | 5,82× | 6,25× con 16 |
 | PC de escritorio en WSL2: i7-10700 (8 núcleos, 16 hilos), 15 GB de RAM | 1,7 s | 3,42× | 6,12× | 7,88× con 16 |
+| Laptop: i5-10210U (4 núcleos, 8 hilos), 15 GB de RAM, enchufada | 2,3 s | 3,29× | 3,27× | techo en los 4 núcleos físicos |
 | **Pixel 9a** con Termux: Tensor G4 (1 + 3 + 4 núcleos), 7,4 GB de RAM | 3,6 s | 3,50× | 3,95× | techo en los 4 núcleos grandes |
 | GPU RTX 4060 (8 GB) del mismo PC, PyTorch en fp32 | | | | 8,73× frente al secuencial, 1,11× frente a 16 hilos |
 
-- **El resultado concurrente es idéntico bit a bit** para cualquier cantidad de workers y en los tres
+- **El resultado concurrente es idéntico bit a bit** para cualquier cantidad de workers y en los cuatro
   entornos medidos, x86 y ARM: inercia 4531798,747970126. La reducción suma los parciales siempre en
   el mismo orden.
 - **La concurrencia paga desde unos 20 000 viajes.** Por debajo, el costo de armar el pool supera el

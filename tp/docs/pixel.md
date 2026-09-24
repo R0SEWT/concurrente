@@ -28,11 +28,12 @@ sobre el dataset completo, trabajo fijo de 10 iteraciones:
 |---|---:|---:|---:|---:|---:|:--|---:|
 | VM en Proxmox, Ryzen 5 7600X, 11 vCPU | 1 106 ms | 1,93× | 3,80× | 5,82× | 6,25× | [5,73; 5,89] | 0,4 % |
 | PC en WSL2, i7-10700 de 16 hilos | 1 650 ms | 1,73× | 3,42× | 6,12× | 7,88× | [6,04; 6,20] | 0,3 % |
+| Laptop, i5-10210U de 4 núcleos y 8 hilos | 2 307 ms | 1,83× | 3,29× | 3,27× | 3,32× | [3,09; 3,35] | 4,3 % |
 | Pixel 9a, Tensor G4 | 3 606 ms | 1,90× | 3,50× | 3,95× | 3,94× | [3,25; 4,79] | 28,8 % |
 
 Hasta convergencia (60 iteraciones) el Pixel da 4,47× con P=8, con la misma forma.
 
-La inercia final concurrente es **idéntica bit a bit en las tres máquinas**: 4531798,747970126 con
+La inercia final concurrente es **idéntica bit a bit en las cuatro máquinas**: 4531798,747970126 con
 trabajo fijo y 4461447,055723991 hasta convergencia. Dos arquitecturas distintas (x86-64 y ARM64),
 tres sistemas operativos, el mismo número. Es la consecuencia directa de reducir los parciales en
 orden de bloque (Sección «Por qué la reducción va en orden de bloque» del informe de la PC2).
