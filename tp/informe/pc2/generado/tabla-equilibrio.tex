@@ -1,0 +1,21 @@
+% Generado por tp/scripts/tablas_informe.py desde tp/reports/*.json. No editar a mano.
+\begin{table}[H]
+\caption{Punto de equilibrio: speedup con $P=4$ según el tamaño del problema}\label{tab:equilibrio}
+\footnotesize
+\begin{tabular}{@{}rrrll@{}}
+\toprule
+\textbf{$n$ (viajes)} & \textbf{Secuencial (ms)} & \textbf{Conc. $P=4$ (ms)} & \textbf{Speedup [IC 95\,\%]} & \textbf{¿Gana?} \\
+\midrule
+1.000 & 0,48 & 0,51 & 0,94$\times$ [0,87; 1,01] & indistinguible \\
+10.000 & 4,38 & 4,70 & 0,93$\times$ [0,91; 0,96] & no, pierde \\
+15.000 & 6,54 & 6,67 & 0,98$\times$ [0,95; 1,01] & indistinguible \\
+20.000 & 8,01 & 7,32 & 1,09$\times$ [1,07; 1,12] & sí \\
+30.000 & 12,66 & 7,33 & 1,73$\times$ [1,65; 1,77] & sí \\
+50.000 & 20,15 & 8,65 & 2,33$\times$ [2,22; 2,45] & sí \\
+70.000 & 29,07 & 9,84 & 2,96$\times$ [2,80; 3,11] & sí \\
+100.000 & 41,83 & 14,56 & 2,87$\times$ [2,81; 2,92] & sí \\
+\bottomrule
+\end{tabular}
+
+{\footnotesize\textit{Nota.} «Gana» cuando el intervalo de confianza queda entero por encima de 1; «pierde» cuando queda entero por debajo. Mismo protocolo que la Tabla~\ref{tab:speedup-fuerte}.\par}
+\end{table}

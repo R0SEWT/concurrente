@@ -1,0 +1,15 @@
+% Generado por tp/scripts/tablas_informe.py desde tp/reports/*.json. No editar a mano.
+\begin{table}[H]
+\caption{Inercia final sobre el dataset completo, $k=8$, 10 iteraciones}\label{tab:inercias}
+\small
+\begin{tabular}{@{}llr@{}}
+\toprule
+\textbf{Versión} & \textbf{$P$} & \textbf{Inercia final} \\
+\midrule
+secuencial & --- & 4531798,747970240 \\
+concurrente & 1, 2, 4, 8, 16 & 4531798,747970126 \\
+\bottomrule
+\end{tabular}
+
+{\footnotesize\textit{Nota.} La versión concurrente da el mismo valor para toda cantidad de workers porque reduce los parciales en orden de chunk. La diferencia con la secuencial es el redondeo de sumar en otro orden: $2{,}53 \cdot 10^{-14}$ en términos relativos.\par}
+\end{table}

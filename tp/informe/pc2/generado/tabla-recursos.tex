@@ -1,0 +1,19 @@
+% Generado por tp/scripts/tablas_informe.py desde tp/reports/*.json. No editar a mano.
+\begin{table}[H]
+\caption{Uso de recursos por configuración en la laptop}\label{tab:recursos}
+\footnotesize
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+\textbf{Modo} & \textbf{$P$} & \textbf{Clust. (ms)} & \textbf{Heap (MB)} & \textbf{RSS (MB)} & \textbf{CPU (s)} & \textbf{Núcleos} \\
+\midrule
+seq & --- & 2.344 & 349 & 453 & 5,05 & 1,2 \\
+conc & 1 & 2.708 & 349 & 466 & 6,11 & 1,2 \\
+conc & 2 & 1.451 & 349 & 452 & 6,26 & 1,7 \\
+conc & 4 & 813 & 349 & 532 & 6,71 & 2,1 \\
+conc & 8 & 742 & 349 & 531 & 9,07 & 3,0 \\
+conc & 16 & 741 & 349 & 531 & 9,07 & 3,0 \\
+\bottomrule
+\end{tabular}
+
+{\footnotesize\textit{Nota.} fedora · go1.26.7-X:nodwarf5 · 8 CPUs lógicas (4 núcleos físicos con SMT) · dataset completo, $k=8$, 10 iteraciones. Una corrida por configuración: acá interesa el consumo, que es estable, no el tiempo. Clust. es el tiempo de clustering; Heap, el heap vivo tras cargar el CSV; RSS, el máximo del proceso. CPU es usuario más sistema del proceso completo, incluida la carga del CSV; Núcleos son los núcleos efectivos, CPU dividido por el tiempo de pared total.\par}
+\end{table}

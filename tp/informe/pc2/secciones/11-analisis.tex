@@ -1,0 +1,106 @@
+% ========================================================
+% ANÁLISIS DE SPEEDUP, ESCALABILIDAD Y TRADE-OFFS
+% ========================================================
+\section{Análisis de speedup, escalabilidad y trade-offs}\label{sec:analisis}
+
+\subsection{Escalamiento fuerte}
+
+El escalamiento fuerte responde \enquote{¿cuánto más rápido resuelvo el mismo problema con más
+workers?}. La Tabla~\ref{tab:speedup-fuerte} muestra una curva casi lineal hasta $P = 4$
+(eficiencia de \cifra{eficiencia-p4}) que se dobla en $P = 8$ (\cifra{eficiencia-p8}) y se aplana
+en $P = 16$ (\cifra{eficiencia-p16}), sobre una máquina de \cifra{cpus-gorgo} núcleos.
+
+Un piloto en la laptop del equipo, de cuatro núcleos físicos con SMT, da la misma forma en otro
+lugar: la curva se aplana justo donde se acaban los núcleos físicos, y el tramo de 4 a 8 workers
+solo aprovecha los hilos SMT. Esas cifras salen de una sola corrida y no del protocolo de
+\cifra{repeticiones} repeticiones, así que sirven para la forma de la curva y no como medición
+oficial; se mencionan porque cualquier lectura de la curva que ignore la diferencia entre núcleos e
+hilos atribuye al algoritmo un techo que es del hardware.
+
+\subsection{Fracción serial efectiva}\label{sec:karp}
+
+La columna Karp--Flatt de la Tabla~\ref{tab:speedup-fuerte} es la fracción serial \emph{efectiva}
+\parencite{karpflatt1990},
+\[
+  e(P) = \frac{1/S(P) - 1/P}{1 - 1/P},
+\]
+la fracción del tiempo que la ley de \textcite{amdahl1967} necesitaría para explicar el speedup
+observado. Absorbe la sincronización, el desbalance y los efectos de memoria; no es el porcentaje de
+líneas secuenciales del programa.
+
+Lo informativo es que \textbf{crece con $P$}: \cifra{kf-p4} con cuatro workers, \cifra{kf-p8} con
+ocho, \cifra{kf-p16} con dieciséis. Si el límite fuera una sección secuencial fija, la reducción por
+ejemplo, la fracción sería constante y el techo de Amdahl una predicción útil. Que crezca dice lo
+contrario: el costo que limita es el de coordinar, y aumenta con la cantidad de workers. Por eso este
+informe retira el techo de Amdahl que la PC1 estimó (Sección~\ref{sec:correcciones}): con
+$e = \cifra{kf-p4}$ daría un speedup máximo de unas 57 veces, un número sin sentido físico en esta
+máquina.
+
+\subsection{Escalamiento débil}\label{sec:debil}
+
+La pregunta del escalamiento débil es distinta: \enquote{¿cuánto más problema resuelvo en el mismo
+tiempo?}, que es la que importa cuando el dataset crece. Se mantiene $n / P$ constante en
+\cifra{n-por-worker}~viajes por worker (Tabla~\ref{tab:debil}).
+
+\input{generado/tabla-debil}
+
+Hasta $P = 4$ el tiempo se mantiene plano: duplicar el problema y los workers al mismo tiempo sale
+casi gratis. Con $P = 8$ aparece el mismo costo de coordinación que muestra la fracción efectiva, y
+el tiempo sube un 37\,\%. El contraste con la cuarta columna es lo que le da sentido: el dataset
+completo con ocho workers termina en 1,4 veces el tiempo que un octavo del dataset con un worker.
+Esto es lo que describe la ley de \textcite{gustafson1988}, y conviene enunciarlo con cuidado:
+\emph{no} dice que el problema fijo escale linealmente, eso lo desmiente la Tabla~\ref{tab:speedup-fuerte},
+sino que si el problema crece con los recursos, el tiempo se sostiene.
+
+\subsection{Tamaño de bloque}\label{sec:chunk}
+
+La PC1 comprometió el tamaño de bloque como variable del experimento, siguiendo a
+\textcite{kwedlo2021} y \textcite{kwedlo2024}. Con $P = \cifra{p-chunk}$ fijo sobre el dataset
+completo (Tabla~\ref{tab:chunk}):
+
+\input{generado/tabla-chunk}
+
+El resultado contradice la intuición de que trocear fino cuesta caro: con 2\,766 bloques el
+rendimiento es el mejor del barrido, empatado con 692. Mandar un entero por un canal con
+\emph{buffer} es baratísimo comparado con procesar mil viajes. El castigo aparece del otro lado: con
+3 bloques y 8 workers, cinco workers se quedan sin trabajo y el speedup cae a lo que se esperaría de
+tres workers ocupados. El problema del bloque grande no es su tamaño, es que deja de haber
+suficientes unidades para repartir.
+
+De ahí la regla práctica: \textbf{muchos más bloques que workers}. El óptimo es una meseta ancha,
+de 1\,024 a 16\,384 viajes por bloque, así que el parámetro no es delicado mientras se respete esa
+condición. El valor por defecto del código, \cifra{chunk}, está dentro de la meseta aunque no en su
+mejor punto (\cifra{mejor-chunk} rinde un 4\,\% más); las corridas oficiales usaron \cifra{chunk}.
+
+\subsection{Trade-offs entre la versión secuencial y la concurrente}
+
+\paragraph{Lo que se gana.} Sobre el dataset del trabajo, \cifra{speedup-p4}$\times$ con cuatro
+workers y \cifra{eficiencia-p4} de eficiencia; \cifra{speedup-p8}$\times$ con ocho. El problema es
+suficientemente grande para que la concurrencia pague.
+
+\paragraph{Lo que se paga.}
+\begin{itemize}
+  \item Un sobrecosto fijo del \cifra{sobrecosto-p1}, visible en que $P = 1$ concurrente es más
+        lento que el secuencial.
+  \item Más tiempo total de CPU: en la laptop sube de 5 a 9 segundos mientras el tiempo de pared
+        baja (Tabla~\ref{tab:recursos}). Se paga trabajo extra a cambio de terminar antes.
+  \item Complejidad: el código concurrente necesita el contrato de fases, la barrera, la reducción
+        ordenada y el modelo en Promela para justificar que es correcto. La versión secuencial se
+        entiende leyéndola.
+  \item Por debajo de unos \cifra{n-equilibrio}~viajes, el paralelismo cuesta más de lo que rinde
+        (Sección~\ref{sec:equilibrio}).
+\end{itemize}
+
+\paragraph{Lo que se decidió pagar a propósito.} Acumular por bloque y reducir en orden cuesta unos
+66~KB con la configuración oficial. A cambio, el resultado concurrente no depende de la cantidad de
+workers, ni del planificador, ni de la máquina (Tabla~\ref{tab:inercias}). Sin esa decisión, dos
+corridas idénticas darían números distintos en los últimos dígitos, y la comparación entre versiones
+sería una inspección a ojo con tolerancias elegidas después de ver el resultado. Es la lección que la
+revisión de la PC1 sacó de \textcite{bellavita2025}: el speedup depende de contra qué y cómo se mide,
+y un experimento que no se puede repetir bit a bit no se puede discutir.
+
+\paragraph{Hasta dónde llega esto.} Un mes de una flota, una arquitectura por plataforma,
+$k = \cifra{k}$ fijado sin validación interna, y las cifras de la laptop como piloto y no como
+medición bajo protocolo. Nada de esto dice qué pasa con varios meses, con otra distribución de datos
+ni con más de \cifra{cpus-gorgo} núcleos. Extender la escala, y contrastar con una implementación en
+GPU, queda para el Entregable 3.

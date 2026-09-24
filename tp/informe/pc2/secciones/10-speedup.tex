@@ -1,0 +1,80 @@
+% ========================================================
+% SPEEDUP CON MEDIA RECORTADA
+% ========================================================
+\section{Speedup con media recortada}\label{sec:speedup}
+
+\subsection{Protocolo de medición}
+
+El protocolo está fijado en \texttt{tp/kmeans/cmd/benchmark} y no se decide en tiempo de corrida,
+que es lo que evita que dos ejecuciones \enquote{según el mismo criterio} den cifras distintas:
+
+\begin{itemize}
+  \item \textbf{\cifra{repeticiones} repeticiones medidas por configuración}, más una ronda de
+        calentamiento que se descarta.
+  \item \textbf{Orden aleatorizado por bloques}: en cada ronda se barajan las configuraciones. No es
+        un detalle: la caché de disco y el turbo del procesador premian a la configuración que corre
+        segunda, así que medir siempre \enquote{primero secuencial, después concurrente} infla el
+        speedup.
+  \item \textbf{Media recortada simétrica al \cifra{recorte} por extremo}: se ordenan las
+        \cifra{repeticiones} mediciones, se descartan las dos menores y las dos mayores, y se
+        promedian las restantes. Descarta las corridas afectadas por un pico del sistema operativo
+        sin elegir a mano cuáles.
+  \item \textbf{El speedup es el cociente de las medias recortadas},
+        $S = \bar{T}_{\text{sec}} / \bar{T}_{\text{conc}}$, y no el promedio de los cocientes por
+        corrida, que sesga hacia arriba.
+  \item \textbf{Intervalo de confianza del 95\,\% por bootstrap} de \cifra{bootstrap} réplicas
+        sobre las dos muestras de tiempos: se remuestrean ambas con reemplazo, se recalcula el
+        cociente de medias recortadas y se toman los percentiles 2,5 y 97,5.
+  \item \textbf{Se mide solo el clustering.} La carga del CSV y la inicialización quedan fuera y se
+        reportan aparte (Sección~\ref{sec:recursos}); ambas versiones parten del mismo archivo de
+        centroides iniciales.
+  \item \textbf{Dos experimentos independientes}: trabajo fijo (\cifra{iter-fijas} iteraciones,
+        tolerancia cero), que compara el mismo trabajo; y hasta convergencia (tope de 60
+        iteraciones, tolerancia $10^{-9}$), que compara el tiempo hasta la misma solución.
+\end{itemize}
+
+Las corridas oficiales se hicieron en el servidor \texttt{\cifra{maquina}} del equipo,
+\cifra{cpus-gorgo} núcleos sin SMT, ocioso durante la medición; el benchmark completo tomó
+\cifra{duracion-min}~minutos. Los tiempos crudos de cada repetición se guardan junto a los
+agregados en \texttt{tp/reports/}, para poder recalcular cualquier estadística sin volver a medir.
+Todas las tablas de esta sección y las siguientes se generan desde esos JSON con
+\texttt{tp/scripts/tablas\_informe.py}; ninguna cifra se transcribió a mano.
+
+\subsection{Tabla de speedup}\label{sec:fuerte}
+
+\input{generado/tabla-speedup-fuerte}
+
+La Tabla~\ref{tab:speedup-fuerte} es el resultado principal. Sobre los \cifra{n}~viajes, la
+versión secuencial tarda \cifra{seq-ms}~ms en \cifra{iter-fijas} iteraciones; la concurrente
+alcanza \cifra{speedup-p2}$\times$ con dos workers, \cifra{speedup-p4}$\times$ con cuatro y
+\cifra{speedup-p8}$\times$ con ocho. Los intervalos son estrechos, del orden de centésimas, porque
+la desviación entre repeticiones es de pocos milisegundos sobre cientos: el protocolo produce
+mediciones estables.
+
+Dos lecturas que conviene no confundir. Con $P = 1$ la versión concurrente es un
+\cifra{sobrecosto-p1} más lenta que la secuencial, y el intervalo no toca el 1: es el precio fijo
+del pool, del troceado y de la reducción, que el paralelismo tiene que recuperar antes de ganar algo.
+Y con $P = 16$ sobre \cifra{cpus-gorgo} núcleos el speedup todavía sube un poco
+(\cifra{speedup-p16}$\times$), porque hay más bloques listos para ocupar cualquier núcleo que se
+libere, pero la eficiencia por worker cae a \cifra{eficiencia-p16}: no son 16 procesadores, es
+sobresuscripción.
+
+\subsection{El mismo resultado hasta convergencia}
+
+\input{generado/tabla-speedup-convergencia}
+
+El segundo experimento (Tabla~\ref{tab:speedup-convergencia}) deja correr ambas versiones hasta el
+criterio de parada. Con la tolerancia de $10^{-9}$ ninguna converge antes del tope de 60 iteraciones,
+así que en la práctica compara seis veces más trabajo que el primero, y da lo mismo dentro del ruido:
+\cifra{speedup-conv-p8}$\times$ contra \cifra{speedup-p8}$\times$ con ocho workers. Eso descarta que
+el resultado dependa de cuál de los dos experimentos se elija.
+
+\subsection{Speedup según el tamaño del problema}
+
+\input{generado/tabla-speedup-tamano}
+
+La Tabla~\ref{tab:speedup-tamano} repite el experimento de trabajo fijo sobre submuestras
+sistemáticas del gold. El speedup crece con $n$: con mil o diez mil viajes la versión concurrente
+pierde con cualquier $P$, con cien mil ya gana pero la eficiencia es baja, y a partir de un millón
+la curva se parece a la del dataset completo. Esa dependencia del tamaño es la que la
+Sección~\ref{sec:equilibrio} mide con más resolución para ubicar el punto de equilibrio.

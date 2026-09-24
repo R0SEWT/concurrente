@@ -1,0 +1,18 @@
+% Generado por tp/scripts/tablas_informe.py desde tp/reports/*.json. No editar a mano.
+\begin{table}[H]
+\caption{Speedup según el tamaño del problema y la cantidad de workers}\label{tab:speedup-tamano}
+\small
+\begin{tabular}{@{}rrrrrrr@{}}
+\toprule
+\textbf{$n$ (viajes)} & \textbf{Secuencial (ms)} & \textbf{$P=1$} & \textbf{$P=2$} & \textbf{$P=4$} & \textbf{$P=8$} & \textbf{$P=16$} \\
+\midrule
+1.000 & 0,5 & 0,89$\times$ & 0,90$\times$ & 0,94$\times$ & 0,92$\times$ & 0,86$\times$ \\
+10.000 & 4,4 & 0,96$\times$ & 0,97$\times$ & 0,93$\times$ & 0,95$\times$ & 0,95$\times$ \\
+100.000 & 41,8 & 0,97$\times$ & 1,88$\times$ & 2,87$\times$ & 3,69$\times$ & 3,64$\times$ \\
+1.000.000 & 388,0 & 0,97$\times$ & 1,89$\times$ & 3,62$\times$ & 5,49$\times$ & 5,93$\times$ \\
+2.831.486 & 1.106,3 & 0,97$\times$ & 1,93$\times$ & 3,80$\times$ & 5,82$\times$ & 6,25$\times$ \\
+\bottomrule
+\end{tabular}
+
+{\footnotesize\textit{Nota.} Trabajo fijo de 10 iteraciones. Cada celda es el speedup puntual de la media recortada; los intervalos de las filas del dataset completo están en la Tabla~\ref{tab:speedup-fuerte}.\par}
+\end{table}

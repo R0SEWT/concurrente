@@ -1,0 +1,131 @@
+% ========================================================
+% PROCEDIMIENTO DE LIMPIEZA
+% ========================================================
+\section{Procedimiento de limpieza del dataset}\label{sec:limpieza}
+
+La limpieza es un pipeline reproducible, ubicado en el directorio \texttt{tp/} del repositorio y
+organizado en tres capas (Figura~\ref{fig:pipeline}). \emph{Bronze} guarda los archivos de TLC tal
+cual se descargan; \emph{silver}, los viajes que pasan las reglas, con sus columnas originales; y
+\emph{gold}, las features en CSV, porque Go no lee Parquet sin librerías de terceros. Polars aplica
+las reglas y DuckDB las vuelve a implementar en SQL como auditoría independiente. El procedimiento
+también está documentado en \texttt{tp/docs/limpieza.md}.
+
+\begin{figure}[H]
+\caption{Pipeline de limpieza por capas}\label{fig:pipeline}
+\centering
+\small
+\input{secciones/figuras/pipeline}
+\end{figure}
+
+Todo el proceso se reproduce con tres comandos:
+
+\begin{quote}
+\small
+\texttt{cd tp \&\& uv sync -{}-extra dev}\\
+\texttt{uv run nyc-tlc all \quad\# bronze $\rightarrow$ silver $\rightarrow$ gold y reporte}\\
+\texttt{uv run pytest -q \quad\ \ \# pruebas de reglas, features y pipeline}
+\end{quote}
+
+\subsection{Reglas de limpieza}
+
+Las siete reglas se aplican en cascada, en el orden de la Tabla~\ref{tab:reglas}, y cada viaje
+descartado se atribuye a la primera regla que no cumple. Así, la suma de descartados coincide
+exactamente con la diferencia entre bronze y silver. El criterio es quitar lo \emph{imposible}, no
+lo \emph{inusual}.
+
+{\small
+\begin{xltabular}{\textwidth}{@{}L{1.75cm}L{3.1cm}Yrr@{}}
+\caption{Reglas de limpieza aplicadas a enero de 2024}\label{tab:reglas}\\
+\toprule
+\textbf{Regla} & \textbf{Se queda si} & \textbf{Por qué} & \textbf{Descartados} & \textbf{Auditoría} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Regla} & \textbf{Se queda si} & \textbf{Por qué} & \textbf{Descartados} & \textbf{Auditoría} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Requeridos & No hay nulos en inicio, fin, distancia, zonas, tarifa ni total
+  & Sin esos campos no se puede validar el viaje ni construir sus features & 0 & 0 \\
+\addlinespace
+Mes & Empieza en enero de 2024
+  & El archivo trae viajes sueltos de otros meses por errores de reloj del taxímetro & 18 & 18 \\
+\addlinespace
+Duración & Dura entre 60~s y 6~h
+  & Menos de un minuto son pruebas o anulaciones; más de seis horas, un taxímetro olvidado
+  & 36.893 & 36.893 \\
+\addlinespace
+Distancia & Mide entre 0 (excluido) y 100 millas
+  & Cero indica anulación o GPS sin datos; el máximo crudo, 312.722 millas, es un error de registro
+  & 36.284 & 60.430 \\
+\addlinespace
+Velocidad & Velocidad media $\le$ 80 mph
+  & Duración y distancia plausibles por separado pueden ser imposibles juntas & 100 & 1.921 \\
+\addlinespace
+Montos & Tarifa y total $> 0$
+  & Los negativos son reembolsos o anulaciones registrados como filas espejo & 32.272 & 38.341 \\
+\addlinespace
+Zonas & Origen y destino ubicables
+  & Las zonas 264 (\textit{Unknown}) y 265 (\textit{Outside of NYC}) no tienen ubicación
+  & 27.571 & 31.527 \\
+\midrule
+\multicolumn{3}{@{}l}{Bronze (archivo original)} & 2.964.624 & \\
+\multicolumn{3}{@{}l}{Total descartado (4,49\,\% de bronze)} & 133.138 & \\
+\multicolumn{3}{@{}l}{\textbf{Silver (dataset limpio)}} & \textbf{2.831.486} & 0 \\
+\end{xltabular}
+{\footnotesize\textit{Nota.} \emph{Descartados} cuenta en cascada, por la primera regla que falla.
+\emph{Auditoría} es el conteo independiente de DuckDB sobre bronze, donde un viaje puede violar
+varias reglas; por eso algunas cifras son mayores. En silver, las siete reglas dan 0 violaciones.
+Las zonas válidas salen de la tabla oficial de TLC, no de una lista escrita a mano.\par}
+}
+
+El dataset limpio conserva el 95,5\,\% de los viajes. Tan importante como lo que se descarta es lo
+que se conserva a propósito. Los 140.162 viajes con tarifa Flex (\texttt{payment\_type = 0}) traen
+nulos en \texttt{RatecodeID}, \texttt{passenger\_count} y \texttt{store\_and\_fwd\_flag}, pero son
+viajes reales y ninguna de esas columnas entra al modelo, así que descartarlos borraría el 4,7\,\%
+de los datos sin motivo. Por la misma razón se ignoran los errores de captura en campos que no
+usamos, como \texttt{passenger\_count = 0} o \texttt{RatecodeID = 99}. No hay duplicados exactos en
+el mes, y los extremos plausibles, como un viaje largo a Newark, se amortiguan en gold con escala
+logarítmica en lugar de eliminarse.
+
+\subsection{Verificación}
+
+Cada regla tiene pruebas automáticas en sus bordes: el viaje con el valor justo en el umbral se
+queda y el siguiente se descarta, sobre registros con el esquema completo de 19 columnas. El
+pipeline se prueba además de punta a punta con un bronze en miniatura. La auditoría en DuckDB cierra
+el circuito, porque si Polars y DuckDB discreparan, una de las dos implementaciones estaría mal.
+Por último, el reporte guarda el sha256 del Parquet de origen (\texttt{c4d59da7bbc8abae\ldots}; el
+valor completo está en \texttt{tp/reports/limpieza\_yellow\_2024-01.json}). Como TLC re-publica
+meses corregidos, ese hash permite comprobar que otra corrida partió del mismo archivo.
+
+\subsection{Features para K-means}
+
+La capa gold transforma cada viaje en las seis features de la Tabla~\ref{tab:features}. Las zonas
+de origen y destino viajan junto a ellas, pero no entran a la distancia: sirven para agregar las
+asignaciones por zona después del clustering.
+
+\begin{table}[H]
+\caption{Features de la capa gold}\label{tab:features}
+\small
+\begin{tabularx}{\textwidth}{@{}L{3.5cm}L{4.4cm}Y@{}}
+\toprule
+\textbf{Feature} & \textbf{Construcción} & \textbf{Por qué} \\
+\midrule
+\texttt{hora\_sin}, \texttt{hora\_cos} & Hora de inicio en el círculo de 24~h
+  & Las 23:00 y la 01:00 quedan a 2 horas, no a 22 \\
+\addlinespace
+\texttt{dia\_sin}, \texttt{dia\_cos} & Día de la semana en el círculo de 7 días
+  & Domingo y lunes quedan como vecinos \\
+\addlinespace
+\texttt{log\_duracion\_z} & z-score de $\log(1 + \text{minutos})$
+  & La cola larga de la duración no domina la distancia euclídea \\
+\addlinespace
+\texttt{log\_distancia\_z} & z-score de $\log(1 + \text{millas})$ & Mismo motivo que la duración \\
+\bottomrule
+\end{tabularx}
+
+{\footnotesize\textit{Nota.} Parámetros del escalado: media 2,558 y desviación 0,639 para el
+logaritmo de la duración; media 1,170 y desviación 0,656 para el de la distancia. Las features se
+revisaron en la PC2 al implementar el lector en Go (Sección~\ref{sec:correcciones}).\par}
+\end{table}

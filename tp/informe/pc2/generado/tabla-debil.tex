@@ -1,0 +1,17 @@
+% Generado por tp/scripts/tablas_informe.py desde tp/reports/*.json. No editar a mano.
+\begin{table}[H]
+\caption{Escalamiento débil: $n/P$ constante}\label{tab:debil}
+\small
+\begin{tabular}{@{}rrrrr@{}}
+\toprule
+\textbf{$P$} & \textbf{$n$ (viajes)} & \textbf{Tiempo con $P$ (ms)} & \textbf{Mismo $n$ con $P=1$ (ms)} & \textbf{Eficiencia débil} \\
+\midrule
+1 & 353.936 & 147,5 & 147,5 & 100\,\% \\
+2 & 707.872 & 152,7 & 296,3 & 97\,\% \\
+4 & 1.415.743 & 150,1 & 576,9 & 98\,\% \\
+8 & 2.831.486 & 201,5 & 1.174,0 & 73\,\% \\
+\bottomrule
+\end{tabular}
+
+{\footnotesize\textit{Nota.} Se mantienen 353.936 viajes por worker. La eficiencia débil es $T(P{=}1, n_1) / T(P, P \cdot n_1)$: 100\,\% significa que el problema creció $P$ veces en el mismo tiempo. La cuarta columna muestra qué costaría el mismo $n$ sin paralelismo.\par}
+\end{table}

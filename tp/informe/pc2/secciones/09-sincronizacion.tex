@@ -1,0 +1,87 @@
+% ========================================================
+% EXPLICACIÓN DEL ALGORITMO CONCURRENTE Y LA SINCRONIZACIÓN
+% ========================================================
+\section{Mecanismos de sincronización: el worker pool}\label{sec:sync}
+
+\subsection{Por qué worker pool y no pipeline}
+
+El enunciado ofrece dos patrones: \emph{worker pool} y \emph{pipeline}. Un pipeline divide el
+trabajo en \emph{etapas} distintas que se encadenan por canales, y rinde cuando cada dato pasa por
+varias transformaciones independientes. Lloyd no tiene esa forma: cada iteración hace una sola cosa
+con todos los datos (asignar y acumular) y luego necesita el resultado de \emph{todos} para seguir
+(actualizar centroides). Es paralelismo de datos con una barrera, y eso es exactamente un worker
+pool: $P$ goroutines iguales que consumen unidades de trabajo homogéneas de un canal, y un punto de
+encuentro al final de cada ronda. La Figura~\ref{fig:workerpool-pc2} lo muestra.
+
+\begin{figure}[H]
+\caption{Worker pool con reparto por canal y acumuladores por bloque}\label{fig:workerpool-pc2}
+\centering
+\small
+\input{secciones/figuras/workerpool-pc2}
+\end{figure}
+
+\subsection{Los tres mecanismos}
+
+\paragraph{Canal de bloques.} \texttt{trabajos} es un \texttt{chan int} con capacidad $C$, la
+cantidad de bloques. En cada iteración el coordinador encola los índices $0, \dots, C-1$; las
+goroutines los reciben con \texttt{for c := range trabajos} y procesan el rango
+$[c \cdot \textit{chunk},\ (c+1) \cdot \textit{chunk})$. El canal hace dos cosas a la vez:
+reparte el trabajo y equilibra la carga, porque el worker que termina antes simplemente recibe el
+siguiente bloque. Con muchos más bloques que workers, ninguno espera ocioso mientras otro termina
+(Sección~\ref{sec:chunk}).
+
+\paragraph{Acumuladores privados por bloque.} Cada bloque $b$ tiene su propio
+\texttt{parcial}: sumas $s_{bj}$ ($k \times 6$ flotantes), conteos $n_{bj}$ e inercia $J_b$. Lo
+escribe un solo worker por iteración, el que recibió $b$, así que no hay dos goroutines escribiendo
+la misma memoria. Las asignaciones $a(i)$ también se escriben sin conflicto: cada bloque cubre un
+rango disjunto de $i$.
+
+\paragraph{Barrera con \texttt{sync.WaitGroup}.} Antes de encolar, el coordinador hace
+\texttt{barrera.Add(C)}; cada worker hace \texttt{barrera.Done()} al terminar un bloque; el
+coordinador hace \texttt{barrera.Wait()}. El \texttt{Add} va \emph{antes} de encolar, no dentro del
+worker: si el worker hiciera su propio \texttt{Add}, el \texttt{Wait} podría ejecutarse con el
+contador en cero antes de que ningún worker haya empezado, y la barrera dejaría pasar. Es el mismo
+error que el curso encontró en el ejemplo de la semana 2, donde un \texttt{WaitGroup} sin
+\texttt{Wait} no esperaba a nadie. Un segundo \texttt{WaitGroup}, \texttt{pool}, solo sirve para el
+cierre ordenado: al terminar, el coordinador cierra el canal y espera a que las $P$ goroutines
+salgan del \texttt{range}.
+
+\subsection{Por qué no hace falta \texttt{sync.Mutex}}
+
+El bucle caliente, asignar y acumular, no comparte estado mutable: los centroides son de solo lectura
+durante la asignación, y cada worker escribe solo el parcial de su bloque y las asignaciones de su
+rango. El único estado que se escribe de forma compartida son los centroides, y los escribe
+únicamente el coordinador, entre el \texttt{Wait} de una iteración y el encolado de la siguiente. Que
+eso sea seguro no es una impresión: lo garantiza el modelo de memoria de Go. El \texttt{Done} de cada
+worker ocurre antes de que el \texttt{Wait} del coordinador retorne, así que todas las escrituras de
+los parciales son visibles cuando empieza la reducción; y el envío de un bloque por el canal ocurre
+antes de su recepción, así que cada worker ve los centroides nuevos que el coordinador escribió antes
+de encolar. Un mutex protegería un acceso concurrente que, por construcción, no existe. Es el
+principio que \textcite{hess2023} y \textcite{xu2021} aplican entre nodos y que la PC1 recogió como
+decisión de diseño: sincronizar una vez por ronda, no una vez por dato.
+
+\subsection{Por qué la reducción va en orden de bloque}\label{sec:reproducibilidad}
+
+Sumar en punto flotante no es asociativo: $(a + b) + c$ y $a + (b + c)$ difieren en los últimos
+dígitos. Si cada worker acumulara todo lo que le tocó, el resultado dependería de \emph{qué} bloques
+le tocaron, o sea del planificador, y dos corridas idénticas darían números distintos. Acumulando por
+bloque y reduciendo en orden $b = 0, \dots, C-1$, la versión concurrente da el mismo resultado en
+toda corrida con el mismo tamaño de bloque, independiente de $P$ y del planificador.
+
+\input{generado/tabla-inercias}
+
+La Tabla~\ref{tab:inercias} lo confirma sobre el dataset completo: la inercia final concurrente es
+la misma para $P = 1, 2, 4, 8$ y $16$, en la laptop y en el servidor. Frente a la secuencial la
+diferencia es de \cifra{inercia-rel} en términos relativos, el redondeo de sumar en otro orden, que
+es exactamente lo que la PC1 anticipó siguiendo a \textcite{he2022} y la razón por la que la
+equivalencia se comprueba con tolerancia y no bit a bit. El costo de esta decisión es memoria para
+$C$ parciales de $k \cdot 7$ valores; con el bloque por defecto son 173 parciales sobre el dataset
+completo, unos 66~KB, frente a los 136~MB de datos.
+
+\subsection{Lo que el diseño no hace}
+
+Se descartaron a propósito, y se mencionan para que la comparación mida concurrencia y no otra
+cosa: la poda por desigualdad triangular de Elkan y Hamerly, que \textcite{li2023} usa y que
+cambia el algoritmo; \emph{mini-batch}, que cambia el trabajo y la aproximación; y la disposición
+por columnas (\emph{SoA}) del arreglo, cuya ventaja depende del compilador. Todas son mejoras
+posibles para después, sobre una línea base ya medida.

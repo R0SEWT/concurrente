@@ -1,0 +1,87 @@
+% ========================================================
+% CORRECCIONES AL ENTREGABLE 1
+% ========================================================
+\section{Correcciones al Entregable 1}\label{sec:correcciones}
+
+Las secciones anteriores reproducen el Entregable 1 tal como se entregó el 13 de septiembre
+(tag \texttt{pc1} del repositorio). Esta sección recoge lo que cambió al pasar del diseño a la
+implementación y lo que quedó pendiente de aquel informe. Los compromisos que se retiran se retiran
+aquí, de forma expresa, y no en silencio.
+
+\subsection{Estado de la asignación del caso}
+
+El enunciado prevé que el docente asigne formalmente el caso de uso y el modelo. Al cierre de este
+informe la asignación formal de \emph{NYC TLC + K-means} sigue sin confirmación escrita, y la
+ausencia de respuesta no se toma como aprobación: el equipo continúa de forma provisional con la
+propuesta de la Sección~\ref{sec:caso}, que es la que este entregable implementa y mide.
+
+\subsection{Lo que cambió del diseño concurrente}
+
+La Sección~\ref{sec:diseno} y el Algoritmo~\ref{alg:lloyd} describen el diseño de referencia de la
+PC1. La implementación lo respeta en lo esencial (centroides de solo lectura durante la asignación,
+acumuladores privados, barrera con \texttt{sync.WaitGroup}, reducción por sumas y conteos) y lo
+precisa en cuatro puntos:
+
+\begin{enumerate}
+  \item \textbf{Acumuladores por bloque, no por worker.} El diseño de la PC1 daba a cada goroutine
+        un acumulador $s_{wj}, n_{wj}$. En la implementación el acumulador pertenece al
+        \emph{bloque} (\emph{chunk}) y la reducción suma los parciales en orden de índice de bloque.
+        La razón es numérica: sumar en punto flotante no es asociativo, y si cada worker acumulara
+        lo que le tocó, el resultado dependería del planificador. Con acumuladores por bloque, la
+        versión concurrente produce exactamente el mismo resultado para cualquier cantidad de
+        workers (Sección~\ref{sec:reproducibilidad}).
+  \item \textbf{Reparto por canal, no en bloques contiguos por worker.} Los $P$ bloques fijos de la
+        PC1 se reemplazan por muchos bloques pequeños que un canal reparte entre $P$ goroutines
+        persistentes. El equilibrio de carga sale solo, y el tamaño de bloque pasa a ser la variable
+        de experimento que la PC1 comprometió (Sección~\ref{sec:chunk}).
+  \item \textbf{Inercia que se reporta.} El pseudocódigo de la PC1 devolvía los centroides
+        actualizados junto con la inercia calculada con los anteriores. La implementación registra
+        la inercia de cada iteración y, al final, la recalcula con los centroides finales en una
+        pasada extra, para que el número publicado corresponda al modelo publicado.
+  \item \textbf{Cluster vacío.} Conserva su centroide anterior; no se vuelve a sembrar, porque
+        hacerlo con el punto más lejano haría que la corrida dependiera del orden de recorrido.
+\end{enumerate}
+
+\subsection{Compromisos que se retiran o se posponen}
+
+\begin{itemize}
+  \item \textbf{Variante con \texttt{sync.Mutex}.} La PC1 prometió una variante con acumuladores
+        compartidos protegidos por mutex para cuantificar el costo de la contención. No se
+        implementó. El contraste que sí se hizo es más informativo para la pregunta de fondo: un
+        mutante del modelo en Promela con un acumulador compartido sin exclusión mutua, que Spin
+        refuta con un contraejemplo (Sección~\ref{sec:promela}). Medir la contención de un mutex real
+        queda para el Entregable 3.
+  \item \textbf{Elección de $k$.} La PC1 propuso fijar $k$ comparando inercia y silueta sobre una
+        muestra. Este entregable congela $k = \cifra{k}$ para todas las mediciones, sin ese estudio:
+        el objeto de la PC2 es la concurrencia, y el speedup se mide con el mismo $k$ en ambas
+        versiones. La elección de $k$ con criterio de validación interna queda para el Entregable 3.
+  \item \textbf{Techo de Amdahl como predicción.} La PC1 estimó un techo de speedup suponiendo una
+        fracción serial fija. Las mediciones muestran que la fracción serial efectiva crece con $P$
+        (Sección~\ref{sec:karp}), así que ese techo no se publica como predicción: el límite no es
+        una sección secuencial fija sino el costo de coordinar.
+\end{itemize}
+
+\subsection{Compromisos que se cumplen}
+
+Se midió el escalamiento fuerte y el débil (Secciones~\ref{sec:fuerte} y~\ref{sec:debil}), el
+tamaño de bloque se trató como variable del experimento (Sección~\ref{sec:chunk}), la equivalencia
+entre versiones se comprobó con tolerancia explícita y, además, comparando las asignaciones
+(Sección~\ref{sec:equivalencia}), la lectura del CSV se midió aparte de las iteraciones, y la
+barrera se modeló en Promela y se verificó con Spin.
+
+\subsection{Revisión de las features}
+
+Las features de la Tabla~\ref{tab:features} se revisaron al implementar el lector en Go. Las cuatro
+componentes seno y coseno no se estandarizan por separado, porque eso deformaría el círculo y
+rompería la vecindad entre las 23:00 y la 01:00; las dos transformaciones \texttt{log1p} sí llevan
+z-score. Las varianzas medidas son 0,389 y 0,487 para hora, 0,509 y 0,487 para día, y 1,0 para
+duración y distancia, así que los cuatro conceptos pesan parecido en la distancia euclídea. Duración y
+distancia están correlacionadas ($r = 0{,}833$) y se conservan las dos a propósito: dos viajes de la
+misma distancia y distinta duración son tipos de viaje distintos, que es justo lo que el caso quiere
+distinguir.
+
+\subsection{Participación del tercer integrante}
+
+El informe de la PC1 registró que el tercer integrante no tenía commits en el repositorio. Desde
+entonces tiene acceso como colaborador (usuario \texttt{ElJulioGG}). Su aporte a este entregable se
+documenta en la Sección~\ref{sec:github}.

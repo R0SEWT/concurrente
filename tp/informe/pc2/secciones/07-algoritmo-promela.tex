@@ -1,0 +1,146 @@
+% ========================================================
+% ALGORITMO CONCURRENTE Y MODELO EN PROMELA
+% ========================================================
+\section{Algoritmo concurrente y modelo en Promela}\label{sec:promela}
+
+\subsection{Planteamiento del algoritmo}
+
+El algoritmo es Lloyd: asignar cada viaje al centroide más cercano y recalcular cada centroide como
+la media de los viajes asignados, hasta que los centroides dejen de moverse o se agoten las
+iteraciones. La versión secuencial y la concurrente comparten el mismo contrato numérico, fijado
+antes de escribir código para que el benchmark compare dos implementaciones del mismo algoritmo y
+no dos algoritmos distintos:
+
+\begin{itemize}
+  \item distancia euclídea al cuadrado sobre las seis features; en caso de empate gana el centroide
+        de menor índice;
+  \item inicialización k-means++ con semilla fija, ejecutada una sola vez; los centroides iniciales se
+        guardan en disco con su sha256 y ambas versiones parten de ese archivo;
+  \item criterio de parada $\max_j \lVert \mu_j^{(t)} - \mu_j^{(t-1)} \rVert_\infty \le
+        10^{-9} + 10^{-9} \cdot \max_j \lVert \mu_j^{(t-1)} \rVert_\infty$, o el máximo de
+        iteraciones, lo que ocurra primero; el resultado registra cuál de los dos paró la corrida;
+  \item un cluster vacío conserva su centroide anterior.
+\end{itemize}
+
+La versión concurrente (Algoritmo~\ref{alg:lloyd-chunks}) parte los $N$ viajes en $C$ bloques de
+tamaño $c$, los reparte por un canal entre $P$ goroutines que viven toda la corrida, y sincroniza una
+sola vez por iteración, en la barrera. Cada bloque tiene sus propios acumuladores, y la reducción los
+suma en orden de índice de bloque.
+
+\begin{algorithm}[H]
+\caption{Lloyd concurrente con worker pool, bloques por canal y acumuladores por bloque}
+\label{alg:lloyd-chunks}
+\begin{algorithmic}[1]
+\Require viajes $X = \{x_1, \dots, x_N\} \subset \mathbb{R}^6$, centroides iniciales
+         $\mu_1, \dots, \mu_k$, $P$ workers, tamaño de bloque $c$
+\Ensure centroides finales, asignaciones $a(i)$ e inercia $J$
+\State $C \gets \lceil N / c \rceil$; crear un canal \textit{trabajos} con capacidad $C$
+\State Lanzar $P$ goroutines; cada una repite: recibir un bloque $b$ del canal, procesarlo, avisar
+       a la barrera \Comment{el pool no se relanza por iteración}
+\For{$t = 1, \dots, \textit{maxIter}$}
+  \State barrera.Add($C$); enviar $b = 0, \dots, C-1$ por \textit{trabajos}
+  \Statex \hspace{\algorithmicindent} \textit{cada worker, al recibir $b$:} \Comment{$\mu$ es de solo lectura}
+  \State \hspace{\algorithmicindent} $s_{bj} \gets \mathbf{0}$, $n_{bj} \gets 0$, $J_b \gets 0$
+  \ForAll{$x_i$ en el bloque $b$}
+    \State $j^{*} \gets \arg\min_j \lVert x_i - \mu_j \rVert^2$; \ $a(i) \gets j^{*}$
+    \State $s_{bj^{*}} \gets s_{bj^{*}} + x_i$; \ $n_{bj^{*}} \gets n_{bj^{*}} + 1$;
+           \ $J_b \gets J_b + \lVert x_i - \mu_{j^{*}} \rVert^2$
+  \EndFor
+  \State \hspace{\algorithmicindent} barrera.Done()
+  \State barrera.Wait() \Comment{\texttt{sync.WaitGroup}: recién ahora se puede escribir $\mu$}
+  \State $s_j \gets \sum_{b=0}^{C-1} s_{bj}$, \ $n_j \gets \sum_{b=0}^{C-1} n_{bj}$,
+         \ $J \gets \sum_b J_b$ \Comment{en orden de $b$, siempre el mismo}
+  \State $\mu_j \gets s_j / n_j$ para todo $j$ con $n_j > 0$
+  \If{$\max_j \lVert \mu_j^{(t)} - \mu_j^{(t-1)} \rVert_\infty$ cumple la tolerancia} \textbf{salir} \EndIf
+\EndFor
+\State Una pasada más de asignación con los $\mu$ finales, también en paralelo, para $a(i)$ y $J$
+\State Cerrar \textit{trabajos}; esperar a que las $P$ goroutines terminen
+\State \Return $\mu$, $a$, $J$
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Qué se modela}
+
+El modelo en Promela (Listado~\ref{lst:pml}) no es el K-means: no tiene distancias, centroides
+reales ni punto flotante. Es el esqueleto de sincronización del Algoritmo~\ref{alg:lloyd-chunks},
+con un dominio deliberadamente pequeño, cuatro puntos, dos bloques, dos workers y dos iteraciones,
+para que Spin pueda recorrer \emph{todos} los entrelazados posibles. Lo que importa está completo:
+el canal que reparte bloques entre workers persistentes, los acumuladores privados por bloque, la
+barrera al final de cada iteración (la variable \texttt{pendientes} es el \texttt{WaitGroup}) y la
+publicación de centroides nuevos, que solo puede ocurrir cuando no queda ningún lector.
+
+Se modelan dos iteraciones a propósito. Los errores de reutilizar mal la barrera o de no reiniciar
+los acumuladores no aparecen en la primera iteración: aparecen en la segunda.
+
+\subsection{Qué se verifica}
+
+\begin{table}[H]
+\caption{Propiedades verificadas por Spin sobre el modelo}\label{tab:propiedades}
+\small
+\begin{tabularx}{\textwidth}{@{}L{5.6cm}Y@{}}
+\toprule
+\textbf{Propiedad} & \textbf{Cómo se expresa} \\
+\midrule
+Cada punto se procesa exactamente una vez por iteración
+  & \texttt{assert(seen[i] == 1)} para todo $i$ al final de cada iteración \\
+\addlinespace
+Los centroides no se escriben mientras alguien los lee
+  & \texttt{assert(escribiendo == 0)} en cada worker al leer; \texttt{assert(lectores == 0)} en el
+    coordinador antes de publicar \\
+\addlinespace
+La reducción conserva los puntos & \texttt{assert(total == N)} tras sumar los acumuladores \\
+\addlinespace
+Ausencia de deadlock & Estados finales válidos, que \texttt{pan} comprueba por su cuenta; los
+  workers bloqueados esperando trabajo llevan la etiqueta \texttt{end}, que declara legítima esa
+  espera \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Sobre la primera propiedad conviene una advertencia. Sumar los conteos no alcanza: procesar el
+punto A dos veces y omitir el punto B da exactamente el mismo total, así que
+\texttt{assert(total == N)} pasaría con un error de cobertura. Por eso se cuenta por punto, con el
+arreglo \texttt{seen}.
+
+\subsection{El mutante: por qué el cero errores significa algo}
+
+Un modelo que da cero errores solo prueba algo si es capaz de encontrar errores. Para comprobarlo,
+el mismo archivo se compila con \texttt{-DMUTANTE}, que reemplaza el acumulador privado por uno
+compartido sin exclusión mutua y separa la lectura de la escritura
+(\texttt{tmp = compartido; tmp++; compartido = tmp}). La separación es necesaria: si lectura y
+escritura fueran un solo enunciado, Promela lo ejecutaría de forma indivisible y la carrera quedaría
+escondida. Este es el mismo incremento perdido que el curso estudia con el algoritmo de
+\textcite{benari2006} en las primeras semanas, ahora dentro del problema real.
+
+\subsection{Resultados}
+
+Los Listados~\ref{lst:spin-ok} y~\ref{lst:spin-mut} son la salida de \texttt{pan} sobre el modelo
+correcto y sobre el mutante (Spin 6.5.2, búsqueda exhaustiva completa, sin reducción por
+\emph{bitstate}). El modelo correcto termina con \texttt{errors: 0} tras recorrer 2\,407 estados; el
+mutante viola la aserción \texttt{compartido == 4} a profundidad 205, en la segunda iteración. El
+contraejemplo se reproduce paso a paso con \texttt{spin -t -p -DMUTANTE kmeans.pml}, y el
+\texttt{Makefile} de \texttt{tp/spin/} comprueba en cada corrida que los dos números sigan siendo
+cero y uno, para que el modelo no deje de probar lo que dice probar sin que nadie lo note.
+
+\lstinputlisting[style=terminal, caption={Salida de \texttt{pan} sobre el modelo correcto},
+                 label={lst:spin-ok}, lastline=22]{generado/spin-correcto.txt}
+
+\lstinputlisting[style=terminal, caption={Salida de \texttt{pan} sobre el mutante con acumulador compartido},
+                 label={lst:spin-mut}, lastline=16]{generado/spin-mutante.txt}
+
+\subsection{Hasta dónde llega esta prueba}
+
+La conclusión vale para este modelo y estos parámetros. No es una demostración del programa en Go
+para cualquier tamaño: lo que descarta es toda una clase de errores, pérdida o duplicación de
+puntos, escritura de centroides durante la lectura, barrera mal reutilizada, sobre todos los
+entrelazados de ese dominio. Eso es exactamente lo que ningún test puede hacer, porque un test
+observa un entrelazado por corrida. Por eso el curso pide las dos cosas y este trabajo hace las dos:
+Spin verifica el diseño (esta sección) y \texttt{go test -race} verifica la implementación
+(Sección~\ref{sec:go}). Las propiedades de progreso, que toda iteración termine, requieren declarar
+hipótesis de \emph{fairness} y quedan para el Entregable 3.
+
+\subsection{El modelo}
+
+\lstinputlisting[language=Promela, firstline=32,
+                 caption={\texttt{tp/spin/kmeans.pml}, sin el comentario de cabecera},
+                 label={lst:pml}]{../../spin/kmeans.pml}
