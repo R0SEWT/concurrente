@@ -20,6 +20,11 @@ type Opciones struct {
 	MaxIter int
 	TolAbs  float64
 	TolRel  float64
+	// AlIterar, si no es nil, se llama al terminar cada iteración con su número
+	// (desde 1) y la inercia de esa iteración. Es para que quien llama muestre
+	// progreso; el paquete no sabe nada de terminales. Corre en la goroutine que
+	// llamó a Secuencial o Concurrente, nunca en un worker.
+	AlIterar func(it int, inercia float64)
 }
 
 // Resultado es lo que produce una corrida. Asignaciones e Inercia corresponden
@@ -82,6 +87,9 @@ func Secuencial(d *Datos, centroidesIniciales []float64, op Opciones) (*Resultad
 		r.Vacios = actualizar(cent, sumas, conteos, k, dim)
 		r.Inercias = append(r.Inercias, inercia)
 		r.Iteraciones = it
+		if op.AlIterar != nil {
+			op.AlIterar(it, inercia)
+		}
 
 		if converge(cent, previos, op) {
 			r.Paro = ParoTolerancia

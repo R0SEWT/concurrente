@@ -61,8 +61,10 @@ func main() {
 		conHash    = flag.Bool("hash-datos", true, "calcular el sha256 del gold (fuera del tiempo medido)")
 		enJSON     = flag.Bool("json", false, "imprimir el resultado como JSON")
 		procs      = flag.Int("gomaxprocs", 0, "GOMAXPROCS; 0 deja el valor por defecto")
+		progreso   = flag.Bool("progreso", false, "barra de progreso por iteración en stderr (para verlo correr, no para medir)")
 	)
-	flag.Parse()
+	flag.CommandLine.Parse(argumentos(os.Args))
+	mostrarProgreso = *progreso
 
 	if err := correr(*datos, *modo, *k, *maxIter, *tolAbs, *tolRel, *workers, *chunk,
 		*semilla, *centroides, *conHash, *enJSON, *procs); err != nil {
@@ -70,6 +72,9 @@ func main() {
 		os.Exit(1)
 	}
 }
+
+// mostrarProgreso lo fija -progreso. Es de la CLI, no del paquete kmeans.
+var mostrarProgreso bool
 
 func correr(ruta, modo string, k, maxIter int, tolAbs, tolRel float64,
 	workers, chunk int, semilla int64, rutaCent string, conHash, enJSON bool, procs int) error {
@@ -91,6 +96,12 @@ func correr(ruta, modo string, k, maxIter int, tolAbs, tolRel float64,
 		s.DatosSha256 = h
 	}
 
+	var b *barra
+	if mostrarProgreso {
+		b = nuevaBarra(os.Stderr, maxIter)
+		fmt.Fprintf(os.Stderr, "\n  \033[1mK-means · %s · %s · %d CPUs\033[0m\n", s.Maquina, s.VersionGo, s.CPUsLogicas)
+	}
+
 	inicio := time.Now()
 	t0 := time.Now()
 	d, err := kmeans.LeerGoldArchivo(ruta)
@@ -98,6 +109,9 @@ func correr(ruta, modo string, k, maxIter int, tolAbs, tolRel float64,
 		return err
 	}
 	s.MsCarga = ms(time.Since(t0))
+	if b != nil {
+		b.fase("gold: %d viajes × %d features", d.N, d.D)
+	}
 	s.N, s.D = d.N, d.D
 	// Foto después de cargar: separa el costo de parsear el CSV del clustering.
 	s.TrasCarga = kmeans.MedirRecursos()
@@ -110,8 +124,19 @@ func correr(ruta, modo string, k, maxIter int, tolAbs, tolRel float64,
 	s.MsInicializar = ms(time.Since(t0))
 	s.KEfectivo = kEfectivo
 	s.CentroidesHash = kmeans.HashCentroides(cent)
+	if b != nil {
+		b.fase("centroides: k=%d, sha256 %s…", kEfectivo, s.CentroidesHash[:8])
+		if modo == "seq" {
+			b.titulo("Lloyd secuencial, 1 hilo, %d iter.", maxIter)
+		} else {
+			b.titulo("Lloyd concurrente, %d workers, chunk %d", workers, chunk)
+		}
+	}
 
 	op := kmeans.Opciones{K: kEfectivo, MaxIter: maxIter, TolAbs: tolAbs, TolRel: tolRel}
+	if b != nil {
+		op.AlIterar = b.iterar
+	}
 	t0 = time.Now()
 	var r *kmeans.Resultado
 	if modo == "seq" {
@@ -125,6 +150,9 @@ func correr(ruta, modo string, k, maxIter int, tolAbs, tolRel float64,
 	}
 	s.MsClustering = ms(time.Since(t0))
 	s.MsTotal = ms(time.Since(inicio))
+	if b != nil {
+		b.fin(r.Iteraciones, r.Paro)
+	}
 	s.Iteraciones, s.Paro, s.Vacios, s.Inercia = r.Iteraciones, r.Paro, r.Vacios, r.Inercia
 	s.Final = kmeans.MedirRecursos()
 	s.GOMAXPROCS = runtime.GOMAXPROCS(0)
