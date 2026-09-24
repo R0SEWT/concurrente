@@ -1,13 +1,15 @@
-name: Go labs
+name: Go
 
 on:
   push:
     paths:
       - "labs/go/**"
+      - "tp/kmeans/**"
       - ".github/workflows/go.yml"
   pull_request:
     paths:
       - "labs/go/**"
+      - "tp/kmeans/**"
       - ".github/workflows/go.yml"
 
 permissions:
@@ -16,9 +18,14 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        modulo: [labs/go, tp/kmeans]
+    name: ${{ matrix.modulo }}
     defaults:
       run:
-        working-directory: labs/go
+        working-directory: ${{ matrix.modulo }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -26,11 +33,15 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v6
         with:
-          go-version-file: labs/go/go.mod
+          go-version-file: ${{ matrix.modulo }}/go.mod
           cache: false
 
+      # -short salta los tests que necesitan el gold, que no se versiona.
       - name: Test with race detector
-        run: go test -race ./...
+        run: go test -race -short ./...
 
       - name: Vet
         run: go vet ./...
+
+      - name: Gofmt
+        run: test -z "$(gofmt -l .)"
