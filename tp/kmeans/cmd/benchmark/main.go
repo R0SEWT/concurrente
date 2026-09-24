@@ -93,7 +93,7 @@ func main() {
 		experCSV    = flag.String("experimentos", "fijas,convergencia", "fijas | convergencia")
 		salida      = flag.String("salida", "", "archivo JSON de salida; vacío = tp/reports/benchmark_<maquina>_<fecha>.json")
 	)
-	flag.Parse()
+	flag.CommandLine.Parse(argumentos(os.Args))
 
 	if err := correr(*ruta, *k, *semilla, *semillaOrd, *chunk, *repes, *calent, *recorte, *boot,
 		*workersCSV, *tamanosCSV, *iterFijas, *maxIterConv, *experCSV, *salida); err != nil {

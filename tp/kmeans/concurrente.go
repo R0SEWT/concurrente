@@ -96,6 +96,9 @@ func Concurrente(d *Datos, centroidesIniciales []float64, op OpcionesConc) (*Res
 		r.Vacios = actualizar(cent, sumas, conteos, k, dim)
 		r.Inercias = append(r.Inercias, inercia)
 		r.Iteraciones = it
+		if op.AlIterar != nil {
+			op.AlIterar(it, inercia)
+		}
 
 		if converge(cent, previos, op.Opciones) {
 			r.Paro = ParoTolerancia

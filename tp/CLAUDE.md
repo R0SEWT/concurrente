@@ -52,6 +52,7 @@ un bug en una de ellas.
 | `kmeans/` | Módulo Go del K-means (PC2): secuencial, concurrente con worker pool, `cmd/kmeans` y `cmd/benchmark`. Su diseño está en `docs/kmeans.md`; el análisis, en `docs/analisis-pc2.md`. |
 | `scripts/tablas_informe.py` | Genera las tablas y cifras del informe de la PC2 desde `reports/benchmark_*.json`. |
 | `scripts/kmeans_gpu.py` | Lloyd en GPU con PyTorch, mismo contrato que `kmeans/`, para el contraste del TB1. Se corre en `ssh gpu` con `scripts/gpu/correr_remoto.sh`; cómo y por qué, en `docs/kmeans-gpu.md`. |
+| `docs/pixel.md` | El K-means en un Pixel 9a con Termux: resultados, heterogeneidad de núcleos, deriva térmica, y cómo compilar para Android (`GOOS=android`). |
 | `scripts/analisis_gpu.py` | Tablas del contraste GPU vs CPU desde `reports/gpu_*.json` y el benchmark de Go de la misma máquina. |
 
 ## Data Conventions
