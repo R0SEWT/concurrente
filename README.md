@@ -75,15 +75,15 @@ todos los entrelazados, y un benchmark con protocolo estadístico fijado en cód
 Mismo gold, mismos centroides iniciales y mismo protocolo en todas las máquinas: 20 repeticiones con
 orden barajado, media recortada al 10 % e intervalos de confianza por bootstrap.
 
-| Máquina | Secuencial | 4 workers | 8 workers | Mejor |
+| Entorno | Secuencial | 4 workers | 8 workers | Mejor |
 |---|---:|---:|---:|---:|
-| gorgo, 11 núcleos x86 | 1,1 s | 3,80× | 5,82× | 6,25× con 16 |
-| Caja con RTX 4060, i7-10700 de 16 hilos | 1,7 s | 3,42× | 6,12× | 7,88× con 16 |
-| **Pixel 9a**, Tensor G4 (1+3+4 núcleos) | 3,6 s | 3,50× | 3,95× | techo en los 4 núcleos grandes |
-| RTX 4060 con PyTorch, fp32 | | | | 8,73× frente al secuencial, 1,11× frente a 16 hilos |
+| VM en Proxmox: Ryzen 5 7600X (6 núcleos), 11 vCPU, 9 GB de RAM | 1,1 s | 3,80× | 5,82× | 6,25× con 16 |
+| PC de escritorio en WSL2: i7-10700 (8 núcleos, 16 hilos), 15 GB de RAM | 1,7 s | 3,42× | 6,12× | 7,88× con 16 |
+| **Pixel 9a** con Termux: Tensor G4 (1 + 3 + 4 núcleos), 7,4 GB de RAM | 3,6 s | 3,50× | 3,95× | techo en los 4 núcleos grandes |
+| GPU RTX 4060 (8 GB) del mismo PC, PyTorch en fp32 | | | | 8,73× frente al secuencial, 1,11× frente a 16 hilos |
 
-- **El resultado concurrente es idéntico bit a bit** para cualquier cantidad de workers y en las tres
-  máquinas medidas, x86 y ARM: inercia 4531798,747970126. La reducción suma los parciales siempre en
+- **El resultado concurrente es idéntico bit a bit** para cualquier cantidad de workers y en los tres
+  entornos medidos, x86 y ARM: inercia 4531798,747970126. La reducción suma los parciales siempre en
   el mismo orden.
 - **La concurrencia paga desde unos 20 000 viajes.** Por debajo, el costo de armar el pool supera el
   trabajo útil. El dataset está 140 veces por encima de ese punto.
