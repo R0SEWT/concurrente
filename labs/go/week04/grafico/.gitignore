@@ -1,0 +1,5 @@
+# escenarios.py escribe el PNG y el SVG en la misma corrida. La entrega
+# (../entrega/matriz-escenarios.typ) incrusta el SVG, y el CSV sí se versiona
+# porque es la fuente de las tablas y del gráfico. El PNG no lo usa nadie: es
+# un raster regenerable, no entra al repo.
+escenarios.png
