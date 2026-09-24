@@ -33,8 +33,9 @@ que es lo que evita que dos ejecuciones \enquote{según el mismo criterio} den c
         iteraciones, tolerancia $10^{-9}$), que compara el tiempo hasta la misma solución.
 \end{itemize}
 
-Las corridas oficiales se hicieron en el servidor \texttt{\cifra{maquina}} del equipo,
-\cifra{cpus-gorgo} núcleos sin SMT, ocioso durante la medición; el benchmark completo tomó
+Las corridas oficiales se hicieron en una máquina virtual del equipo sobre Proxmox
+(\texttt{\cifra{maquina}}), con \cifra{cpus-gorgo}~vCPU de un AMD Ryzen~5 7600X de 6 núcleos
+físicos y 12 hilos, y 9~GB de RAM, ociosa durante la medición; el benchmark completo tomó
 \cifra{duracion-min}~minutos. Los tiempos crudos de cada repetición se guardan junto a los
 agregados en \texttt{tp/reports/}, para poder recalcular cualquier estadística sin volver a medir.
 Todas las tablas de esta sección y las siguientes se generan desde esos JSON con
@@ -54,10 +55,10 @@ mediciones estables.
 Dos lecturas que conviene no confundir. Con $P = 1$ la versión concurrente es un
 \cifra{sobrecosto-p1} más lenta que la secuencial, y el intervalo no toca el 1: es el precio fijo
 del pool, del troceado y de la reducción, que el paralelismo tiene que recuperar antes de ganar algo.
-Y con $P = 16$ sobre \cifra{cpus-gorgo} núcleos el speedup todavía sube un poco
+Y con $P = 16$ sobre \cifra{cpus-gorgo}~vCPU el speedup todavía sube un poco
 (\cifra{speedup-p16}$\times$), porque hay más bloques listos para ocupar cualquier núcleo que se
 libere, pero la eficiencia por worker cae a \cifra{eficiencia-p16}: no son 16 procesadores, es
-sobresuscripción.
+sobresuscripción sobre 6 núcleos físicos.
 
 \subsection{El mismo resultado hasta convergencia}
 

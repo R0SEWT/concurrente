@@ -31,18 +31,19 @@ completo— lo que descarta que el resultado dependa de cuál se elija.
 
 ## 2. Plataformas
 
-| | Núcleos | Hilos | Papel |
-|---|---|---|---|
-| laptop (fedora) | 4 físicos | 8 (SMT) | recursos y contraste de SMT |
-| gorgo (fischl-ubuntusv) | 11 | 11 | corridas oficiales; máquina ociosa |
+| | Procesador | Núcleos físicos | Lógicos | RAM | Papel |
+|---|---|---:|---:|---:|---|
+| Máquina virtual en Proxmox (`fischl-ubuntusv`) | AMD Ryzen 5 7600X | 6 | 11 vCPU | 9 GB | corridas oficiales; ociosa |
+| Laptop (`fedora`) | Intel Core i5-10210U | 4 | 8 (SMT) | 15 GB | recursos y contraste de SMT |
 
-La distinción importa: en la laptop, pasar de P=4 a P=8 no agrega núcleos, agrega
-hilos SMT sobre los mismos 4 núcleos. Cualquier lectura de la curva que ignore
-eso atribuye al algoritmo un techo que es del hardware.
+La distinción importa en las dos: las 11 vCPU de la máquina virtual son hilos de 6
+núcleos físicos, y en la laptop pasar de P=4 a P=8 no agrega núcleos, agrega hilos
+SMT sobre los mismos 4. Cualquier lectura de la curva que ignore eso atribuye al
+algoritmo un techo que es del hardware.
 
 ## 3. Escalamiento fuerte
 
-Dataset completo (2 831 486 viajes), k=8, 10 iteraciones, chunk 16384, en gorgo:
+Dataset completo (2 831 486 viajes), k=8, 10 iteraciones, chunk 16384, en la máquina virtual:
 
 | P | Media recortada | Speedup [IC 95 %] | Eficiencia | Karp–Flatt |
 |---:|---:|:--|---:|---:|
@@ -53,12 +54,26 @@ Dataset completo (2 831 486 viajes), k=8, 10 iteraciones, chunk 16384, en gorgo:
 | 8 | 190,1 ms | 5,82x [5,73, 5,89] | 73 % | 0,054 |
 | 16 | 177,1 ms | 6,25x [6,17, 6,31] | 39 % | 0,104 |
 
-En la laptop, con 4 núcleos físicos, la misma configuración da 1,76x con P=2,
-2,78x con P=4 y 3,17x con P=8: **la curva se aplana justo donde se acaban los
-núcleos físicos**, y el tramo 4→8 solo aprovecha SMT. Atención: esas tres cifras
-salen de un **piloto de una sola corrida**, no del protocolo de 20 repeticiones;
-sirven para la forma de la curva, no como medición oficial. El protocolo completo
-en la laptop queda pendiente.
+**La curva se aplana donde se acaban los núcleos físicos**, en las dos máquinas.
+En la virtual, con 4 workers cada uno tiene su núcleo (95 % de eficiencia); con 8
+ya hay más workers que los 6 núcleos físicos y la eficiencia cae a 73 %. En la
+laptop, medida con el mismo protocolo de 20 repeticiones
+(`reports/benchmark_laptop_i5.json`):
+
+| P | Speedup [IC 95 %] | Eficiencia |
+|---:|:--|---:|
+| 2 | 1,83x [1,74, 1,87] | 91 % |
+| 4 | 3,29x [3,17, 3,36] | 82 % |
+| 8 | 3,27x [3,09, 3,35] | 41 % |
+| 16 | 3,32x [3,08, 3,39] | 21 % |
+
+Techo exacto en los 4 núcleos físicos: los hilos SMT no aportan nada, porque los
+dos hilos de un núcleo compiten por las mismas unidades de coma flotante.
+
+Los speedups son relativos al secuencial de cada máquina: dicen cuánto aprovecha
+cada una sus núcleos, no cuál es más rápida. La virtual tarda 1106 ms en
+secuencial y la laptop 2307 ms; esa diferencia es del procesador, no de la
+concurrencia.
 
 Dos lecturas que conviene no confundir:
 
@@ -66,7 +81,7 @@ Dos lecturas que conviene no confundir:
   que no toca el 1). Ese 3 % es el precio del pool y del troceado: crear las
   goroutines, repartir por canal y reducir los parciales. Es el costo fijo que
   el paralelismo tiene que recuperar antes de ganar algo.
-- **P=16 sobre 11 núcleos** todavía mejora un poco (6,25x contra 5,82x) porque
+- **P=16 sobre 11 vCPU** todavía mejora un poco (6,25x contra 5,82x) porque
   hay más chunks listos para ocupar cualquier núcleo que se libere, pero la
   eficiencia por worker se desploma a 39 %. No son 16 procesadores: es
   sobresuscripción.
@@ -86,7 +101,7 @@ predicción: con e=0,017 daría 57x, que es un número sin sentido físico acá.
 
 ## 5. Punto de equilibrio
 
-Barrido fino entre 10 mil y 100 mil viajes, en gorgo, con el mismo protocolo:
+Barrido fino entre 10 mil y 100 mil viajes, en la máquina virtual, con el mismo protocolo:
 
 | n | Speedup con P=4 [IC 95 %] | ¿Gana el concurrente? |
 |---:|:--|:--|
@@ -177,7 +192,7 @@ Esto es lo que describe la ley de Gustafson, y conviene enunciarlo con cuidado:
 ## 8. Tamaño de chunk
 
 La PC1 comprometió el tamaño de bloque como variable del experimento, junto con
-la cantidad de workers. Con P=8 fijo sobre el dataset completo, en gorgo:
+la cantidad de workers. Con P=8 fijo sobre el dataset completo, en la máquina virtual:
 
 | Chunk | Cantidad de chunks | Tiempo | Speedup [IC 95 %] |
 |---:|---:|---:|:--|
@@ -226,8 +241,8 @@ completo con k=8 y 10 iteraciones:
 
 | | Inercia | Dónde |
 |---|---|---|
-| Secuencial | 4531798,74797024 | idéntica en laptop y en gorgo |
-| Concurrente | 4531798,747970126 | idéntica en laptop y en gorgo, **para P = 1, 2, 4, 8 y 16** |
+| Secuencial | 4531798,74797024 | idéntica en laptop y en la máquina virtual |
+| Concurrente | 4531798,747970126 | idéntica en laptop y en la máquina virtual, **para P = 1, 2, 4, 8 y 16** |
 
 Es decir: el resultado concurrente no depende de la cantidad de workers, ni del
 planificador, ni de la máquina. La única diferencia es entre secuencial y
@@ -240,6 +255,5 @@ los últimos dígitos y la comparación entre versiones sería una inspección a
 con tolerancias elegidas después de ver el resultado.
 
 **Hasta dónde llega esto.** Un mes de una flota, una arquitectura por plataforma,
-k=8, y la elección de k todavía por cerrar. Las cifras de la laptop son un
-piloto, no una medición bajo el protocolo. Nada de esto dice qué pasa con varios
-meses, con otra distribución de datos ni con más de 11 núcleos.
+k=8, y la elección de k todavía por cerrar. Nada de esto dice qué pasa con varios
+meses, con otra distribución de datos ni con más de seis núcleos físicos.
