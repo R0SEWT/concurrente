@@ -152,6 +152,12 @@ func centroidesIniciales(d *kmeans.Datos, k int, semilla int64, ruta string) ([]
 			if dim != d.D {
 				return nil, 0, fmt.Errorf("los centroides tienen D=%d y el gold D=%d", dim, d.D)
 			}
+			// El archivo es una caché de ESTA configuración, no una fuente de k: si
+			// trae otro k, la corrida no respetaría -k y los metadatos registrarían
+			// un K distinto del usado. Mejor fallar y que el usuario decida.
+			if kLeido != k {
+				return nil, 0, fmt.Errorf("los centroides de %s tienen k=%d y se pidió -k %d", ruta, kLeido, k)
+			}
 			return cent, kLeido, nil
 		} else if !os.IsNotExist(err) {
 			return nil, 0, err

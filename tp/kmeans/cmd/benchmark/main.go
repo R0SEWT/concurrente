@@ -143,10 +143,13 @@ func correr(ruta string, k int, semilla, semillaOrd int64, chunk, repes, calent 
 
 	for _, exper := range experimentos {
 		for _, tam := range tamanos {
+			// 0 = dataset completo. Cualquier otro tamaño pasa por Submuestra, que
+			// devuelve el dataset entero si tam == N y falla si tam > N: pedir más
+			// filas de las que hay es un error de configuración, no "el completo".
 			sub := d
-			if tam > 0 && tam < d.N {
+			if tam > 0 {
 				if sub, err = kmeans.Submuestra(d, tam); err != nil {
-					return err
+					return fmt.Errorf("tamaño %d: %w", tam, err)
 				}
 			}
 			n := sub.N
