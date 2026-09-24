@@ -1,0 +1,19 @@
+% Generado por tp/scripts/tablas_informe.py desde tp/reports/*.json. No editar a mano.
+\begin{table}[H]
+\caption{Escalamiento fuerte con trabajo fijo: dataset completo}\label{tab:speedup-fuerte}
+\footnotesize
+\begin{tabular}{@{}rlrrlrr@{}}
+\toprule
+\textbf{$P$} & \textbf{Versión} & \textbf{Media rec. (ms)} & \textbf{Desv. (ms)} & \textbf{Speedup [IC 95\,\%]} & \textbf{Efic.} & \textbf{Karp--Flatt} \\
+\midrule
+--- & secuencial & 1.106,3 & 5,0 & --- & --- & --- \\
+1 & concurrente & 1.141,2 & 6,1 & 0,97$\times$ [0,97; 0,97] & 97\,\% & --- \\
+2 & concurrente & 574,4 & 3,4 & 1,93$\times$ [1,92; 1,93] & 96\,\% & 0,038 \\
+4 & concurrente & 291,0 & 5,1 & 3,80$\times$ [3,77; 3,82] & 95\,\% & 0,017 \\
+8 & concurrente & 190,1 & 6,2 & 5,82$\times$ [5,73; 5,89] & 73\,\% & 0,054 \\
+16 & concurrente & 177,1 & 4,6 & 6,25$\times$ [6,17; 6,31] & 39\,\% & 0,104 \\
+\bottomrule
+\end{tabular}
+
+{\footnotesize\textit{Nota.} Dataset completo, 2.831.486 viajes, trabajo fijo de 10 iteraciones. fischl-ubuntusv · go1.26.7 · 11 CPUs lógicas · 20 repeticiones medidas + 1 de calentamiento · media recortada al 10\,\% por extremo · IC del speedup por bootstrap de 2.000 réplicas · $k=8$ · chunk 16.384. Media rec. es la media recortada; la eficiencia es speedup/$P$. Karp--Flatt es la fracción serial efectiva $e = (1/S - 1/P)/(1 - 1/P)$; no está definida con $P = 1$.\par}
+\end{table}

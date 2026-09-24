@@ -1,0 +1,26 @@
+\section*{Resumen}
+\addcontentsline{toc}{section}{Resumen}
+
+Este informe presenta el segundo entregable del Trabajo Parcial de Programación Concurrente y
+Distribuida y, como pide el enunciado, conserva el primero con sus correcciones. El caso es el
+mismo: K-means sobre los viajes del taxi amarillo de Nueva York \parencite{nyctlc} para
+caracterizar patrones de movilidad urbana, en línea con el Objetivo de Desarrollo Sostenible~11.
+
+En este entregable el algoritmo se implementó en Go, sin librerías de terceros, en dos versiones
+que comparten el mismo contrato numérico: una secuencial y una concurrente con un \emph{worker pool}
+persistente de goroutines, un canal que reparte bloques de viajes, acumuladores privados por bloque
+y una barrera con \texttt{sync.WaitGroup} al final de cada iteración. La lógica de sincronización se
+modeló en Promela y se verificó con Spin sobre todos los entrelazados de un dominio reducido: el
+modelo correcto termina sin errores y un mutante con un acumulador compartido, sin exclusión mutua,
+produce el contraejemplo esperado.
+
+El speedup se midió con un protocolo fijado en código: \cifra{repeticiones}~repeticiones por
+configuración en orden aleatorio, media recortada al \cifra{recorte} por extremo e intervalos de
+confianza por bootstrap. Sobre los \cifra{n}~viajes del dataset, la versión concurrente alcanza
+\cifra{speedup-p4}$\times$ con cuatro workers y \cifra{speedup-p8}$\times$ con ocho, con la misma
+inercia final para cualquier cantidad de workers. El análisis muestra que el costo que limita la
+escalabilidad es el de coordinar, que crece con los workers, y que el paralelismo deja de pagar por
+debajo de unos \cifra{n-equilibrio}~viajes, el punto de equilibrio.
+
+\textit{Palabras clave:} K-means, programación concurrente, Go, worker pool, Promela, Spin, speedup,
+media recortada, NYC TLC.

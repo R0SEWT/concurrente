@@ -1,0 +1,19 @@
+% Generado por tp/scripts/tablas_informe.py desde tp/reports/*.json. No editar a mano.
+\begin{table}[H]
+\caption{Escalamiento fuerte hasta convergencia: dataset completo}\label{tab:speedup-convergencia}
+\footnotesize
+\begin{tabular}{@{}rlrrlrr@{}}
+\toprule
+\textbf{$P$} & \textbf{Versión} & \textbf{Media rec. (ms)} & \textbf{Desv. (ms)} & \textbf{Speedup [IC 95\,\%]} & \textbf{Efic.} & \textbf{Karp--Flatt} \\
+\midrule
+--- & secuencial & 6.016,1 & 14,0 & --- & --- & --- \\
+1 & concurrente & 6.174,7 & 13,0 & 0,97$\times$ [0,97; 0,98] & 97\,\% & --- \\
+2 & concurrente & 3.107,8 & 8,0 & 1,94$\times$ [1,93; 1,94] & 97\,\% & 0,033 \\
+4 & concurrente & 1.579,8 & 9,6 & 3,81$\times$ [3,80; 3,82] & 95\,\% & 0,017 \\
+8 & concurrente & 1.043,1 & 7,4 & 5,77$\times$ [5,75; 5,79] & 72\,\% & 0,055 \\
+16 & concurrente & 982,0 & 16,2 & 6,13$\times$ [6,08; 6,17] & 38\,\% & 0,107 \\
+\bottomrule
+\end{tabular}
+
+{\footnotesize\textit{Nota.} Dataset completo, 2.831.486 viajes, hasta convergencia; ambas versiones pararon en 60 iteraciones (tope del protocolo). fischl-ubuntusv · go1.26.7 · 11 CPUs lógicas · 20 repeticiones medidas + 1 de calentamiento · media recortada al 10\,\% por extremo · IC del speedup por bootstrap de 2.000 réplicas · $k=8$ · chunk 16.384. Media rec. es la media recortada; la eficiencia es speedup/$P$. Karp--Flatt es la fracción serial efectiva $e = (1/S - 1/P)/(1 - 1/P)$; no está definida con $P = 1$.\par}
+\end{table}

@@ -1,0 +1,49 @@
+% ========================================================
+% RECURSOS DE CÓMPUTO Y PUNTO DE EQUILIBRIO
+% ========================================================
+\section{Recursos de cómputo y punto de equilibrio}\label{sec:recursos}
+
+\subsection{Memoria y CPU por configuración}
+
+La Tabla~\ref{tab:recursos} recoge memoria y CPU de cada configuración en la laptop del equipo,
+sobre el dataset completo, con \texttt{tp/scripts/medir\_recursos.sh}. Acá alcanza una corrida por
+configuración: el consumo es estable, y el tiempo, que sí varía, es lo que el benchmark mide con
+repeticiones.
+
+\input{generado/tabla-recursos}
+
+Tres observaciones.
+
+\begin{itemize}
+  \item \textbf{El pico de memoria es de la carga, no del clustering.} El \emph{heap} tras leer el
+        CSV son 349~MB para 136~MB de datos: la diferencia es el crecimiento del arreglo al ir
+        agregando filas. Atribuirle ese pico al K-means sería un error de lectura. El RSS máximo
+        sube un poco con $P$ por los acumuladores parciales y las pilas de las goroutines, pero la
+        memoria la manda el dato. Analíticamente, los datos son $O(n \cdot d)$, los parciales
+        $O(C \cdot k \cdot d)$ y las etiquetas $O(n)$.
+  \item \textbf{El costo del paralelismo se ve en el tiempo de CPU.} Sube de 5 a 9 segundos mientras
+        el tiempo de pared baja. Se paga trabajo extra, sobre todo en coordinar, a cambio de
+        terminar antes.
+  \item \textbf{Los núcleos efectivos} (CPU dividido por tiempo de pared) llegan a 3 sobre 4 núcleos
+        físicos y no se mueven entre $P = 8$ y $P = 16$. Es una comprobación independiente del
+        speedup, y coincide: ahí está el techo de la máquina. Que no llegue a 4 se explica porque la
+        carga del CSV, que es secuencial, entra en el tiempo de pared total.
+\end{itemize}
+
+\subsection{Punto de equilibrio}\label{sec:equilibrio}
+
+El punto de equilibrio es el tamaño de problema a partir del cual la versión concurrente gana a la
+secuencial de forma consistente. Se buscó con un barrido fino entre diez mil y cien mil viajes, con
+$P = 4$ y el mismo protocolo de \cifra{repeticiones} repeticiones (Tabla~\ref{tab:equilibrio}).
+
+\input{generado/tabla-equilibrio}
+
+El punto de equilibrio está en \textbf{$n \approx \cifra{n-equilibrio}$ viajes}: el primer tamaño
+cuyo intervalo de confianza queda completamente por encima de 1. Por debajo de quince mil viajes la
+versión concurrente \emph{pierde} de forma consistente, y el intervalo lo confirma: no es ruido, es
+que el costo fijo de armar el pool y repartir bloques supera el trabajo útil de cada iteración, que
+con diez mil viajes y $k = \cifra{k}$ son apenas unas decenas de miles de distancias.
+
+Dicho de otro modo: con el dataset del trabajo, \cifra{n}~viajes, unas 140 veces el punto de
+equilibrio, la concurrencia está plenamente justificada; no lo estaría para un mes de una flota
+chica, y en ese caso la versión secuencial sería la elección correcta por más simple.
