@@ -4,12 +4,15 @@ labs/go/bin/
 *.test
 *.out
 
-# Spin (labs/spin) — el verificador y sus trazas se regeneran desde el .pml
-labs/spin/pan
-labs/spin/pan.*
-labs/spin/*.trail
-labs/spin/*.nvr
-labs/spin/_spin_nvr.tmp
+# Spin (labs/spin y sus subcarpetas por semana) — el verificador y sus trazas se
+# regeneran desde el .pml. pan.pre en la raíz lo deja `spin` cuando se lo corre
+# desde acá con una ruta relativa.
+labs/spin/**/pan
+labs/spin/**/pan.*
+labs/spin/**/*.trail
+labs/spin/**/*.nvr
+labs/spin/**/_spin_nvr.tmp
+/pan.pre
 
 # Beads / Dolt files (added by bd init)
 .dolt/
