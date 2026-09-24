@@ -28,6 +28,14 @@ CHUNKS = sorted(
     REPORTS.glob("benchmark_gorgo_chunk_*.json"), key=lambda p: int(p.stem.rsplit("_", 1)[1])
 )
 RECURSOS = REPORTS / "recursos_fedora_2026-09-17_2306.json"
+LAPTOP = REPORTS / "benchmark_laptop_i5.json"
+
+# Descripción del hardware de cada plataforma. No son mediciones: salen de lscpu y
+# de la ficha del procesador, y los tiempos se leen de su JSON.
+PLATAFORMAS = [
+    (PRINCIPAL, "VM (Proxmox)", "Ryzen 5 7600X", 6, 11),
+    (LAPTOP, "Laptop", "Core i5-10210U", 4, 8),
+]
 
 
 # ----------------------------------------------------------------- formato ---
@@ -329,6 +337,48 @@ def chunks(archivos):
     )
 
 
+def plataformas():
+    filas, cif = [], {}
+    for ruta, nombre, cpu, fisicos, logicos in PLATAFORMAS:
+        inf = cargar(ruta)
+        n = inf["datos"]["n"]
+        seq = resumen(inf, "fijas", n, "seq")
+        fila = [nombre, cpu, f"{fisicos} / {logicos}", num(seq["media_recortada_ms"], 0)]
+        for p in (2, 4, 8, 16):
+            r = resumen(inf, "fijas", n, "conc", p)
+            fila.append(num(r["speedup"]["punto"]) + "$\\times$")
+        filas.append(fila)
+    lap = cargar(LAPTOP)
+    n = lap["datos"]["n"]
+    cif["laptop-seq-ms"] = num(resumen(lap, "fijas", n, "seq")["media_recortada_ms"], 0)
+    for p in (2, 4, 8, 16):
+        r = resumen(lap, "fijas", n, "conc", p)
+        cif[f"laptop-speedup-p{p}"] = num(r["speedup"]["punto"])
+        cif[f"laptop-eficiencia-p{p}"] = pct(r["eficiencia_por_worker"])
+    cols = [
+        ("Plataforma", "l"),
+        ("Procesador", "l"),
+        ("Núcleos / CPU", "l"),
+        ("Seq. (ms)", "r"),
+        ("$P=2$", "r"),
+        ("$P=4$", "r"),
+        ("$P=8$", "r"),
+        ("$P=16$", "r"),
+    ]
+    return tabla(
+        cols,
+        filas,
+        "Escalamiento fuerte en las dos plataformas medidas con el protocolo completo",
+        "tab:plataformas",
+        "Trabajo fijo de 10 iteraciones sobre el dataset completo, mismo protocolo que la "
+        "Tabla~\\ref{tab:speedup-fuerte}. Cada speedup es relativo al secuencial de la misma "
+        "máquina, así que compara cuánto aprovecha cada una sus núcleos, no qué máquina es más "
+        "rápida. «Núcleos / CPU» son los núcleos físicos y las CPU que ve el sistema: las 11 de la VM son "
+        "vCPU sobre un procesador de 6 núcleos.",
+        tamano="\\footnotesize",
+    ), cif
+
+
 def recursos(lista):
     filas = []
     for r in lista:
@@ -428,6 +478,7 @@ def main() -> int:
     salidas["tabla-debil.tex"], c_debil = debil(cargar(DEBIL))
     salidas["tabla-chunk.tex"], mejor_chunk, p_chunk = chunks(CHUNKS)
     salidas["tabla-recursos.tex"] = recursos(cargar(RECURSOS))
+    salidas["tabla-plataformas.tex"], c_plat = plataformas()
     salidas["tabla-inercias.tex"], rel_inercia = inercias(principal)
 
     # Cifras que el texto cita en prosa.
@@ -451,6 +502,7 @@ def main() -> int:
         "duracion-min": num(principal["duracion_total_min"], 0),
     }
     cif.update(c_debil)
+    cif.update(c_plat)
     for p in workers_de(principal, "fijas", n):
         r = resumen(principal, "fijas", n, "conc", p)
         cif[f"speedup-p{p}"] = num(r["speedup"]["punto"])

@@ -73,15 +73,24 @@ todos los entrelazados, y un benchmark con protocolo estadístico fijado en cód
 ## Resultados
 
 Mismo gold, mismos centroides iniciales y mismo protocolo en todas las máquinas: 20 repeticiones con
-orden barajado, media recortada al 10 % e intervalos de confianza por bootstrap.
+orden barajado, media recortada al 10 % e intervalos de confianza por bootstrap. Se mide el
+clustering, 10 iteraciones sobre los 2,8 M viajes; la carga del CSV queda fuera.
 
-| Entorno | Secuencial | 4 workers | 8 workers | Mejor |
-|---|---:|---:|---:|---:|
-| VM en Proxmox: Ryzen 5 7600X (6 núcleos), 11 vCPU, 9 GB de RAM | 1,1 s | 3,80× | 5,82× | 6,25× con 16 |
-| PC de escritorio en WSL2: i7-10700 (8 núcleos, 16 hilos), 15 GB de RAM | 1,7 s | 3,42× | 6,12× | 7,88× con 16 |
-| Laptop: i5-10210U (4 núcleos, 8 hilos), 15 GB de RAM, enchufada | 2,3 s | 3,29× | 3,27× | techo en los 4 núcleos físicos |
-| **Pixel 9a** con Termux: Tensor G4 (1 + 3 + 4 núcleos), 7,4 GB de RAM | 3,6 s | 3,50× | 3,95× | techo en los 4 núcleos grandes |
-| GPU RTX 4060 (8 GB) del mismo PC, PyTorch en fp32 | | | | 8,73× frente al secuencial, 1,11× frente a 16 hilos |
+| Entorno | Secuencial | 4 workers | 8 workers | Techo |
+|---|---:|---:|---:|---|
+| VM en Proxmox: Ryzen 5 7600X (6 núcleos), 11 vCPU, 9 GB de RAM | 1,11 s | 0,29 s · 3,80× | 0,19 s · 5,82× | 6 núcleos físicos |
+| PC de escritorio en WSL2: i7-10700 (8 núcleos, 16 hilos), 15 GB de RAM | 1,65 s | 0,48 s · 3,42× | 0,27 s · 6,12× | 8 núcleos; SMT aporta hasta 7,88× con 16 |
+| Laptop: i5-10210U (4 núcleos, 8 hilos), 15 GB de RAM, enchufada | 2,31 s | 0,70 s · 3,29× | 0,71 s · 3,27× | 4 núcleos físicos |
+| **Pixel 9a** con Termux: Tensor G4 (1 + 3 + 4 núcleos), 7,4 GB de RAM | 3,61 s | 1,03 s · 3,50× | 0,91 s · 3,95× | 4 núcleos grandes |
+| GPU RTX 4060 (8 GB) del PC, PyTorch en fp32 | | 0,19 s en total | | 8,73× frente al secuencial, 1,11× frente a 16 hilos |
+
+> [!NOTE]
+> **Cómo leer los multiplicadores.** Cada uno es el tiempo secuencial dividido por el tiempo con
+> esa cantidad de workers, **en la misma máquina**: 3,29× en la laptop significa que el mismo trabajo
+> termina en 0,70 s en vez de 2,31 s, porque se reparte entre cuatro núcleos, no porque alguno vaya
+> más rápido. No llega a 4× porque repartir cuesta (el canal, la barrera, sumar los parciales).
+> Los multiplicadores dicen cuánto aprovecha cada máquina sus núcleos; para saber cuál es más
+> rápida hay que mirar los tiempos.
 
 - **El resultado concurrente es idéntico bit a bit** para cualquier cantidad de workers y en los cuatro
   entornos medidos, x86 y ARM: inercia 4531798,747970126. La reducción suma los parciales siempre en

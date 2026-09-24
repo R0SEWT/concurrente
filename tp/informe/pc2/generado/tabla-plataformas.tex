@@ -1,0 +1,15 @@
+% Generado por tp/scripts/tablas_informe.py desde tp/reports/*.json. No editar a mano.
+\begin{table}[H]
+\caption{Escalamiento fuerte en las dos plataformas medidas con el protocolo completo}\label{tab:plataformas}
+\footnotesize
+\begin{tabular}{@{}lllrrrrr@{}}
+\toprule
+\textbf{Plataforma} & \textbf{Procesador} & \textbf{Núcleos / CPU} & \textbf{Seq. (ms)} & \textbf{$P=2$} & \textbf{$P=4$} & \textbf{$P=8$} & \textbf{$P=16$} \\
+\midrule
+VM (Proxmox) & Ryzen 5 7600X & 6 / 11 & 1.106 & 1,93$\times$ & 3,80$\times$ & 5,82$\times$ & 6,25$\times$ \\
+Laptop & Core i5-10210U & 4 / 8 & 2.307 & 1,83$\times$ & 3,29$\times$ & 3,27$\times$ & 3,32$\times$ \\
+\bottomrule
+\end{tabular}
+
+{\footnotesize\textit{Nota.} Trabajo fijo de 10 iteraciones sobre el dataset completo, mismo protocolo que la Tabla~\ref{tab:speedup-fuerte}. Cada speedup es relativo al secuencial de la misma máquina, así que compara cuánto aprovecha cada una sus núcleos, no qué máquina es más rápida. «Núcleos / CPU» son los núcleos físicos y las CPU que ve el sistema: las 11 de la VM son vCPU sobre un procesador de 6 núcleos.\par}
+\end{table}

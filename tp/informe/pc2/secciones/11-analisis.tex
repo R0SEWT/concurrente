@@ -8,14 +8,27 @@
 El escalamiento fuerte responde \enquote{¿cuánto más rápido resuelvo el mismo problema con más
 workers?}. La Tabla~\ref{tab:speedup-fuerte} muestra una curva casi lineal hasta $P = 4$
 (eficiencia de \cifra{eficiencia-p4}) que se dobla en $P = 8$ (\cifra{eficiencia-p8}) y se aplana
-en $P = 16$ (\cifra{eficiencia-p16}), sobre una máquina de \cifra{cpus-gorgo} núcleos.
+en $P = 16$ (\cifra{eficiencia-p16}).
 
-Un piloto en la laptop del equipo, de cuatro núcleos físicos con SMT, da la misma forma en otro
-lugar: la curva se aplana justo donde se acaban los núcleos físicos, y el tramo de 4 a 8 workers
-solo aprovecha los hilos SMT. Esas cifras salen de una sola corrida y no del protocolo de
-\cifra{repeticiones} repeticiones, así que sirven para la forma de la curva y no como medición
-oficial; se mencionan porque cualquier lectura de la curva que ignore la diferencia entre núcleos e
-hilos atribuye al algoritmo un techo que es del hardware.
+La forma de la curva la explica el hardware antes que el algoritmo. Las \cifra{cpus-gorgo}~vCPU de
+la máquina virtual no son once núcleos: son hilos de un procesador de 6 núcleos físicos. Con cuatro
+workers cada uno tiene un núcleo propio, y la eficiencia se mantiene en \cifra{eficiencia-p4}. Con
+ocho ya hay más workers que núcleos, y al menos dos comparten núcleo por SMT; la eficiencia cae a
+\cifra{eficiencia-p8}. El techo está donde se acaban los núcleos físicos, no donde se acaban las
+vCPU.
+
+La laptop del equipo, medida con el mismo protocolo (Tabla~\ref{tab:plataformas}), lo confirma en
+otro procesador: un Core i5-10210U de 4 núcleos y 8 hilos llega a \cifra{laptop-speedup-p4}$\times$
+con cuatro workers y se queda ahí, con \cifra{laptop-speedup-p8}$\times$ con ocho y
+\cifra{laptop-speedup-p16}$\times$ con dieciséis. En este cálculo los hilos SMT no aportan: los dos
+hilos de un núcleo compiten por las mismas unidades de coma flotante. Cualquier lectura de la curva
+que ignore la diferencia entre núcleos e hilos atribuye al algoritmo un techo que es del hardware.
+
+\input{generado/tabla-plataformas}
+
+Los speedups de la tabla no comparan máquinas entre sí: cada uno es relativo al secuencial de su
+propia máquina. Que la máquina virtual escale mejor no dice que sea más rápida; lo es por otra razón,
+un procesador más nuevo, y se ve en la columna del secuencial.
 
 \subsection{Fracción serial efectiva}\label{sec:karp}
 
@@ -99,8 +112,7 @@ sería una inspección a ojo con tolerancias elegidas después de ver el resulta
 revisión de la PC1 sacó de \textcite{bellavita2025}: el speedup depende de contra qué y cómo se mide,
 y un experimento que no se puede repetir bit a bit no se puede discutir.
 
-\paragraph{Hasta dónde llega esto.} Un mes de una flota, una arquitectura por plataforma,
-$k = \cifra{k}$ fijado sin validación interna, y las cifras de la laptop como piloto y no como
-medición bajo protocolo. Nada de esto dice qué pasa con varios meses, con otra distribución de datos
-ni con más de \cifra{cpus-gorgo} núcleos. Extender la escala, y contrastar con una implementación en
+\paragraph{Hasta dónde llega esto.} Un mes de una flota, dos plataformas x86,
+y $k = \cifra{k}$ fijado sin validación interna. Nada de esto dice qué pasa con varios meses, con
+otra distribución de datos ni con más de seis núcleos físicos. Extender la escala, y contrastar con una implementación en
 GPU, queda para el Entregable 3.
