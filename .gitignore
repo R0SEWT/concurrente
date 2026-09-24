@@ -37,3 +37,7 @@ materials/*
 # esta máquina. Nada de esto es del curso.
 .wwebjs_cache/
 .wwebjs_auth/
+
+# Skills y utilidades personales: viven en chrome-helper (privado) y se enlazan desde
+# ~/.claude/skills. Este repo es público; nada de eso debe subirse por accidente.
+.claude/skills/
