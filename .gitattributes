@@ -1,2 +1,10 @@
 # Beads exports its issue log here; union-merge so parallel branches don't conflict.
 .beads/issues.jsonl merge=union
+
+# Linguist (la barra de lenguajes de GitHub). El código del curso es Go, Promela y el
+# pipeline en Python; los informes en LaTeX son documentación y sus tablas se generan
+# desde tp/reports. Sin esto, TeX aparece como el lenguaje principal del repo.
+tp/informe/** linguist-documentation
+tp/informe/**/generado/* linguist-generated
+labs/go/week04/entrega/** linguist-documentation
+*.pml linguist-language=Promela
