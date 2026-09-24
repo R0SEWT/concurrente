@@ -26,8 +26,8 @@ sobre el dataset completo, trabajo fijo de 10 iteraciones:
 
 | Máquina | Secuencial | P=2 | P=4 | P=8 | P=16 | IC 95 % con P=8 | Variación del secuencial |
 |---|---:|---:|---:|---:|---:|:--|---:|
-| gorgo, 11 núcleos x86 | 1 106 ms | 1,93× | 3,80× | 5,82× | 6,25× | [5,73; 5,89] | 0,4 % |
-| Caja 4060, i7-10700 de 16 hilos | 1 650 ms | 1,73× | 3,42× | 6,12× | 7,88× | [6,04; 6,20] | 0,3 % |
+| VM en Proxmox, Ryzen 5 7600X, 11 vCPU | 1 106 ms | 1,93× | 3,80× | 5,82× | 6,25× | [5,73; 5,89] | 0,4 % |
+| PC en WSL2, i7-10700 de 16 hilos | 1 650 ms | 1,73× | 3,42× | 6,12× | 7,88× | [6,04; 6,20] | 0,3 % |
 | Pixel 9a, Tensor G4 | 3 606 ms | 1,90× | 3,50× | 3,95× | 3,94× | [3,25; 4,79] | 28,8 % |
 
 Hasta convergencia (60 iteraciones) el Pixel da 4,47× con P=8, con la misma forma.
