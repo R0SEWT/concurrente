@@ -1,7 +1,7 @@
 # tp — Trabajo Parcial CC65: K-means concurrente sobre NYC TLC
 
 Raíz independiente dentro de `concurrente` (como `labs/go`): tiene su propio toolchain (uv) y su
-propio CI. Las tareas se siguen en los beads del repo padre: `concurrente-41o` (PC1) y sus hijos.
+propio CI. Las tareas se siguen en los beads del repo padre: `concurrente-41o` (PC1), `concurrente-3r8` (PC2) y `concurrente-r0p` (TB1), con sus hijos.
 
 ## Domain / Scientific Context
 
@@ -49,6 +49,10 @@ un bug en una de ellas.
 | `src/nyc_tlc/pipeline.py` | Orquesta las capas y escribe el reporte. |
 | `docs/limpieza.md` | El porqué de cada regla, para el informe de PC1. |
 | `reports/limpieza_yellow_2024-01.md` | Los números de la última corrida. Se genera, no se edita. |
+| `kmeans/` | Módulo Go del K-means (PC2): secuencial, concurrente con worker pool, `cmd/kmeans` y `cmd/benchmark`. Su diseño está en `docs/kmeans.md`; el análisis, en `docs/analisis-pc2.md`. |
+| `scripts/tablas_informe.py` | Genera las tablas y cifras del informe de la PC2 desde `reports/benchmark_*.json`. |
+| `scripts/kmeans_gpu.py` | Lloyd en GPU con PyTorch, mismo contrato que `kmeans/`, para el contraste del TB1. Se corre en `ssh gpu` con `scripts/gpu/correr_remoto.sh`; cómo y por qué, en `docs/kmeans-gpu.md`. |
+| `scripts/analisis_gpu.py` | Tablas del contraste GPU vs CPU desde `reports/gpu_*.json` y el benchmark de Go de la misma máquina. |
 
 ## Data Conventions
 
