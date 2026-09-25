@@ -157,6 +157,77 @@ func TestConcurrenteConChunkMayorQueN(t *testing.T) {
 	}
 }
 
+func TestConcurrenteConKUnoDaLaMedia(t *testing.T) {
+	// Con un solo cluster, todos los puntos deben aportar a la misma media.
+	// Chunk=1 obliga a reducir tres parciales, incluso con más workers que puntos.
+	d := datosDe(p6(0, 0), p6(2, 0), p6(4, 0))
+	cent := p6(10, 10)
+	esperado := p6(2, 0)
+
+	for _, workers := range []int{1, 2, 4} {
+		t.Run(fmt.Sprintf("workers=%d", workers), func(t *testing.T) {
+			r, err := Concurrente(d, cent, opcionesConcDe(1, workers, 1))
+			if err != nil {
+				t.Fatalf("Concurrente: %v", err)
+			}
+			for f, valor := range esperado {
+				if got := r.Centroide(0)[f]; got != valor {
+					t.Errorf("centroide, coordenada %d = %v; se esperaba %v", f, got, valor)
+				}
+			}
+			if len(r.Asignaciones) != d.N {
+				t.Fatalf("%d asignaciones; se esperaban %d", len(r.Asignaciones), d.N)
+			}
+			for i, got := range r.Asignaciones {
+				if got != 0 {
+					t.Errorf("asignación del punto %d = %d; se esperaba 0", i, got)
+				}
+			}
+			if r.Inercia != 8 {
+				t.Errorf("inercia = %v; se esperaba 8", r.Inercia)
+			}
+			if r.Vacios != 0 {
+				t.Errorf("Vacios = %d; se esperaba 0", r.Vacios)
+			}
+		})
+	}
+}
+
+func TestConcurrenteConKIgualANDaInerciaCero(t *testing.T) {
+	// Cada punto distinto empieza con su propio centroide. Ninguno debe
+	// cambiar ni compartir cluster al repartir los puntos entre workers.
+	d := datosDe(p6(0, 0), p6(5, 5), p6(9, 1))
+	cent := append(append(p6(0, 0), p6(5, 5)...), p6(9, 1)...)
+
+	for _, workers := range []int{1, 2, 4} {
+		t.Run(fmt.Sprintf("workers=%d", workers), func(t *testing.T) {
+			r, err := Concurrente(d, cent, opcionesConcDe(d.N, workers, 1))
+			if err != nil {
+				t.Fatalf("Concurrente: %v", err)
+			}
+			for i, esperado := range cent {
+				if got := r.Centroides[i]; got != esperado {
+					t.Errorf("centroide, coordenada %d = %v; se esperaba %v", i, got, esperado)
+				}
+			}
+			if len(r.Asignaciones) != d.N {
+				t.Fatalf("%d asignaciones; se esperaban %d", len(r.Asignaciones), d.N)
+			}
+			for i, got := range r.Asignaciones {
+				if got != i {
+					t.Errorf("asignación del punto %d = %d; se esperaba %d", i, got, i)
+				}
+			}
+			if r.Inercia != 0 {
+				t.Errorf("inercia = %v; se esperaba 0", r.Inercia)
+			}
+			if r.Vacios != 0 {
+				t.Errorf("Vacios = %d; se esperaba 0", r.Vacios)
+			}
+		})
+	}
+}
+
 func TestConcurrenteClusterVacioConservaSuCentroide(t *testing.T) {
 	// Hay cuatro puntos en dos grupos, pero el tercer centroide está tan lejos
 	// que nunca recibe uno. Chunk=1 reparte los puntos en cuatro trabajos.
