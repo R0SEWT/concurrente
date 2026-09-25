@@ -1,6 +1,7 @@
 package kmeans
 
 import (
+	"fmt"
 	"math"
 	"testing"
 )
@@ -153,6 +154,79 @@ func TestConcurrenteConChunkMayorQueN(t *testing.T) {
 	}
 	if r.Iteraciones == 0 {
 		t.Error("no corrió ninguna iteración")
+	}
+}
+
+func TestConcurrenteClusterVacioConservaSuCentroide(t *testing.T) {
+	// Hay cuatro puntos en dos grupos, pero el tercer centroide está tan lejos
+	// que nunca recibe uno. Chunk=1 reparte los puntos en cuatro trabajos.
+	d := datosDe(p6(0, 0), p6(0, 2), p6(10, 0), p6(10, 2))
+	lejano := p6(1e6, 1e6)
+	cent := append(append(p6(0, 0), p6(10, 0)...), lejano...)
+	esperados := [][]float64{p6(0, 1), p6(10, 1), lejano}
+
+	for _, workers := range []int{1, 2, 4} {
+		t.Run(fmt.Sprintf("workers=%d", workers), func(t *testing.T) {
+			op := OpcionesConc{
+				Opciones: Opciones{K: 3, MaxIter: 5, TolAbs: 0, TolRel: 0},
+				Workers:  workers,
+				Chunk:    1,
+			}
+			r, err := Concurrente(d, cent, op)
+			if err != nil {
+				t.Fatalf("Concurrente: %v", err)
+			}
+			if r.Vacios != 1 {
+				t.Errorf("Vacios = %d, se esperaba 1", r.Vacios)
+			}
+			if r.Iteraciones != 2 {
+				t.Errorf("Iteraciones = %d, se esperaban 2 para comprobar el vacío también en la segunda ronda", r.Iteraciones)
+			}
+			for j, esperado := range esperados {
+				for f, valor := range esperado {
+					if got := r.Centroide(j)[f]; got != valor {
+						t.Errorf("centroide %d, coordenada %d = %v; se esperaba %v", j, f, got, valor)
+					}
+				}
+			}
+			for i, esperado := range []int{0, 0, 1, 1} {
+				if got := r.Asignaciones[i]; got != esperado {
+					t.Errorf("asignación del punto %d = %d; se esperaba %d", i, got, esperado)
+				}
+			}
+		})
+	}
+}
+
+func TestConcurrenteDesempataPorElIndiceMenor(t *testing.T) {
+	// El punto (0, 0) está a distancia 1 de ambos centroides. Si gana el índice 0,
+	// la media de los puntos -2 y 0 sigue siendo -1; el empate persiste incluso
+	// en la pasada final. Chunk=1 pone el punto empatado en un trabajo propio.
+	d := datosDe(p6(-2, 0), p6(0, 0), p6(1, 0), p6(1, 0))
+	cent := append(p6(-1, 0), p6(1, 0)...)
+
+	for _, workers := range []int{1, 2, 4} {
+		t.Run(fmt.Sprintf("workers=%d", workers), func(t *testing.T) {
+			r, err := Concurrente(d, cent, OpcionesConc{
+				Opciones: Opciones{K: 2, MaxIter: 3, TolAbs: 0, TolRel: 0},
+				Workers:  workers,
+				Chunk:    1,
+			})
+			if err != nil {
+				t.Fatalf("Concurrente: %v", err)
+			}
+			for i, esperado := range []int{0, 0, 1, 1} {
+				if got := r.Asignaciones[i]; got != esperado {
+					t.Errorf("asignación del punto %d = %d; se esperaba %d", i, got, esperado)
+				}
+			}
+			if r.Inercia != 2 {
+				t.Errorf("inercia = %v; se esperaba 2", r.Inercia)
+			}
+			if r.Vacios != 0 {
+				t.Errorf("Vacios = %d; se esperaba 0", r.Vacios)
+			}
+		})
 	}
 }
 
