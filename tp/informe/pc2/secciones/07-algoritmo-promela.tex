@@ -12,14 +12,14 @@ antes de escribir código para que el benchmark compare dos implementaciones del
 no dos algoritmos distintos:
 
 \begin{itemize}
-  \item distancia euclídea al cuadrado sobre las seis features; en caso de empate gana el centroide
+  \item Distancia euclídea al cuadrado sobre las seis features; en caso de empate gana el centroide
         de menor índice;
-  \item inicialización k-means++ con semilla fija, ejecutada una sola vez; los centroides iniciales se
+  \item Inicialización k-means++ con semilla fija, ejecutada una sola vez; los centroides iniciales se
         guardan en disco con su sha256 y ambas versiones parten de ese archivo;
-  \item criterio de parada $\max_j \lVert \mu_j^{(t)} - \mu_j^{(t-1)} \rVert_\infty \le
+  \item Criterio de parada $\max_j \lVert \mu_j^{(t)} - \mu_j^{(t-1)} \rVert_\infty \le
         10^{-9} + 10^{-9} \cdot \max_j \lVert \mu_j^{(t-1)} \rVert_\infty$, o el máximo de
         iteraciones, lo que ocurra primero; el resultado registra cuál de los dos paró la corrida;
-  \item un cluster vacío conserva su centroide anterior.
+  \item Un cluster vacío conserva su centroide anterior.
 \end{itemize}
 
 La versión concurrente (Algoritmo~\ref{alg:lloyd-chunks}) parte los $N$ viajes en $C$ bloques de
@@ -72,6 +72,68 @@ publicación de centroides nuevos, que solo puede ocurrir cuando no queda ningú
 Se modelan dos iteraciones a propósito. Los errores de reutilizar mal la barrera o de no reiniciar
 los acumuladores no aparecen en la primera iteración: aparecen en la segunda.
 
+\subsection{Correspondencia entre la implementación y el modelo}
+
+La abstracción conserva las decisiones de concurrencia y elimina solamente el cálculo numérico.
+La Tabla~\ref{tab:mapeo-promela} hace explícita esa correspondencia. Esta trazabilidad es importante:
+una propiedad demostrada sobre variables que no representan fielmente el programa no permite sacar
+conclusiones sobre su diseño.
+
+\begin{table}[H]
+\caption{Correspondencia entre Go y el modelo Promela}\label{tab:mapeo-promela}
+\small
+\begin{tabularx}{\textwidth}{@{}L{4.1cm}L{4.2cm}Y@{}}
+\toprule
+\textbf{Implementación en Go} & \textbf{Abstracción en Promela} & \textbf{Aspecto conservado} \\
+\midrule
+\texttt{trabajos chan int} & \texttt{chan trabajos = [C] of \{byte\}} &
+  Reparto dinámico de índices de bloque entre workers persistentes \\
+\addlinespace
+Goroutines del pool & Dos procesos \texttt{worker()} &
+  Consumo concurrente y no determinista de los bloques \\
+\addlinespace
+\texttt{parciales[c]} & \texttt{conteo[c]} &
+  Propiedad de cada acumulador por un único bloque durante la ronda \\
+\addlinespace
+\texttt{barrera.Add}, \texttt{Done} y \texttt{Wait} & \texttt{pendientes = C}, decrementos y guarda
+  \texttt{pendientes == 0} & La reducción empieza solo después de terminar todos los bloques \\
+\addlinespace
+Lectura de \texttt{cent} y llamada a \texttt{actualizar} &
+  \texttt{lectores} y \texttt{escribiendo} & Exclusión temporal entre asignación y publicación \\
+\addlinespace
+Rangos disjuntos de observaciones & \texttt{seen[i]} &
+  Cobertura individual, sin omisiones ni duplicados \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+No se modelan los valores de los centroides ni las sumas de seis dimensiones porque las propiedades
+estudiadas no dependen de ellos. \texttt{conteo[c]} representa el efecto observable de procesar un
+bloque; \texttt{total} representa la reducción de sus parciales. La versión en Go admite un último
+bloque más corto, mientras que el dominio acotado usa $N=4$ y $C=2$, de modo que ambos bloques tienen
+tamaño \texttt{TAM=2}. Esta simplificación reduce el espacio de estados, pero no introduce una prueba
+sobre los límites del último bloque.
+
+\subsection{Ejecución de una ronda en Promela}
+
+\texttt{init} crea los dos workers dentro de un bloque \texttt{atomic}; esto evita entrelazados
+irrelevantes durante la creación, no durante el procesamiento. Al comenzar una ronda, reinicia
+\texttt{seen}, \texttt{total} y, en el mutante, \texttt{compartido}; luego fija
+\texttt{pendientes=C} antes de enviar los dos índices al canal. El orden es el mismo que
+\texttt{WaitGroup.Add} antes de encolar en Go.
+
+La selección \texttt{trabajos ? idx} queda habilitada cuando existe un mensaje. SPIN decide qué
+worker lo recibe y explora las alternativas de planificación. Cada worker incrementa
+\texttt{lectores}, reinicia el acumulador del bloque, marca sus dos puntos y finalmente decrementa
+\texttt{pendientes}. En Promela, una asignación simple es un paso indivisible; por eso las variables
+de instrumentación cuentan eventos sin necesitar otro cerrojo.
+
+La expresión aislada \texttt{pendientes == 0} no es una comprobación que pueda fallar: es una
+\emph{guarda}. Si el contador todavía es positivo, \texttt{init} queda bloqueado y solo los workers
+pueden avanzar. Cuando llega a cero, el coordinador comprueba que no queden lectores, activa
+\texttt{escribiendo}, reduce los parciales y valida las invariantes de la ronda. Después repite el
+ciclo sin recrear el pool, igual que la implementación.
+
 \subsection{Qué se verifica}
 
 \begin{table}[H]
@@ -115,12 +177,18 @@ escondida. Este es el mismo incremento perdido que el curso estudia con el algor
 \subsection{Resultados}
 
 Los Listados~\ref{lst:spin-ok} y~\ref{lst:spin-mut} son la salida de \texttt{pan} sobre el modelo
-correcto y sobre el mutante (Spin 6.5.2, búsqueda exhaustiva completa, sin reducción por
-\emph{bitstate}). El modelo correcto termina con \texttt{errors: 0} tras recorrer 2\,407 estados; el
-mutante viola la aserción \texttt{compartido == 4} a profundidad 205, en la segunda iteración. El
-contraejemplo se reproduce paso a paso con \texttt{spin -t -p -DMUTANTE kmeans.pml}, y el
-\texttt{Makefile} de \texttt{tp/spin/} comprueba en cada corrida que los dos números sigan siendo
-cero y uno, para que el modelo no deje de probar lo que dice probar sin que nadie lo note.
+correcto y sobre el mutante con SPIN 6.5.2. Se usó búsqueda exhaustiva, no \emph{bitstate}; la
+reducción de orden parcial que informa la salida elimina conmutaciones equivalentes sin convertir la
+búsqueda en aproximada. El modelo correcto termina con \texttt{errors: 0} tras almacenar 2\,407
+estados y ejecutar 3\,229 transiciones, con profundidad máxima 180. El mutante encuentra la
+violación de \texttt{compartido == 4} en el paso 205 y alcanza profundidad 208 antes de detener la
+búsqueda en el primer error; por eso su salida dice \texttt{Search not completed}, como corresponde
+a una ejecución destinada a producir un contraejemplo, y no a validar el modelo mutante.
+
+El rastro se reproduce paso a paso con \texttt{spin -t -p -DMUTANTE kmeans.pml}. El
+\texttt{Makefile} de \texttt{tp/spin/} comprueba en cada corrida que el modelo correcto produzca
+cero errores y el mutante exactamente uno, para que el modelo no deje de probar lo que dice probar
+sin que nadie lo note.
 
 \lstinputlisting[style=terminal, caption={Salida de \texttt{pan} sobre el modelo correcto},
                  label={lst:spin-ok}, lastline=22]{generado/spin-correcto.txt}
