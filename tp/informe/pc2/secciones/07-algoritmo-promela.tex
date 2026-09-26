@@ -12,14 +12,14 @@ antes de escribir código para que el benchmark compare dos implementaciones del
 no dos algoritmos distintos:
 
 \begin{itemize}
-  \item Distancia euclídea al cuadrado sobre las seis features; en caso de empate gana el centroide
+  \item distancia euclídea al cuadrado sobre las seis features; en caso de empate gana el centroide
         de menor índice;
-  \item Inicialización k-means++ con semilla fija, ejecutada una sola vez; los centroides iniciales se
+  \item inicialización k-means++ con semilla fija, ejecutada una sola vez; los centroides iniciales se
         guardan en disco con su sha256 y ambas versiones parten de ese archivo;
-  \item Criterio de parada $\max_j \lVert \mu_j^{(t)} - \mu_j^{(t-1)} \rVert_\infty \le
+  \item criterio de parada $\max_j \lVert \mu_j^{(t)} - \mu_j^{(t-1)} \rVert_\infty \le
         10^{-9} + 10^{-9} \cdot \max_j \lVert \mu_j^{(t-1)} \rVert_\infty$, o el máximo de
         iteraciones, lo que ocurra primero; el resultado registra cuál de los dos paró la corrida;
-  \item Un cluster vacío conserva su centroide anterior.
+  \item un cluster vacío conserva su centroide anterior.
 \end{itemize}
 
 La versión concurrente (Algoritmo~\ref{alg:lloyd-chunks}) parte los $N$ viajes en $C$ bloques de
