@@ -16,7 +16,7 @@ no dos algoritmos distintos:
         de menor índice;
   \item Inicialización k-means++ con semilla fija, ejecutada una sola vez; los centroides iniciales se
         guardan en disco con su sha256 y ambas versiones parten de ese archivo;
-  \item Driterio de parada $\max_j \lVert \mu_j^{(t)} - \mu_j^{(t-1)} \rVert_\infty \le
+  \item Criterio de parada $\max_j \lVert \mu_j^{(t)} - \mu_j^{(t-1)} \rVert_\infty \le
         10^{-9} + 10^{-9} \cdot \max_j \lVert \mu_j^{(t-1)} \rVert_\infty$, o el máximo de
         iteraciones, lo que ocurra primero; el resultado registra cuál de los dos paró la corrida;
   \item Un cluster vacío conserva su centroide anterior.
