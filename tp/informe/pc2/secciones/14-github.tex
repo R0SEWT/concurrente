@@ -54,8 +54,9 @@ informe.
 \#19, \#20 & \nombreRody & Hotfix: compilación de los labs de Go en CI & Fusionadas \\
 \#21 & \nombreRody & K-means secuencial y concurrente en Go, Promela y benchmark & Fusionada \\
 \#22 & \nombreRody & Informe de PC2 en LaTeX & Fusionada \\
-\multicolumn{4}{@{}p{\textwidth}@{}}{\pendiente{PR propias de Dayana y Julio para este
-entregable, con su número y estado}} \\
+\#32 & \nombreRody & Informe: corrección de las plataformas medidas & Fusionada \\
+\#34 & \nombreTercero & Tests de casos borde del K-means concurrente & Fusionada \\
+\#35 & \nombreDayana & Documentación del modelo Promela en el informe & Fusionada \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -71,14 +72,26 @@ indica cuáles ya forman parte de \texttt{main} al generar la tabla.
 
 \subsection{Participación de los integrantes}
 
-\paragraph{\nombreRody.} Desarrolló ...
+Cada integrante tiene al menos una \emph{pull request} propia en este entregable; los commits de cada
+uno están en las Tablas~\ref{tab:commits-autor} y~\ref{tab:commits}.
 
-\paragraph{\nombreDayana.} Realizó la revisión crítica y amplió la documentación del modelo Promela. Su 
-aporte consistió en contrastar el modelo con la implementación en Go y explicar la correspondencia entre 
-el canal de trabajos, los workers persistentes, los acumuladores por bloque y la barrera de sincronización. 
-Asimismo, desarrolló la lectura operacional de una ronda en Promela, explicitó las simplificaciones del 
-dominio modelado y precisó el alcance de las propiedades verificadas. También aclaró la interpretación de los 
-resultados de SPIN y del contraejemplo producido por el mutante. Justificó qué aspectos de la implementación 
-conserva la abstracción y hasta dónde pueden extenderse las conclusiones de la verificación.
+\paragraph{\nombreRody{} (coordinador).} Implementó el K-means secuencial y el concurrente con worker
+pool en Go, el modelo Promela con su mutante y el benchmark (PR~\#21); midió el speedup y los
+recursos en las plataformas de la Tabla~\ref{tab:plataformas} y redactó este informe (PR~\#22 y
+\#32). Revisó e integró las \emph{pull requests} del resto del grupo.
 
-\paragraph{Julio.} Desarolló ...
+\paragraph{\nombreDayana.} Realizó la revisión crítica y amplió la documentación del modelo Promela
+(PR~\#35). Su aporte consistió en contrastar el modelo con la implementación en Go y explicar la
+correspondencia entre el canal de trabajos, los workers persistentes, los acumuladores por bloque y
+la barrera de sincronización. Asimismo, desarrolló la lectura operacional de una ronda en Promela,
+explicitó las simplificaciones del dominio modelado y precisó el alcance de las propiedades
+verificadas. También aclaró la interpretación de los resultados de SPIN y del contraejemplo
+producido por el mutante. Justificó qué aspectos de la implementación conserva la abstracción y
+hasta dónde pueden extenderse las conclusiones de la verificación.
+
+\paragraph{\nombreTercero.} Amplió la suite de tests de la versión concurrente con cuatro casos
+borde calculables a mano (PR~\#34): un cluster vacío conserva su centroide, un punto equidistante va
+al centroide de menor índice, con $k=1$ el centroide es la media de todos los puntos y con $k=N$ la
+inercia es cero. Cada caso se prueba con 1, 2 y 4 workers y bloques de un punto, de modo que la
+reducción de parciales se ejercita con distintos repartos del trabajo, y pasa con
+\texttt{go test -race}.
