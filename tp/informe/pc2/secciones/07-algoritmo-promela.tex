@@ -128,6 +128,20 @@ worker lo recibe y explora las alternativas de planificación. Cada worker incre
 \texttt{pendientes}. En Promela, una asignación simple es un paso indivisible; por eso las variables
 de instrumentación cuentan eventos sin necesitar otro cerrojo.
 
+La Figura~\ref{fig:automata} es el autómata que Spin construye para \texttt{worker}, obtenido con
+\texttt{pan -D}: cada estado es un punto de control del proceso y cada arista, un paso indivisible.
+El estado resaltado, S18, es el de espera en \texttt{trabajos ? idx}, el que lleva la etiqueta
+\texttt{end}; el ciclo S13--S7--S8--S9--S10 recorre los \texttt{TAM} puntos del bloque. Los
+entrelazados que Spin explora son todas las formas de ir avanzando una arista de algún proceso, y
+las aserciones sobre \texttt{escribiendo} están en los dos puntos donde el worker lee los centroides.
+
+\begin{figure}[H]
+\caption{Autómata del proceso \texttt{worker} generado por Spin (\texttt{pan -D}); solo se abrevian
+las etiquetas}\label{fig:automata}
+\centering
+\includegraphics[height=13.5cm]{img/automata-worker.pdf}
+\end{figure}
+
 La expresión aislada \texttt{pendientes == 0} no es una comprobación que pueda fallar: es una
 \emph{guarda}. Si el contador todavía es positivo, \texttt{init} queda bloqueado y solo los workers
 pueden avanzar. Cuando llega a cero, el coordinador comprueba que no queden lectores, activa
@@ -189,6 +203,21 @@ El rastro se reproduce paso a paso con \texttt{spin -t -p -DMUTANTE kmeans.pml}.
 \texttt{Makefile} de \texttt{tp/spin/} comprueba en cada corrida que el modelo correcto produzca
 cero errores y el mutante exactamente uno, para que el modelo no deje de probar lo que dice probar
 sin que nadie lo note.
+
+La Figura~\ref{fig:traza-mutante} dibuja ese contraejemplo, reducido a las lecturas y escrituras de
+\texttt{compartido} en la ronda donde falla, que es la segunda. En la primera, Spin hace que un solo
+worker procese los dos bloques y no hay interferencia. En la segunda, los dos workers leen
+\texttt{compartido = 1}, los dos escriben 2 y se pierde un incremento: la ronda cierra con 3 y no
+con 4. Es el mismo patrón que el ejercicio del incremento perdido del laboratorio de la semana 5, dos
+procesos que suman sobre una variable compartida sin exclusión mutua, ahora dentro del modelo del
+K-means.
+
+\begin{figure}[H]
+\caption{Contraejemplo del mutante: \texttt{compartido} después de cada lectura y escritura en la
+ronda que viola \texttt{assert(compartido == 4)}}\label{fig:traza-mutante}
+\centering
+\includegraphics[width=\textwidth]{img/traza-mutante.pdf}
+\end{figure}
 
 \lstinputlisting[style=terminal, caption={Salida de \texttt{pan} sobre el modelo correcto},
                  label={lst:spin-ok}, lastline=22]{generado/spin-correcto.txt}

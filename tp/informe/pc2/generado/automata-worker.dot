@@ -1,0 +1,21 @@
+digraph p_worker {
+rankdir=TB; nodesep=0.25; ranksep=0.22;
+node [fontname="Helvetica", fontsize=13, color="#52514e", shape=circle, width=0.5, fixedsize=true];
+edge [fontname="Helvetica", fontsize=14, color="#52514e", fontcolor="#0b0b0b"];
+  GT [shape=plaintext,label="worker()",fixedsize=false];
+  GT -> S18;
+	S18 -> S2  [color=black,style=bold,label="trabajos?idx"];
+  S18 [color="#2a78d6",penwidth=2];
+	S2 -> S3  [color=black,style=bold,label="lectores++"];
+	S3 -> S4  [color=black,style=bold,label="assert(escribiendo == 0)"];
+	S4 -> S5  [color=black,style=bold,label="conteo[idx] = 0"];
+	S5 -> S13  [color=black,style=solid,label="i = 0"];
+	S13 -> S7  [color=black,style=solid,label="i < TAM"];
+	S13 -> S16  [color=black,style=solid,label="else"];
+	S7 -> S8  [color=black,style=bold,label="assert(escribiendo == 0)"];
+	S8 -> S9  [color=black,style=bold,label="seen[idx*TAM+i]++"];
+	S9 -> S10  [color=black,style=bold,label="conteo[idx]++"];
+	S10 -> S13  [color=black,style=solid,label="i++"];
+	S16 -> S17  [color=black,style=bold,label="lectores--"];
+	S17 -> S18  [color=black,style=bold,label="pendientes--"];
+}

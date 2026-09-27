@@ -38,6 +38,10 @@ latexmk                                                  # pdflatex + biber, APA
   (la primera línea `$ ...` de cada `.txt` es el comando, agregada a mano para la figura).
 - **Salida de Spin**: `generado/spin-correcto.txt` y `generado/spin-mutante.txt` salen de
   `tp/spin` con `spin -a kmeans.pml && cc -O2 -o pan pan.c && ./pan` (y `-DMUTANTE`).
+- **Figuras de Spin**: `img/automata-worker.pdf` (autómata del `worker`, de `pan -D`) e
+  `img/traza-mutante.pdf` (contraejemplo del mutante, de `spin -t -p -l -g`) salen de
+  `cd tp/spin && make figuras`, que deja las entradas en `generado/` y llama a
+  `tp/scripts/figuras_spin.py`.
 - **Historial de commits**: `generado/historial.tex`, desde las ramas de `origin` y el tag `pc1`.
 
 La bibliografía es `../../docs/referencias.bib`: un solo `.bib` para todo el TP.
