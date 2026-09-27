@@ -106,11 +106,11 @@ def workers_de(inf, experimento, tamano):
 def nota_protocolo(inf):
     p, m = inf["protocolo"], inf["metadatos"]
     return (
-        f"{m['maquina']} · {m['version_go']} · {m['cpus_logicas']} CPUs lógicas · "
-        f"{p['repeticiones_medidas']} repeticiones medidas + {p['rondas_calentamiento']} de calentamiento · "
-        f"media recortada al {p['recorte_por_extremo']:.0%} por extremo · "
-        f"IC del speedup por bootstrap de {entero(p['replicas_bootstrap'])} réplicas · "
-        f"$k={p['k']}$ · chunk {entero(p['chunk'])}"
+        f"{m['maquina']} \\textperiodcentered\\ {m['version_go']} \\textperiodcentered\\ {m['cpus_logicas']} CPUs lógicas \\textperiodcentered\\ "
+        f"{p['repeticiones_medidas']} repeticiones medidas + {p['rondas_calentamiento']} de calentamiento \\textperiodcentered\\ "
+        f"media recortada al {p['recorte_por_extremo']:.0%} por extremo \\textperiodcentered\\ "
+        f"IC del speedup por bootstrap de {entero(p['replicas_bootstrap'])} réplicas \\textperiodcentered\\ "
+        f"$k={p['k']}$ \\textperiodcentered\\ chunk {entero(p['chunk'])}"
     ).replace("%", "\\,\\%")
 
 
@@ -255,7 +255,7 @@ def cruce(principal, inf_cruce, p=4):
         filas,
         f"Punto de equilibrio: speedup con $P={p}$ según el tamaño del problema",
         "tab:equilibrio",
-        "«Gana» cuando el intervalo de confianza queda entero por encima de 1; «pierde» cuando "
+        "\\enquote{Gana} cuando el intervalo de confianza queda entero por encima de 1; \\enquote{pierde} cuando "
         "queda entero por debajo. Mismo protocolo que la Tabla~\\ref{tab:speedup-fuerte}.",
         tamano="\\footnotesize",
     ), primero
@@ -373,7 +373,7 @@ def plataformas():
         "Trabajo fijo de 10 iteraciones sobre el dataset completo, mismo protocolo que la "
         "Tabla~\\ref{tab:speedup-fuerte}. Cada speedup es relativo al secuencial de la misma "
         "máquina, así que compara cuánto aprovecha cada una sus núcleos, no qué máquina es más "
-        "rápida. «Núcleos / CPU» son los núcleos físicos y las CPU que ve el sistema: las 11 de la VM son "
+        "rápida. \\enquote{Núcleos / CPU} son los núcleos físicos y las CPU que ve el sistema: las 11 de la VM son "
         "vCPU sobre un procesador de 6 núcleos.",
         tamano="\\footnotesize",
     ), cif
@@ -411,8 +411,8 @@ def recursos(lista):
         filas,
         "Uso de recursos por configuración en la laptop",
         "tab:recursos",
-        f"{m['maquina']} · {m['version_go']} · {m['cpus_logicas']} CPUs lógicas (4 núcleos físicos "
-        f"con SMT) · dataset completo, $k={m['k']}$, {m['max_iter']} iteraciones. Una corrida por "
+        f"{m['maquina']} \\textperiodcentered\\ {m['version_go']} \\textperiodcentered\\ {m['cpus_logicas']} CPUs lógicas (4 núcleos físicos "
+        f"con SMT) \\textperiodcentered\\ dataset completo, $k={m['k']}$, {m['max_iter']} iteraciones. Una corrida por "
         "configuración: acá interesa el consumo, que es estable, no el tiempo. Clust. es el tiempo de "
         "clustering; Heap, el heap vivo tras cargar el CSV; RSS, el máximo del proceso. CPU es usuario "
         "más sistema del proceso completo, incluida la carga del CSV; Núcleos son los núcleos "
