@@ -1,0 +1,17 @@
+% Figura: pipeline de limpieza por capas (sección 4).
+\begin{tikzpicture}[
+    font=\footnotesize,
+    node distance=5mm and 20mm,
+    caja/.style={draw, rounded corners=1pt, align=center, text width=21mm, minimum height=10mm, inner sep=3pt},
+    etiqueta/.style={above, font=\scriptsize},
+    flecha/.style={-Stealth, semithick}]
+  \node[caja] (tlc) {TLC\\CDN oficial};
+  \node[caja, right=of tlc] (bronze) {\textbf{Bronze}\\Parquet original};
+  \node[caja, right=of bronze] (silver) {\textbf{Silver}\\Parquet limpio};
+  \node[caja, right=of silver] (gold) {\textbf{Gold}\\CSV para Go};
+  \node[caja, dashed, below=6mm of silver] (audit) {Auditoría\\SQL en DuckDB};
+  \draw[flecha] (tlc) -- node[etiqueta] {descarga} (bronze);
+  \draw[flecha] (bronze) -- node[etiqueta] {7 reglas} (silver);
+  \draw[flecha] (silver) -- node[etiqueta] {features} (gold);
+  \draw[flecha, dashed] (audit) -- (silver);
+\end{tikzpicture}

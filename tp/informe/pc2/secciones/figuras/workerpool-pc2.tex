@@ -1,0 +1,23 @@
+% Figura: worker pool con reparto por canal y acumuladores por bloque (sección 9).
+\begin{tikzpicture}[
+    font=\footnotesize,
+    caja/.style={draw, rounded corners=1pt, align=center, inner sep=3pt, minimum height=9mm},
+    canal/.style={draw, rounded corners=1pt, align=center, inner sep=2pt, minimum height=7mm, fill=black!5},
+    flecha/.style={-Stealth, semithick}]
+  \node[caja, text width=20mm] (main) at (0, 0) {Coordinador\\encola $C$ bloques\\por iteración};
+  \node[canal, text width=30mm] (chan) at (3.6, 0) {\texttt{chan int}\\$b_0\;b_1\;b_2\;\cdots\;b_{C-1}$};
+  \node[caja, text width=36mm] (w1) at (8.0, 1.35) {Goroutine 1\\recibe $b$, asigna,\\escribe $s_{b}, n_{b}, J_{b}$};
+  \node (dots) at (8.0, 0.05) {$\vdots$};
+  \node[caja, text width=36mm] (wP) at (8.0, -1.35) {Goroutine $P$\\recibe $b'$, asigna,\\escribe $s_{b'}, n_{b'}, J_{b'}$};
+  \node[draw, fill=black!15, minimum width=2.5mm, minimum height=36mm, inner sep=0] (barrera) at (11.3, 0) {};
+  \node[above=1mm of barrera, align=center] {\texttt{sync.WaitGroup}\\Add($C$) / Done / Wait};
+  \node[caja, text width=26mm] (reduce) at (13.9, 0) {Reducción\\$\sum_{b=0}^{C-1}$ en orden\\$\mu_j = s_j / n_j$};
+  \draw[flecha] (main.east) -- (chan.west);
+  \draw[flecha] (chan.east) -- (w1.west);
+  \draw[flecha] (chan.east) -- (wP.west);
+  \draw[flecha] (w1.east) -- (w1.east -| barrera.west);
+  \draw[flecha] (wP.east) -- (wP.east -| barrera.west);
+  \draw[flecha] (barrera.east) -- (reduce.west);
+  \draw[flecha, dashed] (reduce.south) -- ++(0, -2.3)
+    -| node[pos=0.25, below] {centroides nuevos: de solo lectura en la siguiente iteración} (main.south);
+\end{tikzpicture}

@@ -1,0 +1,48 @@
+% ========================================================
+% CONCLUSIONES
+% ========================================================
+\section{Conclusiones}
+
+\subsection{Conclusiones del grupo}
+
+La pregunta guía de la revisión bibliográfica de la PC1 era cómo afectan la granularidad del trabajo
+y la estrategia de reducción al rendimiento y a la equivalencia numérica de K-means sobre más de un
+millón de registros. Este entregable la responde con datos.
+
+\textbf{La granularidad importa, pero al revés de lo que se intuye.} Trocear fino no cuesta: mandar
+un índice por un canal es despreciable frente a procesar mil viajes, y el óptimo es una meseta ancha.
+Lo que castiga es trocear grueso, porque deja workers sin trabajo. La regla es muchos más bloques que
+workers, y con ella el reparto por canal equilibra la carga solo.
+
+\textbf{La estrategia de reducción decide la reproducibilidad.} Acumular por bloque y reducir en
+orden fijo cuesta unos 66~KB y a cambio hace que el resultado concurrente sea el mismo para
+cualquier cantidad de workers, en cualquier máquina. Sin eso, la comparación con la versión
+secuencial sería una inspección a ojo. La equivalencia con la secuencial se comprueba con tolerancia,
+como anticipó la PC1, y la diferencia medida es del orden del redondeo.
+
+\textbf{El límite no es una sección secuencial, es coordinar.} La fracción serial efectiva crece con
+los workers, así que el techo de Amdahl no sirve como predicción; la escalabilidad débil, en cambio,
+se sostiene hasta cuatro workers y se degrada donde la coordinación empieza a pesar. Sobre el
+dataset del trabajo, \cifra{speedup-p4}$\times$ con cuatro workers y \cifra{speedup-p8}$\times$ con
+ocho justifican la concurrencia; por debajo de unos \cifra{n-equilibrio}~viajes no la justificarían.
+
+\textbf{Verificar y probar son cosas distintas, y hacen falta las dos.} Spin recorrió todos los
+entrelazados de un modelo reducido y confirmó que ningún punto se pierde ni se duplica y que los
+centroides no se escriben mientras se leen; el mutante demostró que el modelo detecta la carrera que
+dice detectar. \texttt{go test -race} comprobó lo mismo sobre la implementación, en los entrelazados
+que le tocó observar. Ninguna de las dos reemplaza a la otra.
+
+\textbf{Medir bien es una decisión de diseño.} El orden barajado, la media recortada, el cociente de
+medias y el bootstrap no son adornos: sin ellos el speedup depende de qué corrió primero y de cuántos
+picos del sistema operativo cayeron en cada muestra. El protocolo está en código y los tiempos crudos
+se guardan, así que cualquier cifra de este informe se puede recalcular sin volver a medir.
+
+\subsection{Trabajo pendiente para el Entregable 3}
+
+Queda elegir $k$ con un criterio de validación interna sobre una muestra, medir la variante con
+\texttt{sync.Mutex} que este entregable retiró, verificar propiedades de progreso en el modelo con
+hipótesis de \emph{fairness} declaradas, extender la escala a varios meses y contrastar con una
+implementación en GPU, sabiendo que ese contraste compara configuraciones completas y no una sola
+variable. Y, sobre todo, interpretar los clusters: hasta acá el trabajo demuestra que el algoritmo
+concurrente calcula lo mismo que el secuencial, más rápido; qué tipos de viaje encontró y cómo se
+distribuyen por zona es la pregunta del caso, y sigue abierta.

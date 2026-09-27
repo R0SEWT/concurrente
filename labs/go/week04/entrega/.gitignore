@@ -1,0 +1,6 @@
+# Se regeneran con build.sh. El PDF sí se versiona: es lo que se entregó.
+*.zip
+race.txt
+
+# Copia desempaquetada del zip para revisarlo (idéntica a ../../week04).
+week04-go/

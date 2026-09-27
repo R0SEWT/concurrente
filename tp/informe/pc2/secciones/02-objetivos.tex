@@ -1,0 +1,29 @@
+\section{Objetivos}
+
+\subsection{Objetivo general}
+
+Implementar en Go, sin librerías de terceros, una versión secuencial y una concurrente del mismo
+algoritmo K-means sobre más de un millón de viajes reales, demostrar que la lógica de sincronización
+está libre de condiciones de carrera y medir con rigor estadístico cuánto acelera la concurrencia y
+a qué costo.
+
+\subsection{Objetivos específicos}
+
+\begin{itemize}
+  \item Conservar los puntos del Entregable 1 y corregir de forma expresa lo que cambió entre el
+        diseño y la implementación.
+  \item Plantear el algoritmo concurrente y modelar su sincronización en Promela, de modo que Spin
+        recorra todos los entrelazados y confirme que ningún punto se pierde ni se duplica y que los
+        centroides no se escriben mientras se leen.
+  \item Implementar las dos versiones en Go con un contrato numérico común (misma inicialización,
+        misma distancia, mismo criterio de parada) y probar su equivalencia con \texttt{go test -race}.
+  \item Explicar el patrón \emph{worker pool} elegido y los mecanismos de sincronización que usa:
+        canal de bloques, acumuladores privados y barrera con \texttt{sync.WaitGroup}.
+  \item Calcular el speedup $T_{\text{secuencial}} / T_{\text{concurrente}}$ con media recortada
+        sobre múltiples ejecuciones, con tabla, dispersión e intervalos de confianza.
+  \item Analizar el speedup, la escalabilidad fuerte y débil, y los trade-offs entre la versión
+        secuencial y la concurrente.
+  \item Medir el uso de memoria y CPU de cada configuración y ubicar el punto de equilibrio a partir
+        del cual la concurrencia paga.
+  \item Evidenciar el trabajo en GitHub con el flujo Git Flow y la participación de los integrantes.
+\end{itemize}

@@ -1,0 +1,97 @@
+% ========================================================
+% TRABAJO EN GITHUB
+% ========================================================
+\section{Trabajo en GitHub}\label{sec:github}
+
+El proyecto se aloja en el repositorio público \url{https://github.com/R0SEWT/concurrente}. El
+Trabajo Parcial ocupa el directorio \texttt{tp/}, con su propio toolchain y una integración continua
+en GitHub Actions que, en cada \emph{pull request}, corre \texttt{go test -race}, \texttt{go vet} y
+\texttt{gofmt} sobre el módulo de Go, y \texttt{ruff} y \texttt{pytest} sobre el pipeline de datos.
+
+\subsection{Flujo Git Flow}
+
+El trabajo sigue Git Flow (Tabla~\ref{tab:ramas}): ningún cambio entra directamente a
+\texttt{develop} ni a \texttt{main}, sino por \emph{pull request} desde una rama propia. La
+Tabla~\ref{tab:prs} lista los \emph{pull requests} del Trabajo Parcial hasta la fecha de este
+informe.
+
+\begin{table}[H]
+\caption{Ramas del flujo de trabajo}\label{tab:ramas}
+\small
+\begin{tabularx}{\textwidth}{@{}L{3.6cm}Y@{}}
+\toprule
+\textbf{Rama} & \textbf{Uso} \\
+\midrule
+\texttt{main} & Versión entregada; recibe una fusión desde \texttt{develop} por entregable, con un
+  tag (\texttt{pc1}, \texttt{pc2}) \\
+\texttt{develop} & Integración; todo cambio llega por pull request revisado \\
+\texttt{feature/*}, \texttt{feat/*} & Una rama por unidad de trabajo, que sale de \texttt{develop} y
+  vuelve a ella \\
+\texttt{hotfix/*} & Arreglo urgente sobre \texttt{main}, que luego se lleva a \texttt{develop} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[H]
+\caption{Pull requests del Trabajo Parcial}\label{tab:prs}
+\small
+\begin{tabularx}{\textwidth}{@{}lL{3.6cm}YL{2.1cm}@{}}
+\toprule
+\textbf{N.º} & \textbf{Autor} & \textbf{Contenido} & \textbf{Estado} \\
+\midrule
+\multicolumn{4}{@{}l}{\textit{Entregable 1}} \\
+\#3 & \nombreDayana & Propuesta de caso: SENAMHI y ODS 13 & Cerrada \\
+\#4 & \nombreDayana & Propuesta de caso: NYC TLC y ODS 11 & Fusionada \\
+\#6 & \nombreRody & Limpieza del dataset & Fusionada \\
+\#7 & \nombreDayana & Análisis exploratorio (notebook) & Fusionada \\
+\#8 & \nombreRody & Bibliografía en BibTeX & Fusionada \\
+\#16 & \nombreRody & Informe de PC1 en LaTeX & Fusionada \\
+\#17 & \nombreRody & Tabla de commits del informe de PC1 & Fusionada \\
+\#18 & \nombreRody & Release PC1: \texttt{develop} $\to$ \texttt{main}, tag \texttt{pc1} & Fusionada \\
+\addlinespace
+\multicolumn{4}{@{}l}{\textit{Entregable 2}} \\
+\#9 & \nombreRody & CI: notebooks sin salidas & Fusionada \\
+\#19, \#20 & \nombreRody & Hotfix: compilación de los labs de Go en CI & Fusionadas \\
+\#21 & \nombreRody & K-means secuencial y concurrente en Go, Promela y benchmark & Fusionada \\
+\#22 & \nombreRody & Informe de PC2 en LaTeX & Fusionada \\
+\#32 & \nombreRody & Informe: corrección de las plataformas medidas & Fusionada \\
+\#34 & \nombreTercero & Tests de casos borde del K-means concurrente & Fusionada \\
+\#35 & \nombreDayana & Documentación del modelo Promela en el informe & Fusionada \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Historial de commits por integrante}
+
+Las Tablas~\ref{tab:commits-autor} y~\ref{tab:commits} se generan desde el repositorio con
+\texttt{./generar-historial.sh}. A diferencia del informe de la PC1, la tabla por integrante separa
+lo entregado hasta el tag \texttt{pc1} de lo nuevo de este entregable, y el listado de commits
+indica cuáles ya forman parte de \texttt{main} al generar la tabla.
+
+\input{generado/historial}
+
+\subsection{Participación de los integrantes}
+
+Cada integrante tiene al menos una \emph{pull request} propia en este entregable; los commits de cada
+uno están en las Tablas~\ref{tab:commits-autor} y~\ref{tab:commits}.
+
+\paragraph{\nombreRody{} (coordinador).} Implementó el K-means secuencial y el concurrente con worker
+pool en Go, el modelo Promela con su mutante y el benchmark (PR~\#21); midió el speedup y los
+recursos en las plataformas de la Tabla~\ref{tab:plataformas} y redactó este informe (PR~\#22 y
+\#32). Revisó e integró las \emph{pull requests} del resto del grupo.
+
+\paragraph{\nombreDayana.} Realizó la revisión crítica y amplió la documentación del modelo Promela
+(PR~\#35). Su aporte consistió en contrastar el modelo con la implementación en Go y explicar la
+correspondencia entre el canal de trabajos, los workers persistentes, los acumuladores por bloque y
+la barrera de sincronización. Asimismo, desarrolló la lectura operacional de una ronda en Promela,
+explicitó las simplificaciones del dominio modelado y precisó el alcance de las propiedades
+verificadas. También aclaró la interpretación de los resultados de SPIN y del contraejemplo
+producido por el mutante. Justificó qué aspectos de la implementación conserva la abstracción y
+hasta dónde pueden extenderse las conclusiones de la verificación.
+
+\paragraph{\nombreTercero.} Amplió la suite de tests de la versión concurrente con cuatro casos
+borde calculables a mano (PR~\#34): un cluster vacío conserva su centroide, un punto equidistante va
+al centroide de menor índice, con $k=1$ el centroide es la media de todos los puntos y con $k=N$ la
+inercia es cero. Cada caso se prueba con 1, 2 y 4 workers y bloques de un punto, de modo que la
+reducción de parciales se ejercita con distintos repartos del trabajo, y pasa con
+\texttt{go test -race}.

@@ -1,0 +1,30 @@
+pan:1: assertion violated (compartido==4) (at depth 205)
+pan: wrote kmeans.pml.trail
+
+(Spin Version 6.5.2 -- 18 September 2025)
+Warning: Search not completed
+	+ Partial Order Reduction
+
+Full statespace search for:
+	never claim         	- (none specified)
+	assertion violations	+
+	acceptance   cycles 	- (not selected)
+	invalid end states	+
+
+State-vector 56 byte, depth reached 208, errors: 1
+      391 states, stored
+       42 states, matched
+      433 transitions (= stored+matched)
+        1 atomic steps
+hash conflicts:         0 (resolved)
+
+Stats on memory usage (in Megabytes):
+    0.031	equivalent memory usage for states (stored*(State-vector + overhead))
+    0.285	actual memory usage for states
+  128.000	memory used for hash table (-w24)
+    0.534	memory used for DFS stack (-m10000)
+  128.730	total actual memory usage
+
+
+
+pan: elapsed time 0 seconds

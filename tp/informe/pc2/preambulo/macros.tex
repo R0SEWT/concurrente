@@ -1,0 +1,88 @@
+% ---------------------------------------------------------------------------
+% Datos del grupo: se completan aquí una sola vez (carátula, fichas y conclusiones los usan).
+% ---------------------------------------------------------------------------
+\newcommand{\nombreRody}{Rody Sebastian Vilchez Marin}
+\newcommand{\codigoRody}{U202216562}
+\newcommand{\nombreDayana}{Dayana Kety Gómez Rodriguez}
+\newcommand{\codigoDayana}{U202311495}
+\newcommand{\nombreTercero}{Julio Cesar Meza Alfaro}
+\newcommand{\codigoTercero}{U202218912}
+\newcommand{\coordinador}{\nombreRody}
+
+% ---------------------------------------------------------------------------
+% Marcas de trabajo pendiente. Antes de entregar, buscar "\pendiente" y "\verificar":
+% el PDF final no debe tener ninguna marca roja ni naranja.
+% ---------------------------------------------------------------------------
+\newcommand{\pendiente}[1]{\textcolor{BrickRed}{\itshape [Pendiente: #1]}}
+\newcommand{\verificar}[1]{\textcolor{BurntOrange}{\itshape [Verificar en el PDF: #1]}}
+
+% ---------------------------------------------------------------------------
+% Tarjeta por paper: la tabla que pide el enunciado (sección e), en formato compacto.
+%
+%   \tarjeta{clave-bibtex}{título corto para el caption}{
+%     titulo={...}, autores={...}, fuente={año · venue}, link={\url{...}},
+%     motivacion={...}, problema={...}, propuesta={...}, algoritmo={\paso{1}... \paso{2}...},
+%     stack={...}, aporte={...}, integrante={\nombreX},
+%     opinion={...}            % la escribe el integrante; mientras falte, sale la marca roja
+%   }
+% ---------------------------------------------------------------------------
+\pgfkeys{
+  /tarjeta/.is family, /tarjeta,
+  titulo/.store in=\tjTitulo,
+  autores/.store in=\tjAutores,
+  fuente/.store in=\tjFuente,
+  link/.store in=\tjLink,
+  motivacion/.store in=\tjMotivacion,
+  problema/.store in=\tjProblema,
+  propuesta/.store in=\tjPropuesta,
+  algoritmo/.store in=\tjAlgoritmo,
+  stack/.store in=\tjStack,
+  aporte/.store in=\tjAporte,
+  integrante/.store in=\tjIntegrante,
+  opinion/.store in=\tjOpinion,
+}
+
+\newcommand{\etiqueta}[1]{\textcolor{black!70}{\bfseries #1}}
+\newcommand{\separador}{\par\vspace{1.2mm}\noindent\textcolor{black!25}{\rule{\linewidth}{0.4pt}}\par\vspace{0.6mm}}
+\newcommand{\paso}[1]{\par\textbf{#1.}~}
+
+\newcommand{\tarjeta}[3]{%
+  % Sin espacio antes de #3: pgfkeys solo recorta un espacio y el argumento ya trae el suyo.
+  \pgfqkeys{/tarjeta}{opinion={\pendiente{la escribe el integrante: beneficios o perjuicios de la
+    programación concurrente en este trabajo}},#3}%
+  % No es un float: la tarjeta sigue el texto y puede partirse entre páginas, así no deja huecos.
+  % \needspace evita que el título de la tabla quede solo al pie de una página.
+  \par\needspace{12\baselineskip}\vspace{6pt}%
+  \captionof{table}{Ficha de \textcite{#1}: #2}\label{tab:#1}
+  \begin{tcolorbox}[enhanced, breakable, colback=white, colframe=black!45, boxrule=0.4pt, arc=1mm,
+                    left=2.5mm, right=2.5mm, top=1.5mm, bottom=1.5mm,
+                    before skip=2pt, after skip=12pt,
+                    fontupper=\footnotesize\setstretch{1}\setlength{\parskip}{0pt}]
+    {\small\bfseries\tjTitulo}\par\vspace{0.3mm}
+    \tjAutores\par
+    \tjFuente\ \textperiodcentered\ \tjLink
+    \separador
+    \begin{tabularx}{\linewidth}{@{}Y@{\hspace{5mm}}Y@{}}
+      \etiqueta{Motivación}\par \tjMotivacion
+        & \etiqueta{Problema que resuelve}\par \tjProblema \\ \addlinespace[5pt]
+      \etiqueta{Propuesta de solución}\par \tjPropuesta
+        & \etiqueta{Algoritmos y pseudocódigo}\par \tjAlgoritmo \\
+    \end{tabularx}
+    \separador
+    \etiqueta{Servicios, frameworks, lenguaje y patrones.} \tjStack\par\vspace{0.8mm}
+    \etiqueta{Aporte de la concurrencia.} \tjAporte
+    \separador
+    \etiqueta{Opinión crítica (\tjIntegrante).} \tjOpinion
+  \end{tcolorbox}}
+
+% Pseudocódigo en español.
+\floatname{algorithm}{Algoritmo}
+\renewcommand{\algorithmicrequire}{\textbf{Entrada:}}
+\renewcommand{\algorithmicensure}{\textbf{Salida:}}
+\algrenewcommand\algorithmicwhile{\textbf{mientras}}
+\algrenewcommand\algorithmicdo{\textbf{hacer}}
+\algrenewcommand\algorithmicfor{\textbf{para}}
+\algrenewcommand\algorithmicforall{\textbf{para cada}}
+\algrenewcommand\algorithmicif{\textbf{si}}
+\algrenewcommand\algorithmicthen{\textbf{entonces}}
+\algrenewcommand\algorithmicreturn{\textbf{devolver}}

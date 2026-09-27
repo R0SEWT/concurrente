@@ -1,0 +1,5 @@
+# Artefactos del verificador: se regeneran con make
+pan
+pan-mutante
+pan.*
+*.trail

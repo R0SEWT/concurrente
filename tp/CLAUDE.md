@@ -1,7 +1,7 @@
 # tp — Trabajo Parcial CC65: K-means concurrente sobre NYC TLC
 
 Raíz independiente dentro de `concurrente` (como `labs/go`): tiene su propio toolchain (uv) y su
-propio CI. Las tareas se siguen en los beads del repo padre: `concurrente-41o` (PC1) y sus hijos.
+propio CI. Las tareas se siguen en los beads del repo padre: `concurrente-41o` (PC1), `concurrente-3r8` (PC2) y `concurrente-r0p` (TB1), con sus hijos.
 
 ## Domain / Scientific Context
 
@@ -49,6 +49,11 @@ un bug en una de ellas.
 | `src/nyc_tlc/pipeline.py` | Orquesta las capas y escribe el reporte. |
 | `docs/limpieza.md` | El porqué de cada regla, para el informe de PC1. |
 | `reports/limpieza_yellow_2024-01.md` | Los números de la última corrida. Se genera, no se edita. |
+| `kmeans/` | Módulo Go del K-means (PC2): secuencial, concurrente con worker pool, `cmd/kmeans` y `cmd/benchmark`. Su diseño está en `docs/kmeans.md`; el análisis, en `docs/analisis-pc2.md`. |
+| `scripts/tablas_informe.py` | Genera las tablas y cifras del informe de la PC2 desde `reports/benchmark_*.json`. |
+| `scripts/kmeans_gpu.py` | Lloyd en GPU con PyTorch, mismo contrato que `kmeans/`, para el contraste del TB1. Se corre en `ssh gpu` con `scripts/gpu/correr_remoto.sh`; cómo y por qué, en `docs/kmeans-gpu.md`. |
+| `docs/pixel.md` | El K-means en un Pixel 9a con Termux: resultados, heterogeneidad de núcleos, deriva térmica, y cómo compilar para Android (`GOOS=android`). |
+| `scripts/analisis_gpu.py` | Tablas del contraste GPU vs CPU desde `reports/gpu_*.json` y el benchmark de Go de la misma máquina. |
 
 ## Data Conventions
 
@@ -66,6 +71,11 @@ un bug en una de ellas.
   bronze en miniatura servido por `file://`.
 - **Un nulo solo descarta el viaje si está en una columna que usamos.** Las 140 mil filas de Flex
   Fare (`payment_type = 0`) traen nulos en `RatecodeID`/`passenger_count` y se conservan.
+- **Los notebooks se versionan SIN salidas.** Un `.ipynb` ejecutado pesa megas por las imágenes
+  embebidas, hace ilegible el diff y nada garantiza que sus salidas correspondan al código.
+  `tests/test_notebooks.py` lo verifica en CI. Antes de commitear:
+  `uv run jupyter nbconvert --clear-output --inplace notebooks/*.ipynb`.
+  Las figuras que van al informe se exportan como archivos aparte (`reports/figuras/`).
 - **Los IDs de zona nunca entran a la distancia euclídea**: van en gold solo para agregar por zona
   después del clustering.
 - **Las features de gold son provisionales** (PC1). Se revisan en PC2 junto con el K-means en Go;
