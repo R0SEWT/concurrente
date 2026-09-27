@@ -1,0 +1,589 @@
+Starting worker with pid 1
+  1:	proc  0 (:init::1) kmeans.pml:80 (state 1)	[(run worker())]
+Starting worker with pid 2
+  2:	proc  0 (:init::1) kmeans.pml:80 (state 2)	[(run worker())]
+  3:	proc  0 (:init::1) kmeans.pml:82 (state 4)	[it = 0]
+		:init:(0):it = 0
+  4:	proc  0 (:init::1) kmeans.pml:84 (state 5)	[((it<2))]
+  4:	proc  0 (:init::1) kmeans.pml:85 (state 6)	[i = 0]
+		:init:(0):i = 0
+  5:	proc  0 (:init::1) kmeans.pml:86 (state 7)	[((i<4))]
+  6:	proc  0 (:init::1) kmeans.pml:86 (state 8)	[seen[i] = 0]
+  7:	proc  0 (:init::1) kmeans.pml:86 (state 9)	[i = (i+1)]
+		:init:(0):i = 1
+  8:	proc  0 (:init::1) kmeans.pml:86 (state 7)	[((i<4))]
+  9:	proc  0 (:init::1) kmeans.pml:86 (state 8)	[seen[i] = 0]
+ 10:	proc  0 (:init::1) kmeans.pml:86 (state 9)	[i = (i+1)]
+		:init:(0):i = 2
+ 11:	proc  0 (:init::1) kmeans.pml:86 (state 7)	[((i<4))]
+ 12:	proc  0 (:init::1) kmeans.pml:86 (state 8)	[seen[i] = 0]
+ 13:	proc  0 (:init::1) kmeans.pml:86 (state 9)	[i = (i+1)]
+		:init:(0):i = 3
+ 14:	proc  0 (:init::1) kmeans.pml:86 (state 7)	[((i<4))]
+ 15:	proc  0 (:init::1) kmeans.pml:86 (state 8)	[seen[i] = 0]
+ 16:	proc  0 (:init::1) kmeans.pml:86 (state 9)	[i = (i+1)]
+		:init:(0):i = 4
+ 17:	proc  0 (:init::1) kmeans.pml:86 (state 10)	[else]
+ 18:	proc  0 (:init::1) kmeans.pml:87 (state 15)	[total = 0]
+ 19:	proc  0 (:init::1) kmeans.pml:89 (state 16)	[compartido = 0]
+ 20:	proc  0 (:init::1) kmeans.pml:92 (state 17)	[pendientes = 2]
+		pendientes = 2
+ 21:	proc  0 (:init::1) kmeans.pml:93 (state 18)	[c = 0]
+		:init:(0):c = 0
+ 22:	proc  0 (:init::1) kmeans.pml:94 (state 19)	[((c<2))]
+ 23:	proc  0 (:init::1) kmeans.pml:94 (state 20)	[trabajos!c]
+		queue 1 (trabajos): [0]
+ 24:	proc  0 (:init::1) kmeans.pml:94 (state 21)	[c = (c+1)]
+		queue 1 (trabajos): [0]
+		:init:(0):c = 1
+ 25:	proc  0 (:init::1) kmeans.pml:94 (state 19)	[((c<2))]
+		queue 1 (trabajos): [0]
+ 26:	proc  2 (worker:1) kmeans.pml:53 (state 1)	[trabajos?idx]
+		queue 1 (trabajos): 
+		worker(2):idx = 0
+ 27:	proc  2 (worker:1) kmeans.pml:54 (state 2)	[lectores = (lectores+1)]
+		lectores = 1
+		queue 1 (trabajos): 
+ 28:	proc  2 (worker:1) kmeans.pml:55 (state 3)	[assert((escribiendo==0))]
+		queue 1 (trabajos): 
+ 29:	proc  2 (worker:1) kmeans.pml:56 (state 4)	[conteo[idx] = 0]
+		queue 1 (trabajos): 
+ 30:	proc  2 (worker:1) kmeans.pml:57 (state 5)	[i = 0]
+		queue 1 (trabajos): 
+		worker(2):i = 0
+ 31:	proc  2 (worker:1) kmeans.pml:59 (state 6)	[((i<(4/2)))]
+		queue 1 (trabajos): 
+ 32:	proc  2 (worker:1) kmeans.pml:60 (state 7)	[assert((escribiendo==0))]
+		queue 1 (trabajos): 
+ 33:	proc  2 (worker:1) kmeans.pml:61 (state 8)	[seen[((idx*(4/2))+i)] = (seen[((idx*(4/2))+i)]+1)]
+		seen[0] = 1
+		seen[1] = 0
+		seen[2] = 0
+		seen[3] = 0
+		queue 1 (trabajos): 
+ 34:	proc  2 (worker:1) kmeans.pml:62 (state 9)	[conteo[idx] = (conteo[idx]+1)]
+		conteo[0] = 1
+		conteo[1] = 0
+		queue 1 (trabajos): 
+ 35:	proc  2 (worker:1) kmeans.pml:64 (state 10)	[tmp = compartido]
+		queue 1 (trabajos): 
+		worker(2):tmp = 0
+ 36:	proc  2 (worker:1) kmeans.pml:65 (state 11)	[tmp = (tmp+1)]
+		queue 1 (trabajos): 
+		worker(2):tmp = 1
+ 37:	proc  2 (worker:1) kmeans.pml:66 (state 12)	[compartido = tmp]
+		queue 1 (trabajos): 
+		compartido = 1
+ 38:	proc  2 (worker:1) kmeans.pml:68 (state 13)	[i = (i+1)]
+		queue 1 (trabajos): 
+		worker(2):i = 1
+ 39:	proc  2 (worker:1) kmeans.pml:59 (state 6)	[((i<(4/2)))]
+		queue 1 (trabajos): 
+ 40:	proc  2 (worker:1) kmeans.pml:60 (state 7)	[assert((escribiendo==0))]
+		queue 1 (trabajos): 
+ 41:	proc  2 (worker:1) kmeans.pml:61 (state 8)	[seen[((idx*(4/2))+i)] = (seen[((idx*(4/2))+i)]+1)]
+		seen[0] = 1
+		seen[1] = 1
+		seen[2] = 0
+		seen[3] = 0
+		queue 1 (trabajos): 
+ 42:	proc  2 (worker:1) kmeans.pml:62 (state 9)	[conteo[idx] = (conteo[idx]+1)]
+		conteo[0] = 2
+		conteo[1] = 0
+		queue 1 (trabajos): 
+ 43:	proc  2 (worker:1) kmeans.pml:64 (state 10)	[tmp = compartido]
+		queue 1 (trabajos): 
+		worker(2):tmp = 1
+ 44:	proc  2 (worker:1) kmeans.pml:65 (state 11)	[tmp = (tmp+1)]
+		queue 1 (trabajos): 
+		worker(2):tmp = 2
+ 45:	proc  2 (worker:1) kmeans.pml:66 (state 12)	[compartido = tmp]
+		queue 1 (trabajos): 
+		compartido = 2
+ 46:	proc  2 (worker:1) kmeans.pml:68 (state 13)	[i = (i+1)]
+		queue 1 (trabajos): 
+		worker(2):i = 2
+ 47:	proc  2 (worker:1) kmeans.pml:69 (state 14)	[else]
+		queue 1 (trabajos): 
+ 48:	proc  2 (worker:1) kmeans.pml:71 (state 19)	[lectores = (lectores-1)]
+		lectores = 0
+		queue 1 (trabajos): 
+ 49:	proc  2 (worker:1) kmeans.pml:72 (state 20)	[pendientes = (pendientes-1)]
+		pendientes = 1
+		queue 1 (trabajos): 
+ 50:	proc  0 (:init::1) kmeans.pml:94 (state 20)	[trabajos!c]
+		queue 1 (trabajos): [1]
+ 51:	proc  0 (:init::1) kmeans.pml:94 (state 21)	[c = (c+1)]
+		queue 1 (trabajos): [1]
+		:init:(0):c = 2
+ 52:	proc  0 (:init::1) kmeans.pml:94 (state 22)	[else]
+		queue 1 (trabajos): [1]
+ 53:	proc  2 (worker:1) kmeans.pml:53 (state 1)	[trabajos?idx]
+		queue 1 (trabajos): 
+		worker(2):idx = 1
+ 54:	proc  2 (worker:1) kmeans.pml:54 (state 2)	[lectores = (lectores+1)]
+		lectores = 1
+		queue 1 (trabajos): 
+ 55:	proc  2 (worker:1) kmeans.pml:55 (state 3)	[assert((escribiendo==0))]
+		queue 1 (trabajos): 
+ 56:	proc  2 (worker:1) kmeans.pml:56 (state 4)	[conteo[idx] = 0]
+		queue 1 (trabajos): 
+ 57:	proc  2 (worker:1) kmeans.pml:57 (state 5)	[i = 0]
+		queue 1 (trabajos): 
+		worker(2):i = 0
+ 58:	proc  2 (worker:1) kmeans.pml:59 (state 6)	[((i<(4/2)))]
+		queue 1 (trabajos): 
+ 59:	proc  2 (worker:1) kmeans.pml:60 (state 7)	[assert((escribiendo==0))]
+		queue 1 (trabajos): 
+ 60:	proc  2 (worker:1) kmeans.pml:61 (state 8)	[seen[((idx*(4/2))+i)] = (seen[((idx*(4/2))+i)]+1)]
+		seen[0] = 1
+		seen[1] = 1
+		seen[2] = 1
+		seen[3] = 0
+		queue 1 (trabajos): 
+ 61:	proc  2 (worker:1) kmeans.pml:62 (state 9)	[conteo[idx] = (conteo[idx]+1)]
+		conteo[0] = 2
+		conteo[1] = 1
+		queue 1 (trabajos): 
+ 62:	proc  2 (worker:1) kmeans.pml:64 (state 10)	[tmp = compartido]
+		queue 1 (trabajos): 
+		worker(2):tmp = 2
+ 63:	proc  2 (worker:1) kmeans.pml:65 (state 11)	[tmp = (tmp+1)]
+		queue 1 (trabajos): 
+		worker(2):tmp = 3
+ 64:	proc  2 (worker:1) kmeans.pml:66 (state 12)	[compartido = tmp]
+		queue 1 (trabajos): 
+		compartido = 3
+ 65:	proc  2 (worker:1) kmeans.pml:68 (state 13)	[i = (i+1)]
+		queue 1 (trabajos): 
+		worker(2):i = 1
+ 66:	proc  2 (worker:1) kmeans.pml:59 (state 6)	[((i<(4/2)))]
+		queue 1 (trabajos): 
+ 67:	proc  2 (worker:1) kmeans.pml:60 (state 7)	[assert((escribiendo==0))]
+		queue 1 (trabajos): 
+ 68:	proc  2 (worker:1) kmeans.pml:61 (state 8)	[seen[((idx*(4/2))+i)] = (seen[((idx*(4/2))+i)]+1)]
+		seen[0] = 1
+		seen[1] = 1
+		seen[2] = 1
+		seen[3] = 1
+		queue 1 (trabajos): 
+ 69:	proc  2 (worker:1) kmeans.pml:62 (state 9)	[conteo[idx] = (conteo[idx]+1)]
+		conteo[0] = 2
+		conteo[1] = 2
+		queue 1 (trabajos): 
+ 70:	proc  2 (worker:1) kmeans.pml:64 (state 10)	[tmp = compartido]
+		queue 1 (trabajos): 
+		worker(2):tmp = 3
+ 71:	proc  2 (worker:1) kmeans.pml:65 (state 11)	[tmp = (tmp+1)]
+		queue 1 (trabajos): 
+		worker(2):tmp = 4
+ 72:	proc  2 (worker:1) kmeans.pml:66 (state 12)	[compartido = tmp]
+		queue 1 (trabajos): 
+		compartido = 4
+ 73:	proc  2 (worker:1) kmeans.pml:68 (state 13)	[i = (i+1)]
+		queue 1 (trabajos): 
+		worker(2):i = 2
+ 74:	proc  2 (worker:1) kmeans.pml:69 (state 14)	[else]
+		queue 1 (trabajos): 
+ 75:	proc  2 (worker:1) kmeans.pml:71 (state 19)	[lectores = (lectores-1)]
+		lectores = 0
+		queue 1 (trabajos): 
+ 76:	proc  2 (worker:1) kmeans.pml:72 (state 20)	[pendientes = (pendientes-1)]
+		pendientes = 0
+		queue 1 (trabajos): 
+ 77:	proc  0 (:init::1) kmeans.pml:96 (state 27)	[((pendientes==0))]
+		queue 1 (trabajos): 
+ 78:	proc  0 (:init::1) kmeans.pml:97 (state 28)	[assert((lectores==0))]
+		queue 1 (trabajos): 
+ 79:	proc  0 (:init::1) kmeans.pml:99 (state 29)	[escribiendo = 1]
+		escribiendo = 1
+		queue 1 (trabajos): 
+ 80:	proc  0 (:init::1) kmeans.pml:100 (state 30)	[c = 0]
+		queue 1 (trabajos): 
+		:init:(0):c = 0
+ 81:	proc  0 (:init::1) kmeans.pml:101 (state 31)	[((c<2))]
+		queue 1 (trabajos): 
+ 82:	proc  0 (:init::1) kmeans.pml:101 (state 32)	[total = (total+conteo[c])]
+		total = 2
+		queue 1 (trabajos): 
+ 83:	proc  0 (:init::1) kmeans.pml:101 (state 33)	[c = (c+1)]
+		queue 1 (trabajos): 
+		:init:(0):c = 1
+ 84:	proc  0 (:init::1) kmeans.pml:101 (state 31)	[((c<2))]
+		queue 1 (trabajos): 
+ 85:	proc  0 (:init::1) kmeans.pml:101 (state 32)	[total = (total+conteo[c])]
+		total = 4
+		queue 1 (trabajos): 
+ 86:	proc  0 (:init::1) kmeans.pml:101 (state 33)	[c = (c+1)]
+		queue 1 (trabajos): 
+		:init:(0):c = 2
+ 87:	proc  0 (:init::1) kmeans.pml:101 (state 34)	[else]
+		queue 1 (trabajos): 
+ 88:	proc  0 (:init::1) kmeans.pml:102 (state 39)	[escribiendo = 0]
+		escribiendo = 0
+		queue 1 (trabajos): 
+ 89:	proc  0 (:init::1) kmeans.pml:104 (state 40)	[i = 0]
+		queue 1 (trabajos): 
+		:init:(0):i = 0
+ 90:	proc  0 (:init::1) kmeans.pml:105 (state 41)	[((i<4))]
+		queue 1 (trabajos): 
+ 91:	proc  0 (:init::1) kmeans.pml:105 (state 42)	[assert((seen[i]==1))]
+		queue 1 (trabajos): 
+ 92:	proc  0 (:init::1) kmeans.pml:105 (state 43)	[i = (i+1)]
+		queue 1 (trabajos): 
+		:init:(0):i = 1
+ 93:	proc  0 (:init::1) kmeans.pml:105 (state 41)	[((i<4))]
+		queue 1 (trabajos): 
+ 94:	proc  0 (:init::1) kmeans.pml:105 (state 42)	[assert((seen[i]==1))]
+		queue 1 (trabajos): 
+ 95:	proc  0 (:init::1) kmeans.pml:105 (state 43)	[i = (i+1)]
+		queue 1 (trabajos): 
+		:init:(0):i = 2
+ 96:	proc  0 (:init::1) kmeans.pml:105 (state 41)	[((i<4))]
+		queue 1 (trabajos): 
+ 97:	proc  0 (:init::1) kmeans.pml:105 (state 42)	[assert((seen[i]==1))]
+		queue 1 (trabajos): 
+ 98:	proc  0 (:init::1) kmeans.pml:105 (state 43)	[i = (i+1)]
+		queue 1 (trabajos): 
+		:init:(0):i = 3
+ 99:	proc  0 (:init::1) kmeans.pml:105 (state 41)	[((i<4))]
+		queue 1 (trabajos): 
+100:	proc  0 (:init::1) kmeans.pml:105 (state 42)	[assert((seen[i]==1))]
+		queue 1 (trabajos): 
+101:	proc  0 (:init::1) kmeans.pml:105 (state 43)	[i = (i+1)]
+		queue 1 (trabajos): 
+		:init:(0):i = 4
+102:	proc  0 (:init::1) kmeans.pml:105 (state 44)	[else]
+		queue 1 (trabajos): 
+103:	proc  0 (:init::1) kmeans.pml:106 (state 49)	[assert((total==4))]
+		queue 1 (trabajos): 
+104:	proc  0 (:init::1) kmeans.pml:108 (state 50)	[assert((compartido==4))]
+		queue 1 (trabajos): 
+105:	proc  0 (:init::1) kmeans.pml:110 (state 51)	[it = (it+1)]
+		queue 1 (trabajos): 
+		:init:(0):it = 1
+106:	proc  0 (:init::1) kmeans.pml:84 (state 5)	[((it<2))]
+		queue 1 (trabajos): 
+106:	proc  0 (:init::1) kmeans.pml:85 (state 6)	[i = 0]
+		queue 1 (trabajos): 
+		:init:(0):i = 0
+107:	proc  0 (:init::1) kmeans.pml:86 (state 7)	[((i<4))]
+		queue 1 (trabajos): 
+108:	proc  0 (:init::1) kmeans.pml:86 (state 8)	[seen[i] = 0]
+		seen[0] = 0
+		seen[1] = 1
+		seen[2] = 1
+		seen[3] = 1
+		queue 1 (trabajos): 
+109:	proc  0 (:init::1) kmeans.pml:86 (state 9)	[i = (i+1)]
+		queue 1 (trabajos): 
+		:init:(0):i = 1
+110:	proc  0 (:init::1) kmeans.pml:86 (state 7)	[((i<4))]
+		queue 1 (trabajos): 
+111:	proc  0 (:init::1) kmeans.pml:86 (state 8)	[seen[i] = 0]
+		seen[0] = 0
+		seen[1] = 0
+		seen[2] = 1
+		seen[3] = 1
+		queue 1 (trabajos): 
+112:	proc  0 (:init::1) kmeans.pml:86 (state 9)	[i = (i+1)]
+		queue 1 (trabajos): 
+		:init:(0):i = 2
+113:	proc  0 (:init::1) kmeans.pml:86 (state 7)	[((i<4))]
+		queue 1 (trabajos): 
+114:	proc  0 (:init::1) kmeans.pml:86 (state 8)	[seen[i] = 0]
+		seen[0] = 0
+		seen[1] = 0
+		seen[2] = 0
+		seen[3] = 1
+		queue 1 (trabajos): 
+115:	proc  0 (:init::1) kmeans.pml:86 (state 9)	[i = (i+1)]
+		queue 1 (trabajos): 
+		:init:(0):i = 3
+116:	proc  0 (:init::1) kmeans.pml:86 (state 7)	[((i<4))]
+		queue 1 (trabajos): 
+117:	proc  0 (:init::1) kmeans.pml:86 (state 8)	[seen[i] = 0]
+		seen[0] = 0
+		seen[1] = 0
+		seen[2] = 0
+		seen[3] = 0
+		queue 1 (trabajos): 
+118:	proc  0 (:init::1) kmeans.pml:86 (state 9)	[i = (i+1)]
+		queue 1 (trabajos): 
+		:init:(0):i = 4
+119:	proc  0 (:init::1) kmeans.pml:86 (state 10)	[else]
+		queue 1 (trabajos): 
+120:	proc  0 (:init::1) kmeans.pml:87 (state 15)	[total = 0]
+		total = 0
+		queue 1 (trabajos): 
+121:	proc  0 (:init::1) kmeans.pml:89 (state 16)	[compartido = 0]
+		queue 1 (trabajos): 
+		compartido = 0
+122:	proc  0 (:init::1) kmeans.pml:92 (state 17)	[pendientes = 2]
+		pendientes = 2
+		queue 1 (trabajos): 
+123:	proc  0 (:init::1) kmeans.pml:93 (state 18)	[c = 0]
+		queue 1 (trabajos): 
+		:init:(0):c = 0
+124:	proc  0 (:init::1) kmeans.pml:94 (state 19)	[((c<2))]
+		queue 1 (trabajos): 
+125:	proc  0 (:init::1) kmeans.pml:94 (state 20)	[trabajos!c]
+		queue 1 (trabajos): [0]
+126:	proc  0 (:init::1) kmeans.pml:94 (state 21)	[c = (c+1)]
+		queue 1 (trabajos): [0]
+		:init:(0):c = 1
+127:	proc  0 (:init::1) kmeans.pml:94 (state 19)	[((c<2))]
+		queue 1 (trabajos): [0]
+128:	proc  2 (worker:1) kmeans.pml:53 (state 1)	[trabajos?idx]
+		queue 1 (trabajos): 
+		worker(2):idx = 0
+129:	proc  2 (worker:1) kmeans.pml:54 (state 2)	[lectores = (lectores+1)]
+		lectores = 1
+		queue 1 (trabajos): 
+130:	proc  2 (worker:1) kmeans.pml:55 (state 3)	[assert((escribiendo==0))]
+		queue 1 (trabajos): 
+131:	proc  2 (worker:1) kmeans.pml:56 (state 4)	[conteo[idx] = 0]
+		conteo[0] = 0
+		conteo[1] = 2
+		queue 1 (trabajos): 
+132:	proc  2 (worker:1) kmeans.pml:57 (state 5)	[i = 0]
+		queue 1 (trabajos): 
+		worker(2):i = 0
+133:	proc  2 (worker:1) kmeans.pml:59 (state 6)	[((i<(4/2)))]
+		queue 1 (trabajos): 
+134:	proc  2 (worker:1) kmeans.pml:60 (state 7)	[assert((escribiendo==0))]
+		queue 1 (trabajos): 
+135:	proc  2 (worker:1) kmeans.pml:61 (state 8)	[seen[((idx*(4/2))+i)] = (seen[((idx*(4/2))+i)]+1)]
+		seen[0] = 1
+		seen[1] = 0
+		seen[2] = 0
+		seen[3] = 0
+		queue 1 (trabajos): 
+136:	proc  2 (worker:1) kmeans.pml:62 (state 9)	[conteo[idx] = (conteo[idx]+1)]
+		conteo[0] = 1
+		conteo[1] = 2
+		queue 1 (trabajos): 
+137:	proc  2 (worker:1) kmeans.pml:64 (state 10)	[tmp = compartido]
+		queue 1 (trabajos): 
+		worker(2):tmp = 0
+138:	proc  2 (worker:1) kmeans.pml:65 (state 11)	[tmp = (tmp+1)]
+		queue 1 (trabajos): 
+		worker(2):tmp = 1
+139:	proc  2 (worker:1) kmeans.pml:66 (state 12)	[compartido = tmp]
+		queue 1 (trabajos): 
+		compartido = 1
+140:	proc  2 (worker:1) kmeans.pml:68 (state 13)	[i = (i+1)]
+		queue 1 (trabajos): 
+		worker(2):i = 1
+141:	proc  2 (worker:1) kmeans.pml:59 (state 6)	[((i<(4/2)))]
+		queue 1 (trabajos): 
+142:	proc  2 (worker:1) kmeans.pml:60 (state 7)	[assert((escribiendo==0))]
+		queue 1 (trabajos): 
+143:	proc  2 (worker:1) kmeans.pml:61 (state 8)	[seen[((idx*(4/2))+i)] = (seen[((idx*(4/2))+i)]+1)]
+		seen[0] = 1
+		seen[1] = 1
+		seen[2] = 0
+		seen[3] = 0
+		queue 1 (trabajos): 
+144:	proc  2 (worker:1) kmeans.pml:62 (state 9)	[conteo[idx] = (conteo[idx]+1)]
+		conteo[0] = 2
+		conteo[1] = 2
+		queue 1 (trabajos): 
+145:	proc  2 (worker:1) kmeans.pml:64 (state 10)	[tmp = compartido]
+		queue 1 (trabajos): 
+		worker(2):tmp = 1
+146:	proc  2 (worker:1) kmeans.pml:65 (state 11)	[tmp = (tmp+1)]
+		queue 1 (trabajos): 
+		worker(2):tmp = 2
+147:	proc  0 (:init::1) kmeans.pml:94 (state 20)	[trabajos!c]
+		queue 1 (trabajos): [1]
+148:	proc  0 (:init::1) kmeans.pml:94 (state 21)	[c = (c+1)]
+		queue 1 (trabajos): [1]
+		:init:(0):c = 2
+149:	proc  0 (:init::1) kmeans.pml:94 (state 22)	[else]
+		queue 1 (trabajos): [1]
+150:	proc  1 (worker:1) kmeans.pml:53 (state 1)	[trabajos?idx]
+		queue 1 (trabajos): 
+		worker(1):idx = 1
+151:	proc  1 (worker:1) kmeans.pml:54 (state 2)	[lectores = (lectores+1)]
+		lectores = 2
+		queue 1 (trabajos): 
+152:	proc  1 (worker:1) kmeans.pml:55 (state 3)	[assert((escribiendo==0))]
+		queue 1 (trabajos): 
+153:	proc  1 (worker:1) kmeans.pml:56 (state 4)	[conteo[idx] = 0]
+		conteo[0] = 2
+		conteo[1] = 0
+		queue 1 (trabajos): 
+154:	proc  1 (worker:1) kmeans.pml:57 (state 5)	[i = 0]
+		queue 1 (trabajos): 
+		worker(1):i = 0
+155:	proc  1 (worker:1) kmeans.pml:59 (state 6)	[((i<(4/2)))]
+		queue 1 (trabajos): 
+156:	proc  1 (worker:1) kmeans.pml:60 (state 7)	[assert((escribiendo==0))]
+		queue 1 (trabajos): 
+157:	proc  1 (worker:1) kmeans.pml:61 (state 8)	[seen[((idx*(4/2))+i)] = (seen[((idx*(4/2))+i)]+1)]
+		seen[0] = 1
+		seen[1] = 1
+		seen[2] = 1
+		seen[3] = 0
+		queue 1 (trabajos): 
+158:	proc  1 (worker:1) kmeans.pml:62 (state 9)	[conteo[idx] = (conteo[idx]+1)]
+		conteo[0] = 2
+		conteo[1] = 1
+		queue 1 (trabajos): 
+159:	proc  1 (worker:1) kmeans.pml:64 (state 10)	[tmp = compartido]
+		queue 1 (trabajos): 
+		worker(1):tmp = 1
+160:	proc  1 (worker:1) kmeans.pml:65 (state 11)	[tmp = (tmp+1)]
+		queue 1 (trabajos): 
+		worker(1):tmp = 2
+161:	proc  2 (worker:1) kmeans.pml:66 (state 12)	[compartido = tmp]
+		queue 1 (trabajos): 
+		compartido = 2
+162:	proc  2 (worker:1) kmeans.pml:68 (state 13)	[i = (i+1)]
+		queue 1 (trabajos): 
+		worker(2):i = 2
+163:	proc  2 (worker:1) kmeans.pml:69 (state 14)	[else]
+		queue 1 (trabajos): 
+164:	proc  2 (worker:1) kmeans.pml:71 (state 19)	[lectores = (lectores-1)]
+		lectores = 1
+		queue 1 (trabajos): 
+165:	proc  2 (worker:1) kmeans.pml:72 (state 20)	[pendientes = (pendientes-1)]
+		pendientes = 1
+		queue 1 (trabajos): 
+166:	proc  1 (worker:1) kmeans.pml:66 (state 12)	[compartido = tmp]
+		queue 1 (trabajos): 
+167:	proc  1 (worker:1) kmeans.pml:68 (state 13)	[i = (i+1)]
+		queue 1 (trabajos): 
+		worker(1):i = 1
+168:	proc  1 (worker:1) kmeans.pml:59 (state 6)	[((i<(4/2)))]
+		queue 1 (trabajos): 
+169:	proc  1 (worker:1) kmeans.pml:60 (state 7)	[assert((escribiendo==0))]
+		queue 1 (trabajos): 
+170:	proc  1 (worker:1) kmeans.pml:61 (state 8)	[seen[((idx*(4/2))+i)] = (seen[((idx*(4/2))+i)]+1)]
+		seen[0] = 1
+		seen[1] = 1
+		seen[2] = 1
+		seen[3] = 1
+		queue 1 (trabajos): 
+171:	proc  1 (worker:1) kmeans.pml:62 (state 9)	[conteo[idx] = (conteo[idx]+1)]
+		conteo[0] = 2
+		conteo[1] = 2
+		queue 1 (trabajos): 
+172:	proc  1 (worker:1) kmeans.pml:64 (state 10)	[tmp = compartido]
+		queue 1 (trabajos): 
+		worker(1):tmp = 2
+173:	proc  1 (worker:1) kmeans.pml:65 (state 11)	[tmp = (tmp+1)]
+		queue 1 (trabajos): 
+		worker(1):tmp = 3
+174:	proc  1 (worker:1) kmeans.pml:66 (state 12)	[compartido = tmp]
+		queue 1 (trabajos): 
+		compartido = 3
+175:	proc  1 (worker:1) kmeans.pml:68 (state 13)	[i = (i+1)]
+		queue 1 (trabajos): 
+		worker(1):i = 2
+176:	proc  1 (worker:1) kmeans.pml:69 (state 14)	[else]
+		queue 1 (trabajos): 
+177:	proc  1 (worker:1) kmeans.pml:71 (state 19)	[lectores = (lectores-1)]
+		lectores = 0
+		queue 1 (trabajos): 
+178:	proc  1 (worker:1) kmeans.pml:72 (state 20)	[pendientes = (pendientes-1)]
+		pendientes = 0
+		queue 1 (trabajos): 
+179:	proc  0 (:init::1) kmeans.pml:96 (state 27)	[((pendientes==0))]
+		queue 1 (trabajos): 
+180:	proc  0 (:init::1) kmeans.pml:97 (state 28)	[assert((lectores==0))]
+		queue 1 (trabajos): 
+181:	proc  0 (:init::1) kmeans.pml:99 (state 29)	[escribiendo = 1]
+		escribiendo = 1
+		queue 1 (trabajos): 
+182:	proc  0 (:init::1) kmeans.pml:100 (state 30)	[c = 0]
+		queue 1 (trabajos): 
+		:init:(0):c = 0
+183:	proc  0 (:init::1) kmeans.pml:101 (state 31)	[((c<2))]
+		queue 1 (trabajos): 
+184:	proc  0 (:init::1) kmeans.pml:101 (state 32)	[total = (total+conteo[c])]
+		total = 2
+		queue 1 (trabajos): 
+185:	proc  0 (:init::1) kmeans.pml:101 (state 33)	[c = (c+1)]
+		queue 1 (trabajos): 
+		:init:(0):c = 1
+186:	proc  0 (:init::1) kmeans.pml:101 (state 31)	[((c<2))]
+		queue 1 (trabajos): 
+187:	proc  0 (:init::1) kmeans.pml:101 (state 32)	[total = (total+conteo[c])]
+		total = 4
+		queue 1 (trabajos): 
+188:	proc  0 (:init::1) kmeans.pml:101 (state 33)	[c = (c+1)]
+		queue 1 (trabajos): 
+		:init:(0):c = 2
+189:	proc  0 (:init::1) kmeans.pml:101 (state 34)	[else]
+		queue 1 (trabajos): 
+190:	proc  0 (:init::1) kmeans.pml:102 (state 39)	[escribiendo = 0]
+		escribiendo = 0
+		queue 1 (trabajos): 
+191:	proc  0 (:init::1) kmeans.pml:104 (state 40)	[i = 0]
+		queue 1 (trabajos): 
+		:init:(0):i = 0
+192:	proc  0 (:init::1) kmeans.pml:105 (state 41)	[((i<4))]
+		queue 1 (trabajos): 
+193:	proc  0 (:init::1) kmeans.pml:105 (state 42)	[assert((seen[i]==1))]
+		queue 1 (trabajos): 
+194:	proc  0 (:init::1) kmeans.pml:105 (state 43)	[i = (i+1)]
+		queue 1 (trabajos): 
+		:init:(0):i = 1
+195:	proc  0 (:init::1) kmeans.pml:105 (state 41)	[((i<4))]
+		queue 1 (trabajos): 
+196:	proc  0 (:init::1) kmeans.pml:105 (state 42)	[assert((seen[i]==1))]
+		queue 1 (trabajos): 
+197:	proc  0 (:init::1) kmeans.pml:105 (state 43)	[i = (i+1)]
+		queue 1 (trabajos): 
+		:init:(0):i = 2
+198:	proc  0 (:init::1) kmeans.pml:105 (state 41)	[((i<4))]
+		queue 1 (trabajos): 
+199:	proc  0 (:init::1) kmeans.pml:105 (state 42)	[assert((seen[i]==1))]
+		queue 1 (trabajos): 
+200:	proc  0 (:init::1) kmeans.pml:105 (state 43)	[i = (i+1)]
+		queue 1 (trabajos): 
+		:init:(0):i = 3
+201:	proc  0 (:init::1) kmeans.pml:105 (state 41)	[((i<4))]
+		queue 1 (trabajos): 
+202:	proc  0 (:init::1) kmeans.pml:105 (state 42)	[assert((seen[i]==1))]
+		queue 1 (trabajos): 
+203:	proc  0 (:init::1) kmeans.pml:105 (state 43)	[i = (i+1)]
+		queue 1 (trabajos): 
+		:init:(0):i = 4
+204:	proc  0 (:init::1) kmeans.pml:105 (state 44)	[else]
+		queue 1 (trabajos): 
+205:	proc  0 (:init::1) kmeans.pml:106 (state 49)	[assert((total==4))]
+		queue 1 (trabajos): 
+spin: kmeans.pml:108, Error: assertion violated
+spin: text of failed assertion: assert((compartido==4))
+206:	proc  0 (:init::1) kmeans.pml:108 (state 50)	[assert((compartido==4))]
+		queue 1 (trabajos): 
+spin: trail ends after 206 steps
+#processes: 3
+		seen[0] = 1
+		seen[1] = 1
+		seen[2] = 1
+		seen[3] = 1
+		conteo[0] = 2
+		conteo[1] = 2
+		pendientes = 0
+		lectores = 0
+		escribiendo = 0
+		total = 4
+		queue 1 (trabajos): 
+		compartido = 3
+206:	proc  2 (worker:1) kmeans.pml:52 (state 21) <valid end state>
+		worker(2):tmp = 2
+		worker(2):i = 2
+		worker(2):idx = 0
+206:	proc  1 (worker:1) kmeans.pml:52 (state 21) <valid end state>
+		worker(1):tmp = 3
+		worker(1):i = 2
+		worker(1):idx = 1
+206:	proc  0 (:init::1) kmeans.pml:110 (state 51)
+		:init:(0):i = 4
+		:init:(0):c = 2
+		:init:(0):it = 1
+3 processes created
