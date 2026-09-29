@@ -1,0 +1,10 @@
+$ kmeans -modo seq -k 8 -iter 10 -centroides centroides_k8.json
+gold        ../data/gold/yellow_2024-01_features.csv
+            2831486 viajes × 6 features · sha256 a3ad5205201b…
+centroides  k-means++ semilla 2024 · k efectivo 8 · sha256 a1755469195d…
+modo        secuencial
+máquina     fedora · go1.26.7-X:nodwarf5 · GOMAXPROCS 8 de 8 CPUs lógicas
+tiempos     carga 2177 ms · init 296 ms · clustering 2541 ms · total 5014 ms
+memoria     heap tras carga 349 MB · heap final 393 MB · RSS máximo 531 MB · 24 GC
+cpu         usuario 5.85 s · sistema 0.35 s · pared 5.01 s → 1.2 núcleos efectivos
+resultado   10 iteraciones (paro=max_iter) · 0 clusters vacíos · inercia 4.531799e+06

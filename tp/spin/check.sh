@@ -3,6 +3,7 @@
 #
 #   ./check.sh            # todos los casos
 #   CC=gcc MEM="-m100000 -w26" ./check.sh
+#   TSV=casos.tsv ./check.sh   # además deja una fila por caso (la tabla del informe sale de ahí)
 #
 # Un caso es: variante del modelo | corrida de pan | errores esperados | tipo de error | qué prueba.
 # Las variantes -D son el mismo kmeans.pml con una línea distinta, para que la comparación sea
@@ -23,6 +24,8 @@ cd "$(dirname "$0")"
 CC="${CC:-cc}"
 CFLAGS="${CFLAGS:--O2}"
 MEM="${MEM:-}"
+TSV="${TSV:-}"
+[[ -z "$TSV" ]] || printf 'variante\tcorrida\terrores\testados\ttransiciones\tprofundidad\terror\tque\n' > "$TSV"
 
 casos=(
   "correcto|sin-ltl|0||seguridad: aserciones y estados finales válidos (sin deadlock)"
@@ -66,6 +69,14 @@ for caso in "${casos[@]}"; do
   # figure como el never claim activo de la búsqueda.
   if [[ "$corrida" =~ -N\ ([a-z_]+) ]]; then
     [[ "$salida" == *"never claim"*"+ (${BASH_REMATCH[1]})"* ]] || { ok=0; tipo="sin la fórmula ${BASH_REMATCH[1]}"; }
+  fi
+  if [[ -n "$TSV" ]]; then
+    estados="$(sed -n 's/^ *\([0-9]*\) states, stored.*/\1/p' <<< "$salida" | tail -1)"
+    trans="$(sed -n 's/^ *\([0-9]*\) transitions.*/\1/p' <<< "$salida" | tail -1)"
+    prof="$(sed -n 's/.*depth reached \([0-9]*\).*/\1/p' <<< "$salida" | tail -1)"
+    error="$(grep -m1 -E '^pan:[0-9]+:' <<< "$salida" | sed 's/^pan:[0-9]*: *//' || true)"
+    printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$variante" "$corrida" "$n" "$estados" "$trans" \
+      "$prof" "$error" "$que" >> "$TSV"
   fi
   if (( ok )); then
     printf '  ok    %-20s %-20s errores: %s  %s\n' "$variante" "$corrida" "$n" "$que"

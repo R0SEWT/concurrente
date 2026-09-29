@@ -1,0 +1,69 @@
+% ========================================================
+% CONCLUSIONES
+% ========================================================
+\section{Conclusiones}
+
+\subsection{Conclusiones del grupo}
+
+La pregunta guía de la revisión bibliográfica de la PC1 era cómo afectan la granularidad del trabajo
+y la estrategia de reducción al rendimiento y a la equivalencia numérica de K-means sobre más de un
+millón de registros. Este entregable la responde con datos.
+
+\textbf{La granularidad importa, pero al revés de lo que se intuye.} Trocear fino no cuesta: mandar
+un índice por un canal es despreciable frente a procesar mil viajes, y el óptimo es una meseta ancha.
+Lo que castiga es trocear grueso, porque deja workers sin trabajo. La regla es muchos más bloques que
+workers, y con ella el reparto por canal equilibra la carga solo.
+
+\textbf{La estrategia de reducción decide la reproducibilidad.} Acumular por bloque y reducir en
+orden fijo cuesta unos 66~KB y a cambio hace que el resultado concurrente sea el mismo para
+cualquier cantidad de workers, en cualquier máquina. Sin eso, la comparación con la versión
+secuencial sería una inspección a ojo. La equivalencia con la secuencial se comprueba con tolerancia,
+como anticipó la PC1, y la diferencia medida es del orden del redondeo.
+
+\textbf{El límite no es una sección secuencial, es coordinar.} La fracción serial efectiva crece con
+los workers, así que el techo de Amdahl no sirve como predicción; la escalabilidad débil, en cambio,
+se sostiene hasta cuatro workers y se degrada donde la coordinación empieza a pesar. Sobre el
+dataset del trabajo, \cifra{speedup-p4}$\times$ con cuatro workers y \cifra{speedup-p8}$\times$ con
+ocho justifican la concurrencia; por debajo de unos \cifra{n-equilibrio}~viajes no la justificarían.
+
+\textbf{Una verificación solo vale si puede fallar.} El Entregable 3 llevó la idea del mutante a
+cada propiedad: el deadlock, la exclusión mutua y el progreso tienen cada uno una variante del
+modelo que los viola, y la regresión exige que Spin encuentre ese error y no otro. En el camino,
+\texttt{pan} dio tres veces un resultado falso sin avisar: dejó de buscar deadlocks por tener
+fórmulas en el archivo, verificó «sin errores» una fórmula que no existía y apagó una fórmula al
+apagar las aserciones. Ninguno de los tres se habría notado mirando solo el \texttt{errors: 0}.
+
+\textbf{Verificar y probar son cosas distintas, y hacen falta las dos.} Spin recorrió todos los
+entrelazados de un modelo reducido y confirmó que ningún punto se pierde ni se duplica y que los
+centroides no se escriben mientras se leen; el mutante demostró que el modelo detecta la carrera que
+dice detectar. \texttt{go test -race} comprobó lo mismo sobre la implementación, en los entrelazados
+que le tocó observar. Ninguna de las dos reemplaza a la otra.
+
+\textbf{Medir bien es una decisión de diseño.} El orden barajado, la media recortada, el cociente de
+medias y el bootstrap no son adornos: sin ellos el speedup depende de qué corrió primero y de cuántos
+picos del sistema operativo cayeron en cada muestra. El protocolo está en código y los tiempos crudos
+se guardan, así que cualquier cifra de este informe se puede recalcular sin volver a medir.
+
+\subsection{Recomendaciones}
+
+\begin{itemize}
+  \item Mantener el modelo Promela junto al código y en la integración continua: la regresión de
+        siete casos tarda segundos y es la única forma de que un cambio en la sincronización no
+        invalide en silencio lo que este informe dice haber verificado.
+  \item Modelar el cierre del pool (\texttt{close(trabajos)} y la espera de las goroutines), que hoy
+        queda fuera del modelo, antes de reutilizar el worker pool en un programa que viva más que
+        una corrida.
+  \item Elegir $k$ con un criterio de validación interna sobre una muestra, e interpretar los
+        clusters por zona y franja horaria: es la pregunta del caso y sigue abierta.
+  \item Extender la medición a varios meses del dataset, donde el costo de coordinar pesa menos
+        frente al trabajo y el speedup debería acercarse más al número de workers.
+  \item \pendiente{recomendaciones que salgan del informe de GAPs (Sección~\ref{sec:gaps})}
+\end{itemize}
+
+\subsection{Conclusiones y recomendaciones de cada integrante}
+
+% Las escribe cada integrante en primera persona (rúbrica: 4 puntos, «del alumno»), cada uno en su
+% archivo de secciones/conclusiones/, con su propia pull request.
+\input{secciones/conclusiones/rody}
+\input{secciones/conclusiones/dayana}
+\input{secciones/conclusiones/julio}

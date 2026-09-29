@@ -9,7 +9,11 @@ make check     # regresión completa: 7 casos, cada uno con su número y tipo de
 make verify    # el modelo correcto sin fórmulas: aserciones y deadlock
 make ltl       # el modelo correcto contra las fórmulas exclusion y termina
 make trail     # lee el contraejemplo del mutante de la carrera
+make informe   # salidas de pan, tabla de los 7 casos y figuras para tp/informe/tp/
 ```
+
+`make figuras` y `make informe` escriben en el informe del TP. El de la PC2 quedó congelado en el
+tag `pc2`: si hiciera falta regenerarlo, `make figuras INFORME=pc2`, desde ese tag.
 
 ## Qué se modela
 

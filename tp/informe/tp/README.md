@@ -1,14 +1,11 @@
-# Informe PC2 (LaTeX)
+# Informe del TP (LaTeX)
 
-> **Congelado.** Esta es la versión entregada el 27 de septiembre de 2026 (tag `pc2`). El informe
-> que sigue es `../tp/`. Compilarlo desde `develop` ya no reproduce lo entregado: el modelo de
-> `tp/spin/kmeans.pml` creció para el TP. Para recompilarlo, hacerlo desde el tag `pc2`.
-
-Informe del Entregable 2 del Trabajo Parcial. Empieza con el Entregable 1 y sus correcciones
-(Parte I) y sigue el orden de la rúbrica de la PC2 (Parte II): algoritmo y modelo en Promela,
-implementación en Go con capturas, explicación de la sincronización, speedup con media recortada,
-análisis de escalabilidad y trade-offs, recursos de cómputo y punto de equilibrio, antecedente,
-GitHub y conclusiones.
+Informe del Entregable 3 del Trabajo Parcial, el final. Salió del de la PC2 (`../pc2/`, congelado
+en el tag `pc2`), como pide el enunciado: empieza con los Entregables 1 y 2 y sus correcciones
+(Partes I y II) y sigue con lo del Entregable 3 (Parte III): verificación formal en Spin
+(deadlock, exclusión mutua y progreso), análisis del código con IA (GAPs), GitHub, conclusiones
+del grupo y de cada integrante, y los anexos (video, informe de GAPs en `.md`, declaración de uso
+de IA).
 
 ```bash
 ./compilar.sh            # historial + tablas + latexmk → build/main.pdf
@@ -40,13 +37,13 @@ latexmk                                                  # pdflatex + biber, APA
   ```
 
   (la primera línea `$ ...` de cada `.txt` es el comando, agregada a mano para la figura).
-- **Salida de Spin**: `generado/spin-correcto.txt` y `generado/spin-mutante.txt` salen de
-  `tp/spin` con `spin -a kmeans.pml && cc -O2 -o pan pan.c && ./pan` (y `-DMUTANTE`).
-- **Figuras de Spin**: `img/automata-worker.pdf` (autómata del `worker`, de `pan -D`) e
-  `img/traza-mutante.pdf` (contraejemplo del mutante, de `spin -t -p -l -g`) salen de
-  `cd tp/spin && make figuras`, que deja las entradas en `generado/` y llama a
-  `tp/scripts/figuras_spin.py`.
-- **Historial de commits**: `generado/historial.tex`, desde las ramas de `origin` y el tag `pc1`.
+- **Todo lo de Spin**: `cd tp/spin && make informe`. Deja en `generado/` las salidas de `pan`
+  (`spin-*.txt`), el estado final del contraejemplo de deadlock (`traza-deadlock.txt`), la tabla
+  de los siete casos de la regresión (`spin-casos.tsv` → `tabla-spin-casos.tex`) y las figuras
+  `img/automata-worker.pdf` e `img/traza-mutante.pdf`, vía `tp/scripts/figuras_spin.py`. Falla si
+  `kmeans.pml` se movió y los rangos de líneas que cita la Sección 17 ya no apuntan a lo que dicen.
+- **Historial de commits**: `generado/historial.tex`, desde las ramas de `origin` y los tags `pc1`
+  y `pc2`.
 
 La bibliografía es `../../docs/referencias.bib`: un solo `.bib` para todo el TP.
 
@@ -65,6 +62,10 @@ por `LD_LIBRARY_PATH` y `PERL5LIB`. No toca el sistema.
 
 - Buscar `\pendiente` y `\verificar` en `secciones/`: el PDF final no debe tener ninguna marca
   roja ni naranja.
-- Regenerar el historial con las ramas ya fusionadas y `main` con el tag `pc2`.
+- Regenerar el historial con las ramas ya fusionadas y `main` con el tag `tp`. El release va por
+  una rama `release/tp` y nunca con `develop` como rama de origen: el repositorio borra la rama de
+  origen al fusionar.
+- El video (Anexo A) y `tp/docs/gaps-ia.md` (Anexo B) tienen que estar publicados antes: el
+  enunciado resta 5 puntos sin video y 10 si `main` se edita después de la fecha de entrega.
 - El enunciado pide Word, pero el docente aceptó `.tex` y `.pdf`. Cada integrante sube el PDF como
-  `CC65-PC2-202620-[código]`; el coordinador sube además `CC65-Participación-202620`.
+  `CC65-TP-202620-[código]`; el coordinador sube además `CC65-Participación-202620`.
