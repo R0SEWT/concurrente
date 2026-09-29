@@ -25,6 +25,35 @@ teoría. En este trabajo se usó IA generativa en las tareas que siguen, y todo 
 fue revisado por el grupo y validado contra el código, los tests y las salidas de Spin, que son la
 fuente de las cifras de este informe.
 
-\pendiente{lista revisada por el grupo: qué herramienta y modelo se usó en cada tarea (código,
-modelo Promela, redacción del informe, análisis de GAPs) y qué se verificó a mano. Partir del
-registro de uso de IA (bead r0p.1)}
+\begin{table}[H]
+\caption{Uso de IA generativa en el Trabajo Parcial}\label{tab:uso-ia}
+\small
+\begin{tabularx}{\textwidth}{@{}L{3.6cm}L{3.8cm}Y@{}}
+\toprule
+\textbf{Tarea} & \textbf{Herramienta} & \textbf{Cómo se verificó} \\
+\midrule
+Código en Go, modelo Promela, scripts y pipeline de datos & Claude Code (Anthropic), modelos
+  Claude; en el Entregable 3, Claude Opus 5.5 & \texttt{go test -race}, la regresión de Spin con un
+  mutante por propiedad, \texttt{pytest} y la auditoría en SQL de la limpieza, todo en la
+  integración continua \\
+\addlinespace
+Redacción y maquetación del informe & Claude Code, mismo modelo & Revisión del grupo; las cifras
+  salen de tablas generadas desde los datos y las salidas de Spin, no de la redacción \\
+\addlinespace
+Análisis de GAPs (Sección~\ref{sec:gaps}) & Claude Opus 5.5 con el prompt de
+  \path{tp/docs/gaps-ia-prompt.md} & Cada hallazgo se contrastó contra el código antes de
+  incluirlo \\
+\addlinespace
+Coordinación del grupo por WhatsApp & Claude Code como asistente del coordinador & Cada
+  mensaje lleva la firma del modelo y el nombre de quien lo envía \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Desde el 26 de septiembre de 2026, los commits hechos con Claude Code llevan la línea
+\texttt{Co-Authored-By: Claude}, así que el historial de la Sección~\ref{sec:github} permite
+rastrearlos; los anteriores no llevan esa marca aunque también se hayan hecho con asistencia. Las conclusiones de cada integrante (Sección~\ref{sec:conclusiones-integrantes}) son
+propias de cada uno.
+
+\verificar{Rody: confirmar que la tabla refleja el uso real en la PC1 y la PC2 (qué herramienta y
+modelo, si alguien del grupo usó otra) y borrar esta marca}

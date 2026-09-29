@@ -44,7 +44,7 @@ medias y el bootstrap no son adornos: sin ellos el speedup depende de qué corri
 picos del sistema operativo cayeron en cada muestra. El protocolo está en código y los tiempos crudos
 se guardan, así que cualquier cifra de este informe se puede recalcular sin volver a medir.
 
-\subsection{Recomendaciones}
+\subsection{Recomendaciones}\label{sec:recomendaciones}
 
 \begin{itemize}
   \item Mantener el modelo Promela junto al código y en la integración continua: la regresión de
@@ -57,10 +57,15 @@ se guardan, así que cualquier cifra de este informe se puede recalcular sin vol
         clusters por zona y franja horaria: es la pregunta del caso y sigue abierta.
   \item Extender la medición a varios meses del dataset, donde el costo de coordinar pesa menos
         frente al trabajo y el speedup debería acercarse más al número de workers.
-  \item \pendiente{recomendaciones que salgan del informe de GAPs (Sección~\ref{sec:gaps})}
+  \item Del análisis con IA (Sección~\ref{sec:gaps}), en este orden: que el benchmark escriba cada
+        corrida al terminarla y tenga tests (G1, G7); alinear los acumuladores de cada bloque a
+        64 bytes para evitar el \emph{false sharing} (G2); exigir el commit en los metadatos de cada
+        medición y registrar la dispersión de la GPU (G3, G4); verificar el sha256 de los datos
+        descargados (G5); y agregar a la regresión de Spin configuraciones con más workers que
+        bloques y al revés (G15).
 \end{itemize}
 
-\subsection{Conclusiones y recomendaciones de cada integrante}
+\subsection{Conclusiones y recomendaciones de cada integrante}\label{sec:conclusiones-integrantes}
 
 % Las escribe cada integrante en primera persona (rúbrica: 4 puntos, «del alumno»), cada uno en su
 % archivo de secciones/conclusiones/, con su propia pull request.

@@ -1,0 +1,68 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[spanish,es-noshorthands]{babel}
+\usepackage{iftex}
+\ifPDFTeX
+\usepackage[utf8]{inputenc}\usepackage[T1]{fontenc}\usepackage{lmodern}
+\else
+\usepackage{fontspec}
+\setmainfont{lmroman12-regular.otf}[BoldFont=lmroman12-bold.otf,ItalicFont=lmroman12-italic.otf,BoldItalicFont=lmroman10-bolditalic.otf]
+\fi
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{array,tabularx}
+\usepackage{hyperref}
+\hypersetup{hidelinks,pdftitle={Reporte de participación TP}}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.08}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcommand{\nombreGrupo}{Equipo K-means NYC TLC}
+\begin{document}
+\begin{center}
+\textbf{1ACC0065 PROGRAMACIÓN CONCURRENTE Y DISTRIBUIDA}\\[3pt]
+\textbf{REPORTE DE PARTICIPACIÓN}\\[3pt]
+\textbf{CIENCIAS DE LA COMPUTACIÓN}
+\end{center}
+
+\begin{tabularx}{\textwidth}{|L{5cm}|Y|}\hline
+Entrega & TP (Entregable 3) \\\hline
+Nombre del grupo & \nombreGrupo \\\hline
+Nombre de la solución & K-means concurrente sobre viajes de taxi de Nueva York \\\hline
+Nombre completo Team Leader & Rody Sebastian Vilchez Marin \\\hline
+\end{tabularx}
+
+\vspace{6pt}
+\begin{tabularx}{\textwidth}{|Y|}\hline
+\textbf{Comentario del team leader} \\\hline
+Completar por el líder al cerrar la entrega, cuando estén las PR de conclusiones y el video. \\\hline
+\end{tabularx}
+
+\vspace{6pt}
+{\fontsize{9}{10}\selectfont
+\begin{tabularx}{\textwidth}{|L{0.55cm}|L{2.65cm}|Y|L{1.25cm}|L{2.25cm}|L{1.2cm}|}\hline
+\multicolumn{6}{|l|}{\textbf{Tabla de Participación} Marcar con un X de acuerdo al nivel de cumplimiento} \\\hline
+{\scriptsize\textbf{Nro}} & {\scriptsize\textbf{Estudiante}} & {\scriptsize\textbf{Responsabilidades}} & {\scriptsize\textbf{Cumplió}} & {\scriptsize\textbf{Cumplimiento parcial}} & {\scriptsize\textbf{No cumplió}} \\\hline
+1 & Rody Sebastian Vilchez Marin & Verificación formal en Spin: fórmulas LTL de exclusión mutua y progreso, mutantes de deadlock y de barrera omitida, regresión de siete casos en la integración continua (PR \#43). & X & & \\\hline
+ & & Informe final del TP a partir del de la PC2, con la verificación formal y las correcciones de la PC2 (PR \#44). & X & & \\\hline
+ & & Informe de GAPs con IA: prompt estructurado, análisis del código y contraste de cada hallazgo (PR \#45). & X & & \\\hline
+ & & Guion del video, integración de las PR del equipo, release a \texttt{main} y entrega. & X & & \\\hline
+2 & Dayana Kety Gómez Rodriguez & Conclusiones y recomendaciones propias en el informe, por PR propia. & & & \\\hline
+ & & Su parte del video de sustentación. & & & \\\hline
+3 & Julio Cesar Meza Alfaro & Conclusiones y recomendaciones propias en el informe, por PR propia. & & & \\\hline
+ & & Su parte del video de sustentación. & & & \\\hline
+\end{tabularx}}
+
+\newpage
+\textbf{CRITERIOS DE DESCUENTO POR PARTICIPACIÓN INDIVIDUAL}
+
+La calificación del trabajo grupal se ajustará individualmente según el nivel de compromiso y cumplimiento de las tareas asignadas. Es responsabilidad del equipo reportar objetivamente el desempeño de sus integrantes en el formato de responsabilidad.
+
+{\small
+\begin{tabularx}{\textwidth}{|L{2.3cm}|Y|L{2.4cm}|L{4.2cm}|}\hline
+\textbf{Nivel de cumplimiento} & \textbf{Descripción} & \textbf{Descuento} & \textbf{Justificación} \\\hline
+Cumplió & El estudiante entregó todas sus tareas asignadas (código, documentación, video) en el plazo acordado y con la calidad esperada. Participó activamente en las reuniones y la integración final. & 0 puntos (Nota completa) & Participación responsable, proactiva y organizada que contribuyó al éxito del proyecto. \\\hline
+Cumplimiento Parcial & El estudiante entregó sus tareas tarde o incompletas, obligando al resto del equipo a corregir o completar su parte. Su asistencia a reuniones fue irregular. & $-5$ puntos & La falta de prolijidad o puntualidad generó una carga de trabajo adicional para el resto del equipo. \\\hline
+No Cumplió & El estudiante no entregó ninguna tarea asignada, o su aporte fue irrelevante/insuficiente. No participó en la grabación del video ni en la redacción del informe. & Nota Individual: 00 (Se anula la nota del trabajo) & La inacción total perjudicó gravemente el avance del proyecto. No existe evidencia de aprendizaje ni trabajo realizado. \\\hline
+\end{tabularx}}
+\end{document}

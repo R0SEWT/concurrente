@@ -18,8 +18,11 @@ bajo \emph{weak fairness}: la corrida termina. Cada propiedad se expresa como as
 LTL y tiene un mutante que la viola: un worker que pierde su \texttt{wg.Done} produce el deadlock en
 la barrera, y un coordinador que publica sin esperarla viola la exclusión. Una regresión de siete
 casos exige, para cada uno, el número y el tipo de error esperados, y corre en la integración
-continua. \pendiente{una o dos oraciones con el modelo de IA elegido y los GAPs principales que
-encontró (Sección~\ref{sec:gaps})}
+continua. Un análisis del código con Claude Opus 5.5 y un prompt estructurado, contrastado hallazgo
+por hallazgo, no encontró errores de sincronización, pero sí dieciocho brechas en el entorno del
+algoritmo: un caso de \emph{false sharing} que cuesta un 12\,\% con otros valores de $k$, un harness
+de medición sin tests que puede perder una sesión completa, y resultados que no quedan atados al
+commit que los produjo.
 
 \textit{Palabras clave:} K-means, programación concurrente, Go, worker pool, Promela, Spin, LTL,
 verificación formal, deadlock, exclusión mutua, NYC TLC.
