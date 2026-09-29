@@ -35,21 +35,29 @@ remotos=(--exclude='origin/__dolt*' --remotes=origin)
 # falla si la ruta no existe en alguna rama.
 rutas=(-- ../../../tp ../../../docs)
 
+# Alias de autor que el .mailmap no puede unificar sin escribir un correo en el repo: el .mailmap
+# empareja por correo, y el de estos commits es uno que no debe publicarse de nuevo. Se unifican
+# por nombre, acá. Formato: nombre en el commit|nombre real.
+alias_nombres='R0SEWT-CGIAR|Rody Sebastian Vilchez Marin'
+unificar() { awk -F'|' -v alias="$alias_nombres" '
+  BEGIN { n = split(alias, a, "\n"); for (i = 1; i <= n; i++) { split(a[i], par, "|"); m[par[1]] = par[2] } }
+  { print (($0 in m) ? m[$0] : $0) }'; }
+
 escapar() { sed -e 's/\\/\//g' -e 's/[&%$#_{}]/\\&/g' -e 's/~/-/g' -e 's/\^/ /g'; }
 
 # Conteo por autor en un rango. $1 = rango (p. ej. "pc1" o "pc1..").
 conteo() {
-  git log "$@" --no-merges --format='%aN' "${rutas[@]}" | sort | uniq -c \
+  git log "$@" --no-merges --format='%aN' "${rutas[@]}" | unificar | sort | uniq -c \
     | awk '{n=$1; $1=""; sub(/^ /, ""); print $0 "|" n}' | sort -t '|' -k1,1
 }
 
 pc1="$(conteo pc1)"
 pc2="$(conteo pc2 --not pc1)"
 tp="$(conteo "${remotos[@]}" --not pc2)"
-merges="$(git log "${remotos[@]}" --not pc2 --merges --grep='^Merge pull request' --format='%aN' \
+merges="$(git log "${remotos[@]}" --not pc2 --merges --grep='^Merge pull request' --format='%aN' | unificar \
   | sort | uniq -c | awk '{n=$1; $1=""; sub(/^ /, ""); print $0 "|" n}' | sort -t '|' -k1,1)"
 
-autores="$( (printf '%s\n' "$pc1" "$pc2" "$tp" "$merges" | cut -d'|' -f1; git log pc1 --format='%aN' "${rutas[@]}") | grep -v '^$' | sort -u)"
+autores="$( (printf '%s\n' "$pc1" "$pc2" "$tp" "$merges" | cut -d'|' -f1; git log pc1 --format='%aN' "${rutas[@]}" | unificar) | grep -v '^$' | sort -u)"
 
 buscar() { printf '%s\n' "$2" | awk -F'|' -v a="$1" '$1==a {print $2; f=1} END {if (!f) print 0}'; }
 
