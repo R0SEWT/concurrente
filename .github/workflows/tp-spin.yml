@@ -1,0 +1,37 @@
+name: TP Spin
+
+# Regresión del modelo Promela del K-means: el modelo correcto sin errores y cada mutante
+# atrapado por la propiedad que le corresponde (tp/spin/check.sh). Solo compara números y tipos
+# de error, así que no depende de la versión exacta de Spin.
+
+on:
+  push:
+    paths:
+      - "tp/spin/**"
+      - ".github/workflows/tp-spin.yml"
+  pull_request:
+    paths:
+      - "tp/spin/**"
+      - ".github/workflows/tp-spin.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: tp/spin
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Install Spin
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q spin
+          spin -V
+
+      - name: Regresión (7 casos)
+        run: make check
