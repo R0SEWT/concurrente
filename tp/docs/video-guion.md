@@ -63,8 +63,8 @@ la terminal, `cd tp/spin && make check`.
 
 ## Parte 3 · Julio · 3:40–5:30 · tests, IA y discusión crítica
 
-**En pantalla**: `tp/kmeans/concurrente_test.go`; después la Sección 15 del PDF (GAPs); al final,
-las recomendaciones de la Sección 17.
+**En pantalla**: `tp/kmeans/concurrente_test.go`; después la Sección 15 del PDF (GAPs, Tabla del
+análisis por categoría); al final, las recomendaciones de la Sección 17.
 
 > Spin verifica el diseño; la implementación la prueban los tests con `go test -race`. Agregué
 > casos borde que se pueden calcular a mano: un cluster vacío conserva su centroide, un empate va al
@@ -72,8 +72,12 @@ las recomendaciones de la Sección 17.
 > caso se prueba con 1, 2 y 4 workers.
 >
 > También analizamos el código con un modelo de IA, Claude Opus 5.5, con un prompt estructurado, y
-> contrastamos cada hallazgo contra el código. *(Completar el jueves con los dos hallazgos
-> principales del informe de GAPs.)*
+> contrastamos cada hallazgo contra el código. No encontró errores de sincronización, lo que
+> coincide con Spin y con `-race`. Pero sí encontró algo que ninguna de las dos herramientas ve:
+> *false sharing*. Los contadores de dos bloques vecinos comparten una línea de caché, y con k = 4
+> eso cuesta un 12 %; con nuestro k = 8 no pasa, por casualidad. Y encontró que el programa de
+> benchmark, que produce todas nuestras cifras, no tiene tests y puede perder una sesión entera
+> de medición si falla al final.
 >
 > Las limitaciones: la verificación en Spin vale para un modelo pequeño y bajo weak fairness, y no
 > modela el cierre del pool. Medimos un solo mes de datos. Y todavía no interpretamos los clusters.
@@ -85,7 +89,7 @@ las recomendaciones de la Sección 17.
 
 ## Checklist de Rody
 
-- [ ] Mandar este guion al grupo el jueves 1/10, con la parte de GAPs completa.
+- [ ] Mandar este guion al grupo el jueves 1/10.
 - [ ] Unir las tres partes y comprobar que la duración total sea menor a 6:00.
 - [ ] Subir el video con acceso por enlace y ponerlo en el Anexo A del informe
       (`secciones/19-anexos.tex`: URL, duración y minuto en que empieza cada parte).

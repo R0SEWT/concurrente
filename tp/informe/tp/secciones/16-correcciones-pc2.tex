@@ -55,6 +55,10 @@ el mismo dataset, los mismos centroides iniciales y el mismo protocolo de medici
 \texttt{float64} calcula la misma inercia que Go, con una diferencia del orden de $10^{-14}$, pero es
 más lenta que el worker pool con 16 hilos en esa máquina (0{,}55$\times$), porque la RTX~4060 castiga
 la doble precisión. En \texttt{float32} la supera apenas (1{,}11$\times$), a cambio de asignar
-distinto el 0{,}21\,\% de los viajes. Sobre este volumen, entonces, el worker pool en CPU queda a la
+distinto el 0{,}21\,\% de los viajes. Estas cifras de equivalencia son de una sola corrida: el
+análisis con IA de la Sección~\ref{sec:gaps} encontró que la versión en GPU no es determinista, y en
+21 repeticiones iguales la inercia toma 8 valores distintos en \texttt{float64} y 9 en
+\texttt{float32} (hallazgo G4). En \texttt{float64} la variación es del orden de $10^{-15}$ y no
+cambia la conclusión; en \texttt{float32} es del mismo orden que la diferencia con la CPU. Sobre este volumen, entonces, el worker pool en CPU queda a la
 altura de la GPU, y el resultado de la comparación depende tanto de la precisión elegida como del
 paralelismo disponible.

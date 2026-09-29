@@ -7,28 +7,115 @@
 
 El enunciado pide elaborar un prompt estructurado, elegir un modelo de IA, analizar con él el código
 del repositorio y documentar en Markdown los GAPs en calidad de código, seguridad, patrones de
-concurrencia y otros aspectos relevantes. El informe completo está en
-\texttt{tp/docs/gaps-ia.md} (Anexo~\ref{anexo:gaps}); esta sección resume el método y los hallazgos.
+concurrencia y otros aspectos relevantes. El informe completo, con la evidencia de cada hallazgo,
+está en \path{tp/docs/gaps-ia.md} (Anexo~\ref{anexo:gaps}); esta sección resume el método, los
+hallazgos y su contraste con la verificación del proyecto.
 
 \subsection{Modelo y prompt}
 
-\pendiente{qué modelo se eligió, con qué versión y por qué (contexto largo para leer el repositorio,
-capacidad para razonar sobre concurrencia, disponibilidad); con qué herramienta se le dio acceso al
-código y a qué commit}
+Se eligió Claude Opus 5.5, de Anthropic, usado como agente de Claude Code. La elección responde a
+tres capacidades que el análisis necesitaba:
+\begin{itemize}
+  \item leer el repositorio completo con herramientas, en vez de fragmentos pegados en un chat;
+  \item correr \texttt{go vet}, \texttt{go test -race}, Spin y pruebas propias, para confirmar lo que
+        sospecha en vez de suponerlo;
+  \item razonar sobre la concurrencia en Go.
+\end{itemize}
 
-\pendiente{la estructura del prompt: rol, contexto del proyecto, alcance (qué directorios), criterios
-por categoría, formato de salida exigido (hallazgo, evidencia con archivo y línea, severidad,
-recomendación) y la instrucción de no inventar hallazgos sin evidencia. El prompt completo va en el
-.md}
+El mismo modelo ayudó a escribir parte del código (Anexo~\ref{anexo:ia}), así que había un riesgo de
+sesgo: que revisara el código con los mismos supuestos con que se escribió. Para acotarlo, el
+análisis lo hizo un agente en una sesión nueva, sin la conversación del desarrollo, sobre una copia
+de solo lectura del commit \texttt{97ba37c}. Además, cada hallazgo se contrastó después contra el
+código.
+
+El prompt, versionado en \path{tp/docs/gaps-ia-prompt.md}, tiene seis partes:
+\begin{itemize}
+  \item \textbf{rol}: un revisor senior de concurrencia en Go, Promela y pipelines de datos;
+  \item \textbf{contexto}: qué hace el proyecto y que es una herramienta local sobre datos públicos,
+        para que la seguridad se evalúe en ese contexto;
+  \item \textbf{alcance}: qué directorios analizar y cuáles no;
+  \item \textbf{qué buscar}: seis categorías con preguntas guía;
+  \item \textbf{reglas}: todo hallazgo con evidencia \texttt{ruta:línea}, lo que no se puede demostrar
+        marcado como hipótesis, severidad según el contexto y recomendaciones acotadas;
+  \item \textbf{formato de salida}: resumen, tabla, detalle por hallazgo con impacto, recomendación y
+        forma de verificarlo, y fortalezas.
+\end{itemize}
 
 \subsection{Hallazgos}
 
-\pendiente{tabla resumen: categoría (calidad de código, seguridad, patrones de concurrencia,
-pruebas, rendimiento, documentación), cantidad de hallazgos y el más importante de cada una}
+El agente reportó 18 hallazgos, uno de severidad alta, seis de media y once de baja
+(Tabla~\ref{tab:gaps}), y corrió 35 comandos para confirmarlos. Ninguno es un error de
+sincronización: no encontró carreras de datos, deadlocks ni goroutines que queden vivas, y
+\texttt{go vet}, \texttt{go test -race} y la regresión de Spin pasaron en su revisión.
+
+\begin{table}[H]
+\caption{Hallazgos del análisis con IA por categoría}\label{tab:gaps}
+\small
+\begin{tabularx}{\textwidth}{@{}L{3.3cm}cccY@{}}
+\toprule
+\textbf{Categoría} & \textbf{Alta} & \textbf{Media} & \textbf{Baja} & \textbf{El más importante} \\
+\midrule
+Concurrencia y rendimiento & & 1 & & G2: \emph{false sharing} en los contadores por bloque \\
+Calidad de código & 1 & & 3 & G1: el benchmark pierde todas las mediciones si falla al final \\
+Pruebas & & 2 & 1 & G7: el harness de medición no tiene tests \\
+Reproducibilidad & & 2 & 2 & G3: 10 de 12 JSON de benchmark sin commit \\
+Seguridad y robustez & & 1 & 3 & G5: la descarga no verifica el sha256 esperado \\
+Verificación e integración continua & & & 2 & G15: la regresión de Spin fija una sola configuración \\
+\midrule
+\textbf{Total} & 1 & 6 & 11 & \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\paragraph{G2, el hallazgo de concurrencia.} Los contadores de los bloques están contiguos en
+memoria, y como el canal entrega los bloques en orden, dos workers suelen procesar bloques vecinos al
+mismo tiempo. Cuando $k$ no es múltiplo de 8, los contadores de dos bloques comparten una línea de
+caché de 64 bytes, y cada incremento de un worker invalida la línea en el núcleo del otro. El
+resultado sigue siendo correcto, pero más lento. Se midió aparte, alineando cada parcial a
+64 bytes: con $k=4$ el tiempo baja de unos 256 a unos 224~ms, un 12{,}5\,\% menos, y con $k=8$ no
+cambia. Los resultados de este informe usan $k=8$, donde cada bloque ocupa líneas completas, así que
+no están afectados, pero por casualidad.
+
+\paragraph{G1 y G7, el harness de medición.} El benchmark guarda los tiempos crudos solo al final,
+después de calcular el resumen. Si ese cálculo falla, por ejemplo con una sola repetición, el
+programa termina sin escribir nada y se pierde una sesión de medición de decenas de minutos. Y el
+programa que produce todas las cifras del informe es el único paquete sin tests.
+
+\paragraph{G3 y G4, la trazabilidad.} Diez de los doce archivos de benchmark, incluido el que
+alimenta la tabla principal, no registran el commit que los produjo, porque el benchmark corrió en
+un directorio sin repositorio git y los metadatos no distinguen «sin commit» de «árbol limpio». La versión en GPU no es
+determinista: la misma corrida da 8 inercias distintas en \texttt{float64} y 9 en \texttt{float32} a
+lo largo de 21 repeticiones.
 
 \subsection{Contraste con la verificación del proyecto}
 
-\pendiente{qué hallazgos de la IA se confirmaron contra el código y cuáles no (falsos positivos),
-qué ya estaba cubierto por \texttt{go test -race} o por Spin, y qué encontró la IA que ninguna de las
-dos herramientas cubre. El sílabo pide contrastar lo que dice la IA con la teoría: esta subsección es
-ese contraste}
+Cada hallazgo se contrastó contra el código antes de incluirlo:
+\begin{itemize}
+  \item G1, G2, G3, G4, G5, G7, G11, G16 y G17 se comprobaron por separado, sobre los archivos o
+        leyendo el código citado. G2 se volvió a medir con un benchmark propio.
+  \item Los demás, salvo G6 y G13, los demostró el agente con un test o un comando, y el grupo revisó
+        el código citado.
+  \item G6 queda como hipótesis y G13 como un cálculo sin medir.
+\end{itemize}
+El contraste encontró dos errores del agente: un conteo equivocado en G3 (dijo 9 de 11 archivos y
+son 10 de 12) y una referencia cruzada mal atribuida en G7.
+
+El resultado es consistente con la verificación del proyecto y la completa:
+\begin{itemize}
+  \item \textbf{Lo que ya estaba cubierto se confirmó.} Spin verifica el diseño y
+        \texttt{go test -race} la implementación, y el análisis no encontró ningún error de
+        sincronización.
+  \item \textbf{G2 está fuera del alcance de las dos herramientas.} Spin no modela la memoria, y el
+        detector de carreras solo ve accesos a la misma variable, no a la misma línea de caché. Es
+        un problema de concurrencia que solo aparece al medir.
+  \item \textbf{G15 marca un límite de la verificación formal.} La regresión de Spin fija una sola
+        configuración, $P = C = 2$. El agente comprobó a mano que $P=3$ y $C=3$ también dan cero
+        errores, pero ningún caso de la regresión lo asegura.
+  \item \textbf{La mayoría de los GAPs están alrededor del algoritmo, no en él.} Están en el
+        harness que lo mide y en la trazabilidad de los resultados, que es donde el proyecto tenía
+        menos pruebas.
+\end{itemize}
+
+No se corrigió ningún hallazgo en este entregable, para no cambiar el código que produjo las cifras
+del informe. G4 sí obliga a matizar el contraste en GPU de la Sección~\ref{sec:correcciones-pc2}.
+Las recomendaciones que salen del análisis están en la Sección~\ref{sec:recomendaciones}.
