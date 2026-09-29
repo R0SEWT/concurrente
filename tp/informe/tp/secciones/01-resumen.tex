@@ -1,0 +1,25 @@
+\section*{Resumen}
+\addcontentsline{toc}{section}{Resumen}
+
+Este informe presenta el tercer y último entregable del Trabajo Parcial de Programación Concurrente
+y Distribuida y, como pide el enunciado, conserva los dos anteriores con sus correcciones. El caso es
+el mismo: K-means sobre los viajes del taxi amarillo de Nueva York \parencite{nyctlc} para
+caracterizar patrones de movilidad urbana, en línea con el Objetivo de Desarrollo Sostenible~11.
+
+Los entregables anteriores dejaron un K-means en Go, sin librerías de terceros, en una versión
+secuencial y una concurrente con un \emph{worker pool} persistente, acumuladores privados por bloque
+y una barrera con \texttt{sync.WaitGroup}; sobre los \cifra{n}~viajes del dataset, la concurrente
+alcanza \cifra{speedup-p4}$\times$ con cuatro workers y \cifra{speedup-p8}$\times$ con ocho, con la
+misma inercia final para cualquier cantidad de workers.
+
+Este entregable verifica formalmente con Spin la ausencia de deadlocks y la exclusión mutua entre el
+coordinador que publica los centroides y los workers que los leen, y agrega una propiedad de progreso
+bajo \emph{weak fairness}: la corrida termina. Cada propiedad se expresa como aserción o como fórmula
+LTL y tiene un mutante que la viola: un worker que pierde su \texttt{wg.Done} produce el deadlock en
+la barrera, y un coordinador que publica sin esperarla viola la exclusión. Una regresión de siete
+casos exige, para cada uno, el número y el tipo de error esperados, y corre en la integración
+continua. \pendiente{una o dos oraciones con el modelo de IA elegido y los GAPs principales que
+encontró (Sección~\ref{sec:gaps})}
+
+\textit{Palabras clave:} K-means, programación concurrente, Go, worker pool, Promela, Spin, LTL,
+verificación formal, deadlock, exclusión mutua, NYC TLC.

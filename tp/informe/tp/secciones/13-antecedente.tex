@@ -1,0 +1,47 @@
+% ========================================================
+% ANTECEDENTE: NYC-TAXI
+% ========================================================
+\section{Antecedente consultado: NYC-Taxi}\label{sec:antecedente}
+
+Durante el diseño de este entregable el equipo revisó un repositorio público sobre el mismo
+dataset: \emph{NYC-Taxi} \parencite{hexed2026nyctaxi}, un \emph{random forest} distribuido en Go
+que predice la duración de un viaje, con licencia MIT, revisado el 14 de septiembre de 2026 en su
+commit \texttt{0bf4252}. Se documenta aquí para atribuir lo consultado y dejar claro qué se
+reutilizó y qué se implementó de forma independiente.
+
+\subsection{Qué se reutilizó}
+
+Ningún código. El modelo es distinto (clasificación supervisada frente a clustering), el patrón de
+concurrencia es distinto (nodos que se comunican por red frente a un worker pool en una máquina) y
+el pipeline de datos de este trabajo se construyó en la PC1 con reglas propias y auditoría
+independiente (Sección~\ref{sec:limpieza}). Lo que se tomó fue una lista de decisiones en las que
+\emph{no} conviene tropezar, a partir de lo que se observó al leerlo.
+
+\subsection{Decisiones propias que la lectura reforzó}
+
+\begin{itemize}
+  \item \textbf{Concurrencia dentro del nodo.} El antecedente reparte el entrenamiento entre nodos
+        pero cada nodo procesa en un solo hilo (\texttt{ml-node/main.go}, línea 34). Este trabajo
+        hace lo contrario en la PC2: un solo proceso que usa todos los núcleos con un worker pool;
+        la distribución entre máquinas es tema de la Unidad 2.
+  \item \textbf{Hora local sin zona horaria.} El antecedente convierte los \emph{timestamps} según la
+        zona horaria del sistema (\texttt{loader/clean.go}, línea 41), así que la hora del día
+        depende de dónde corra. Los datos de TLC están en hora local de Nueva York sin zona, y el
+        pipeline de la PC1 los trata así, de modo que las features de hora dan lo mismo en cualquier
+        máquina.
+  \item \textbf{Zonas desconocidas.} El antecedente asigna las zonas 264 y 265 (\enquote{desconocida}
+        en el diccionario de TLC) a un distrito (\texttt{ml-node/data.go}, línea 27). La regla 6 de
+        limpieza de la PC1 las descarta.
+  \item \textbf{Separación entrenamiento y prueba.} El conjunto de prueba del antecedente está
+        contenido en el de entrenamiento (\texttt{convert\_to\_csv.py} y
+        \texttt{generate\_test\_set.py}). No aplica a un clustering, pero recuerda por qué este
+        trabajo guarda el sha256 de cada archivo intermedio: para que dos corridas no puedan mezclar
+        entradas sin que se note.
+  \item \textbf{Caché obsoleta.} La API del antecedente sirve resultados de una caché que no se
+        invalida al reentrenar (\texttt{api/main.go} y \texttt{api/cache.go}). Es una carrera entre
+        el escritor y los lectores, del mismo tipo que el modelo en Promela de la
+        Sección~\ref{sec:promela} descarta para los centroides; modelarla en Spin queda como
+        ejercicio del laboratorio del curso.
+\end{itemize}
+
+La comparación se limita a lo relevante para este proyecto; no es una revisión del antecedente.

@@ -1,0 +1,34 @@
+% ========================================================
+% ANÁLISIS DEL CÓDIGO CON IA: GAPs (ENTREGABLE 3)
+% ========================================================
+% El informe completo es un .md, como pide el enunciado: tp/docs/gaps-ia.md. Esta sección lo
+% resume y explica el método; el detalle técnico queda en el .md (Anexo B).
+\section{Análisis del código con IA: GAPs}\label{sec:gaps}
+
+El enunciado pide elaborar un prompt estructurado, elegir un modelo de IA, analizar con él el código
+del repositorio y documentar en Markdown los GAPs en calidad de código, seguridad, patrones de
+concurrencia y otros aspectos relevantes. El informe completo está en
+\texttt{tp/docs/gaps-ia.md} (Anexo~\ref{anexo:gaps}); esta sección resume el método y los hallazgos.
+
+\subsection{Modelo y prompt}
+
+\pendiente{qué modelo se eligió, con qué versión y por qué (contexto largo para leer el repositorio,
+capacidad para razonar sobre concurrencia, disponibilidad); con qué herramienta se le dio acceso al
+código y a qué commit}
+
+\pendiente{la estructura del prompt: rol, contexto del proyecto, alcance (qué directorios), criterios
+por categoría, formato de salida exigido (hallazgo, evidencia con archivo y línea, severidad,
+recomendación) y la instrucción de no inventar hallazgos sin evidencia. El prompt completo va en el
+.md}
+
+\subsection{Hallazgos}
+
+\pendiente{tabla resumen: categoría (calidad de código, seguridad, patrones de concurrencia,
+pruebas, rendimiento, documentación), cantidad de hallazgos y el más importante de cada una}
+
+\subsection{Contraste con la verificación del proyecto}
+
+\pendiente{qué hallazgos de la IA se confirmaron contra el código y cuáles no (falsos positivos),
+qué ya estaba cubierto por \texttt{go test -race} o por Spin, y qué encontró la IA que ninguna de las
+dos herramientas cubre. El sílabo pide contrastar lo que dice la IA con la teoría: esta subsección es
+ese contraste}

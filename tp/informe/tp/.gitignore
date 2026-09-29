@@ -1,0 +1,2 @@
+# Artefactos de LaTeX: el PDF se regenera con `latexmk`.
+build/
