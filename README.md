@@ -121,8 +121,8 @@ con una herramienta en Go (`tp/kmeans/cmd/resumen_zonas`), generando un archivo 
 alimenta un visor web interactivo (`tp/app/`):
 
 <p align="center">
-  <img src="tp/informe/tp/img/app-movil-midtown.png" alt="Visor de movilidad en Midtown Manhattan" width="520">
-  <br><sub>Inspección de Midtown Center (zona 161) al mediodía: diagnóstico de micro-viajes y sustituibilidad peatonal.</sub>
+  <img src="tp/informe/tp/img/app-movil-demo.gif" alt="Visor interactivo de movilidad urbana en NYC" width="340">
+  <br><sub>Visor interactivo en acción: exploración temporal (24h), arquetipos y diagnóstico ODS 11.2 (Midtown, aeropuertos y ocio nocturno).</sub>
 </p>
 
 - **Sustituibilidad peatonal (meta 11.2):** en Midtown Center al mediodía (12:00 Lun–Vie), el **41,2 % de los viajes
