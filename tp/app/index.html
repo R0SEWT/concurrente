@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>NYC Taxi Pulse — ¿Cómo se mueve Nueva York?</title>
+  
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Top Friendly Bar -->
+    <header class="hud-top">
+      <div class="hud-brand">
+        <h1 class="brand-title">NYC TAXI PULSE</h1>
+        <p class="brand-sub">¿Cómo se mueve la ciudad?</p>
+      </div>
+
+      <div class="hud-actions">
+        <div id="activeFilterPill" class="active-filter-pill hidden">
+          <span id="filterLabel">✈️ Aeropuerto</span>
+          <button id="btnClearFilter" class="btn-clear-filter" aria-label="Quitar filtro">&times;</button>
+        </div>
+        <button id="btnHelp" class="chip-btn" aria-label="Tutorial de uso">
+          <span>💡 Guía</span>
+        </button>
+        <button id="btnInfoModal" class="chip-btn" aria-label="Ficha técnica de datos">
+          <span>ℹ️ Datos</span>
+        </button>
+        <button id="btnLegend" class="chip-btn" aria-label="Ver arquetipos">
+          <span>🎨 Arquetipos</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Map Canvas -->
+    <main id="map" class="map-container">
+      <button id="btnRecenter" class="floating-map-btn" aria-label="Centrar en Manhattan">
+        <span>🎯</span>
+      </button>
+    </main>
+
+    <!-- Bottom Action Deck (Ergonomic Thumb Zone) -->
+    <section class="action-deck">
+      
+      <!-- Zone Inspector (Bottom Sheet) -->
+      <article id="zoneSheet" class="bottom-sheet collapsed">
+        <div class="sheet-handle-bar" id="sheetHandle">
+          <div class="handle-pill"></div>
+        </div>
+
+        <!-- Initial Welcome State (when no zone is selected) -->
+        <div id="sheetWelcome" class="sheet-welcome">
+          <div class="welcome-text">
+            <span class="welcome-icon">👋</span>
+            <div>
+              <h3>Toca cualquier barrio en el mapa</h3>
+              <p>O busca por nombre y puntos clave:</p>
+            </div>
+          </div>
+
+          <!-- Zone Search Input with Autocomplete Datalist -->
+          <div class="search-box-wrapper">
+            <input type="text" id="zoneSearchInput" list="zoneDatalist" placeholder="🔍 Buscar barrio (ej. Penn, Bushwick, DUMBO)..." autocomplete="off">
+            <datalist id="zoneDatalist"></datalist>
+          </div>
+
+          <div class="quick-zones">
+            <button class="quick-zone-btn" data-zone="161">💼 Midtown</button>
+            <button class="quick-zone-btn" data-zone="211">🍸 SoHo</button>
+            <button class="quick-zone-btn" data-zone="132">✈️ JFK Airport</button>
+            <button class="quick-zone-btn" data-zone="79">🍕 East Village</button>
+          </div>
+        </div>
+
+        <!-- Zone Detail View (when a zone is clicked) -->
+        <div id="sheetDetail" class="sheet-detail" style="display: none;">
+          <div class="zone-header">
+            <div>
+              <span class="zone-tag" id="zoneBorough">MANHATTAN</span>
+              <h2 class="zone-name" id="zoneName">Nombre de Zona</h2>
+            </div>
+            <div class="zone-header-actions">
+              <div id="clusterBadge" class="cluster-badge">
+                <span id="clusterIcon">🌇</span>
+                <span id="clusterName">Salida Laboral</span>
+              </div>
+              <button id="btnCloseDetailHeader" class="btn-close-header" aria-label="Cerrar detalle">&times;</button>
+            </div>
+          </div>
+
+          <!-- Plain Language Human Story -->
+          <div class="human-story-card">
+            <p id="archetypeDesc" class="archetype-desc">
+              Cargando historia del barrio a esta hora...
+            </p>
+          </div>
+
+          <!-- Selector de Modo: Consejo Callejero vs Diagnóstico ODS 11 -->
+          <div class="sheet-tabs" role="tablist">
+            <button id="tabStreet" class="sheet-tab active" type="button">💡 Consejo en la Calle</button>
+            <button id="tabElena" class="sheet-tab" type="button">🌱 Diagnóstico ODS 11</button>
+          </div>
+
+          <!-- Tab 1: Consejo en la Calle (Leo y Marco) -->
+          <div id="tabContentStreet" class="tab-content">
+            <div class="street-card">
+              <div class="street-fare-row">
+                <span class="fare-label">Tarifa estimada:</span>
+                <span id="fareEstimate" class="fare-val">~$12 - $15</span>
+              </div>
+              <p id="streetTipText" class="street-tip">Consejo práctico para moverte o manejar...</p>
+            </div>
+          </div>
+
+          <!-- Tab 2: Diagnóstico Elena (ODS 11 para evaluadores y planners) -->
+          <div id="tabContentElena" class="tab-content hidden">
+            <div id="odsCard" class="ods-card">
+              <div class="ods-header">
+                <span class="ods-pill">🌱 ODS 11 · Análisis de Elena</span>
+                <span id="speedBadge" class="speed-badge">~8.1 mph</span>
+              </div>
+              <p id="odsRecommendation" class="ods-recommendation">
+                Recomendación de política pública y sostenibilidad...
+              </p>
+            </div>
+          </div>
+
+          <!-- Metrics Row -->
+          <div class="zone-stats" id="zoneStatsRow">
+            <div class="stat-item">
+              <span class="stat-label">Viajes/h</span>
+              <span class="stat-val" id="statTrips">--</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Duración</span>
+              <span class="stat-val" id="statDur">-- min</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Distancia</span>
+              <span class="stat-val" id="statDist">-- mi</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Dominancia</span>
+              <span class="stat-val highlight" id="statDominance">--%</span>
+            </div>
+          </div>
+
+          <!-- Distribution in zone -->
+          <div class="dist-section">
+            <h4 class="section-sub">Reparto de viajes en esta zona:</h4>
+            <div id="distributionBar" class="cluster-dist-bar"></div>
+            <div id="distributionLegend" class="dist-legend"></div>
+          </div>
+
+          <!-- Dismiss button -->
+          <button id="btnCloseDetail" class="btn-dismiss-detail">
+            ✕ Cerrar detalle y volver al mapa
+          </button>
+        </div>
+      </article>
+
+      <!-- Temporal Deck & Storyteller -->
+      <div class="temporal-controls">
+        <!-- Story of the Current Hour -->
+        <div class="story-banner">
+          <span class="story-icon" id="storyIcon">🥪</span>
+          <span class="story-text" id="storyText">Mediodía: Diligencias y almuerzos en Manhattan</span>
+        </div>
+
+        <!-- Quick Story Moments (1-Tap shortcuts con 02h y 15h) -->
+        <div class="moment-chips">
+          <button class="moment-btn" data-hour="8">☕ 08h Mañana</button>
+          <button class="moment-btn active" data-hour="12">🥪 12h Almuerzo</button>
+          <button class="moment-btn" data-hour="15">✈️ 15h Aeropuertos</button>
+          <button class="moment-btn" data-hour="19">🌇 19h Salida</button>
+          <button class="moment-btn" data-hour="22">🍸 22h Bares</button>
+          <button class="moment-btn" data-hour="2">🌙 02h Cierre</button>
+        </div>
+
+        <div class="control-row">
+          <!-- Day Toggle -->
+          <div class="day-toggle" role="tablist">
+            <button id="btnSemana" class="toggle-btn active" role="tab">Lunes a Viernes</button>
+            <button id="btnFinde" class="toggle-btn" role="tab">Fin de Semana</button>
+          </div>
+
+          <!-- Play / Pause Animation -->
+          <button id="btnPlay" class="play-btn" aria-label="Reproducir ciclo 24h">
+            <span id="playIcon">▶</span>
+          </button>
+        </div>
+
+        <!-- Hour Range Slider -->
+        <div class="slider-wrapper">
+          <div class="slider-header">
+            <span class="slider-label">HORA DEL DÍA</span>
+            <span id="timeText" class="time-readout-pill">12:00 PM</span>
+          </div>
+          <input type="range" id="hourSlider" min="0" max="23" value="12" step="1" aria-label="Seleccionar hora">
+          <div class="slider-ticks">
+            <span>00h</span>
+            <span>04h</span>
+            <span>08h</span>
+            <span>12h</span>
+            <span>16h</span>
+            <span>20h</span>
+            <span>23h</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modal Archetypes / Legend -->
+    <div id="legendModal" class="modal-overlay hidden">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div>
+            <h2>Los 8 Arquetipos de Viaje</h2>
+            <p class="modal-sub">Toca cualquiera para aislarlo y ver dónde ocurre en la ciudad.</p>
+          </div>
+          <button id="btnCloseModal" class="btn-close">&times;</button>
+        </div>
+        <div id="archetypesList" class="archetypes-list"></div>
+      </div>
+    </div>
+
+    <!-- Modal Methodology & Open Data (Elena & Evaluadores) -->
+    <div id="infoModal" class="modal-overlay hidden">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div>
+            <h2>Ficha Metodológica & Datos</h2>
+            <p class="modal-sub">Rigor empírico y reproducibilidad científica.</p>
+          </div>
+          <button id="btnCloseInfoModal" class="btn-close">&times;</button>
+        </div>
+        <div class="modal-body-content">
+          <div class="info-metric-grid">
+            <div class="info-metric-card">
+              <span class="info-metric-lbl">Dataset Oficial</span>
+              <span class="info-metric-val">NYC TLC Yellow Cab</span>
+            </div>
+            <div class="info-metric-card">
+              <span class="info-metric-lbl">Viajes Analizados</span>
+              <span class="info-metric-val">2,831,486</span>
+            </div>
+            <div class="info-metric-card">
+              <span class="info-metric-lbl">Agrupamiento</span>
+              <span class="info-metric-val">K-means (K=8)</span>
+            </div>
+            <div class="info-metric-card">
+              <span class="info-metric-lbl">Inercia Canónica</span>
+              <span class="info-metric-val">4,461,447.05</span>
+            </div>
+          </div>
+          <div class="info-desc-box">
+            <h4>🌱 Alineación ODS 11 (Ciudades Sostenibles)</h4>
+            <p>
+              Responde a la <strong>Meta 11.2</strong> (Transporte público accesible y sostenible). Los 8 arquetipos caracterizan micro-viajes sustituibles a pie o en Citi Bike (41.2% en Manhattan al mediodía), corredores masivos a aeropuertos y el colapso de velocidad comercial (&lt;8.5 mph) en horas laborales.
+            </p>
+          </div>
+          <div class="info-desc-box">
+            <h4>🛡️ Principio Cartográfico InWatch</h4>
+            <p>
+              Cero invención de datos. Las zonas sin actividad de taxis amarillos se declaran abiertamente como cubiertas por transporte masivo (Metro MTA) o flotas locales (Uber/Lyft). Las muestras reducidas (&lt;8 viajes/h) se marcan con bordes punteados y advertencia visual explícita.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Onboarding / Tutorial en 3 Pasos -->
+    <div id="tourModal" class="modal-overlay hidden">
+      <div class="modal-card tour-card">
+        <div class="modal-header">
+          <span class="tour-step-badge" id="tourStepBadge">PASO 1 DE 3</span>
+          <button id="btnCloseTour" class="btn-close" aria-label="Saltar tutorial">&times;</button>
+        </div>
+
+        <div class="tour-body" id="tourBody">
+          <!-- Step 1 Content -->
+          <div class="tour-step" id="tourStep1">
+            <div class="tour-icon">⏳</div>
+            <h3 class="tour-title">1. Viaja por las 24 Horas</h3>
+            <p class="tour-text">
+              Nueva York nunca duerme, pero se mueve muy distinto según la hora. Usa el <strong>deslizador inferior</strong> para ver los flujos de la ciudad y cambia entre <strong>Lunes a Viernes</strong> y <strong>Fin de Semana</strong>.
+            </p>
+            <div class="tour-chips">
+              <span>☕ 08h Mañana</span>
+              <span>🥪 12h Almuerzo</span>
+              <span>✈️ 15h Aeropuertos</span>
+              <span>🌙 02h Cierre</span>
+            </div>
+          </div>
+
+          <!-- Step 2 Content -->
+          <div class="tour-step hidden" id="tourStep2">
+            <div class="tour-icon">🗺️</div>
+            <h3 class="tour-title">2. Toca un Barrio o Búscalo</h3>
+            <p class="tour-text">
+              Toca cualquier polígono en el mapa o escribe en el <strong>buscador</strong> para enfocar tu zona. Descubrirás <strong>consejos prácticos</strong>, tarifas estimadas y diagnósticos de movilidad urbana ODS 11.
+            </p>
+            <div class="tour-chips">
+              <span>💼 Midtown</span>
+              <span>🍸 SoHo</span>
+              <span>🍕 East Village</span>
+              <span>🔍 Buscar...</span>
+            </div>
+          </div>
+
+          <!-- Step 3 Content -->
+          <div class="tour-step hidden" id="tourStep3">
+            <div class="tour-icon">🎨</div>
+            <h3 class="tour-title">3. Aísla los 8 Arquetipos</h3>
+            <p class="tour-text">
+              Toca <strong>Arquetipos</strong> para aislar comportamientos específicos: viajes a aeropuertos, salidas de bares o micro-viajes. Las zonas con mayor concentración se iluminarán con bordes blancos.
+            </p>
+            <div class="tour-chips">
+              <span>✈️ Aeropuerto</span>
+              <span>🚶 Micro-saltos</span>
+              <span>🍸 Noche</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tour Navigation Footer -->
+        <div class="tour-footer">
+          <div class="tour-dots">
+            <span class="tour-dot active" id="dot1"></span>
+            <span class="tour-dot" id="dot2"></span>
+            <span class="tour-dot" id="dot3"></span>
+          </div>
+          <div class="tour-btn-group">
+            <button id="btnTourPrev" class="tour-btn-sec hidden">Anterior</button>
+            <button id="btnTourNext" class="tour-btn-prim">Siguiente →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

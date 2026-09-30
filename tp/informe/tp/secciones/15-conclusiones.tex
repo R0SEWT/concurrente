@@ -44,6 +44,15 @@ medias y el bootstrap no son adornos: sin ellos el speedup depende de qué corri
 picos del sistema operativo cayeron en cada muestra. El protocolo está en código y los tiempos crudos
 se guardan, así que cualquier cifra de este informe se puede recalcular sin volver a medir.
 
+\textbf{Los arquetipos espaciotemporales cierran el caso de uso (ODS 11).} El agrupamiento de 2{,}83
+millones de viajes en $K = 8$ clusters (Sección~\ref{sec:interpretacion-clusters}) demostró que el
+tráfico en Manhattan no es homogéneo: el 41{,}2\,\% de los taxis en Midtown al mediodía absorben
+micro-saltos de una milla sustituibles por transporte activo (meta 11.2), mientras que la demanda hacia
+terminales aéreas se concentra en la media tarde (más de 7\,700 viajes en Manhattan a las 14:00
+alimentando el pico de las 15:00 en JFK y LaGuardia). La herramienta interactiva desarrollada
+(\texttt{tp/app/}) demuestra que el precómputo offline en Go permite alimentar visualizadores
+cartográficos ultraligeros respetando el principio de honestidad metodológica (\emph{InWatch}).
+
 \subsection{Recomendaciones}\label{sec:recomendaciones}
 
 \begin{itemize}
@@ -53,8 +62,10 @@ se guardan, así que cualquier cifra de este informe se puede recalcular sin vol
   \item Modelar el cierre del pool (\texttt{close(trabajos)} y la espera de las goroutines), que hoy
         queda fuera del modelo, antes de reutilizar el worker pool en un programa que viva más que
         una corrida.
-  \item Elegir $k$ con un criterio de validación interna sobre una muestra, e interpretar los
-        clusters por zona y franja horaria: es la pregunta del caso y sigue abierta.
+  \item Mantener la interpretación de los clusters por zona y franja horaria
+        (Sección~\ref{sec:interpretacion-clusters}) como base empírica para la formulación de
+        políticas públicas urbanas, y evaluar en trabajos futuros la elección dinámica de $k$ con
+        criterios de validación interna sobre muestras estacionales.
   \item Extender la medición a varios meses del dataset, donde el costo de coordinar pesa menos
         frente al trabajo y el speedup debería acercarse más al número de workers.
   \item Del análisis con IA (Sección~\ref{sec:gaps}), en este orden: que el benchmark escriba cada
