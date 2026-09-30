@@ -121,8 +121,8 @@ con una herramienta en Go (`tp/kmeans/cmd/resumen_zonas`), generando un archivo 
 alimenta un visor web interactivo (`tp/app/`):
 
 <p align="center">
-  <img src="tp/informe/tp/img/app-movil-demo.gif" alt="Visor interactivo de movilidad urbana en NYC" width="340">
-  <br><sub>Visor interactivo en acción: exploración temporal (24h), arquetipos y diagnóstico ODS 11.2 (Midtown, aeropuertos y ocio nocturno).</sub>
+  <img src="tp/informe/tp/img/app-movil-demo.gif" alt="Simulación interactiva de Elena (Planificadora Urbana NYCDOT)" width="340">
+  <br><sub>Simulación de usuaria sintética: <b>Elena</b> (planificadora NYCDOT) completa el onboarding, analiza la sustituibilidad peatonal (41,2 %) en Midtown al mediodía y audita el pico aeroportuario en JFK (<a href="tp/informe/tp/img/app-movil-demo.mp4">video MP4</a>).</sub>
 </p>
 
 - **Sustituibilidad peatonal (meta 11.2):** en Midtown Center al mediodía (12:00 Lun–Vie), el **41,2 % de los viajes
