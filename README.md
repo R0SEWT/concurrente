@@ -2,264 +2,295 @@
 
 <div align="center">
 
-<h1>concurrente</h1>
+# 🚕 NYC Taxi Pulse · K-means Concurrente & Movilidad Urbana (ODS 11)
 
 <p>
-  <strong>K-means concurrente en Go sobre 2,8 millones de viajes de taxi de Nueva York</strong>,<br>
-  verificado con Promela/Spin y medido en cuatro máquinas, del servidor al celular.
-</p>
-
-<p>
-  Cuaderno del curso <em>Programación Concurrente y Distribuida</em> (UPC 1ACC0065, ciclo 2026-20)
+  <strong>Motor K-means concurrente de alto rendimiento en Go puro sobre 2,83 millones de viajes de taxi de Nueva York</strong>,<br>
+  verificado formalmente con Promela/Spin, medido desde servidores hasta un Google Pixel 9a,<br>
+  y visualizado en una aplicación web interactiva orientada al ODS 11.2 (Ciudades Sostenibles).
 </p>
 
 <p>
   <img alt="Go" src="https://img.shields.io/badge/Go-1.26-00ADD8?style=for-the-badge&logo=go&logoColor=white">
-  <img alt="Promela" src="https://img.shields.io/badge/Promela-Spin_6.5-6E4C9E?style=for-the-badge">
-  <img alt="Python" src="https://img.shields.io/badge/Python-uv-3776AB?style=for-the-badge&logo=python&logoColor=white">
+  <img alt="Promela / Spin" src="https://img.shields.io/badge/Spin-6.5_LTL-6E4C9E?style=for-the-badge">
+  <img alt="Python uv" src="https://img.shields.io/badge/Python-uv_Polars-3776AB?style=for-the-badge&logo=python&logoColor=white">
   <img alt="CI" src="https://img.shields.io/github/actions/workflow/status/R0SEWT/concurrente/go.yml?branch=develop&style=for-the-badge&label=go%20test%20-race">
+  <img alt="ODS 11" src="https://img.shields.io/badge/ONU-ODS_11.2-FD9D24?style=for-the-badge">
+  <img alt="Reproducibilidad" src="https://img.shields.io/badge/Determinismo-Bit_a_Bit-2ea44f?style=for-the-badge">
 </p>
 
 <p>
-  <a href="#resultados">Resultados</a> ·
-  <a href="#empezar">Empezar</a> ·
-  <a href="tp/docs/analisis-pc2.md">Análisis de la PC2</a> ·
-  <a href="tp/docs/analisis-gpu.md">Contraste en GPU</a> ·
-  <a href="tp/docs/pixel.md">En un celular</a>
+  <a href="#app-web">📱 App Web Interactiva</a> ·
+  <a href="#pilares">⚡ Pilares del Sistema</a> ·
+  <a href="#benchmarks">📊 Benchmarks Multi-Plataforma</a> ·
+  <a href="#hallazgos">🏙️ Diagnóstico ODS 11.2</a> ·
+  <a href="#verificacion">🛡️ Verificación Formal</a> ·
+  <a href="#inicio-rapido">🚀 Inicio Rápido</a> ·
+  <a href="#equipo">👥 Equipo</a>
 </p>
 
 </div>
 
-<details>
-  <summary>Contenido</summary>
-  <ol>
-    <li><a href="#que-es">Qué es</a></li>
-    <li><a href="#resultados">Resultados</a></li>
-    <li><a href="#como-esta-hecho">Cómo está hecho</a></li>
-    <li><a href="#empezar">Empezar</a></li>
-    <li><a href="#mapa">Mapa del repo</a></li>
-    <li><a href="#curso">El curso</a></li>
-    <li><a href="#convenciones">Convenciones</a></li>
-    <li><a href="#equipo">Equipo</a></li>
-  </ol>
-</details>
+---
 
-<a id="que-es"></a>
-
-## Qué es
-
-<p align="center">
-  <img src="tp/informe/pc2/img/cli-concurrente.png" alt="La CLI del K-means con 8 workers sobre el dataset completo" width="780">
-</p>
-
-El Trabajo Parcial agrupa los viajes del taxi amarillo de Nueva York de enero de 2024 (datos abiertos
-de la TLC) en tipos de viaje según hora, día, duración y distancia, para caracterizar la movilidad
-urbana en línea con el ODS 11. El algoritmo es K-means de Lloyd, en dos versiones que comparten el
-mismo contrato numérico:
-
-| Versión | Cómo reparte el trabajo | Sincronización |
-|---|---|---|
-| Secuencial | Un solo hilo recorre los 2,8 M viajes | Ninguna |
-| Concurrente | *Worker pool* persistente; un canal reparte bloques de viajes | Acumuladores privados por bloque y una barrera `sync.WaitGroup` por iteración |
-
-Sin librerías de terceros, como exige el curso. Alrededor del algoritmo hay un pipeline de datos en
-Python (bronze → silver → gold con auditoría en SQL), un modelo en Promela que Spin verifica sobre
-todos los entrelazados, y un benchmark con protocolo estadístico fijado en código.
-
-<p align="right">(<a href="#inicio">volver arriba</a>)</p>
-
-<a id="resultados"></a>
-
-## Resultados
-
-Mismo gold, mismos centroides iniciales y mismo protocolo en todas las máquinas: 20 repeticiones con
-orden barajado, media recortada al 10 % e intervalos de confianza por bootstrap. Se mide el
-clustering, 10 iteraciones sobre los 2,8 M viajes; la carga del CSV queda fuera.
-
-| Entorno | Secuencial | 4 workers | 8 workers | Techo |
-|---|---:|---:|---:|---|
-| VM en Proxmox: Ryzen 5 7600X (6 núcleos), 11 vCPU, 9 GB de RAM | 1,11 s | 0,29 s · 3,80× | 0,19 s · 5,82× | 6 núcleos físicos |
-| PC de escritorio en WSL2: i7-10700 (8 núcleos, 16 hilos), 15 GB de RAM | 1,65 s | 0,48 s · 3,42× | 0,27 s · 6,12× | 8 núcleos; SMT aporta hasta 7,88× con 16 |
-| Laptop: i5-10210U (4 núcleos, 8 hilos), 15 GB de RAM, enchufada | 2,31 s | 0,70 s · 3,29× | 0,71 s · 3,27× | 4 núcleos físicos |
-| **Pixel 9a** con Termux: Tensor G4 (1 + 3 + 4 núcleos), 7,4 GB de RAM | 3,61 s | 1,03 s · 3,50× | 0,91 s · 3,95× | 4 núcleos grandes |
-| GPU RTX 4060 (8 GB) del PC, PyTorch en fp32 | | 0,19 s en total | | 8,73× frente al secuencial, 1,11× frente a 16 hilos |
-
-> [!NOTE]
-> **Cómo leer los multiplicadores.** Cada uno es el tiempo secuencial dividido por el tiempo con
-> esa cantidad de workers, **en la misma máquina**: 3,29× en la laptop significa que el mismo trabajo
-> termina en 0,70 s en vez de 2,31 s, porque se reparte entre cuatro núcleos, no porque alguno vaya
-> más rápido. No llega a 4× porque repartir cuesta (el canal, la barrera, sumar los parciales).
-> Los multiplicadores dicen cuánto aprovecha cada máquina sus núcleos; para saber cuál es más
-> rápida hay que mirar los tiempos.
-
-- **El resultado concurrente es idéntico bit a bit** para cualquier cantidad de workers y en los cuatro
-  entornos medidos, x86 y ARM: inercia 4531798,747970126. La reducción suma los parciales siempre en
-  el mismo orden.
-- **La concurrencia paga desde unos 20 000 viajes.** Por debajo, el costo de armar el pool supera el
-  trabajo útil. El dataset está 140 veces por encima de ese punto.
-- **El límite es coordinar, no una sección secuencial.** La fracción serial efectiva crece con los
-  workers, así que el techo de Amdahl no sirve como predicción.
-- **La GPU de consumo no le gana a 16 hilos en doble precisión** (0,55×). En simple precisión gana
-  por poco y cambia de cluster el 0,2 % de los viajes.
-
-<p align="center">
-  <img src="tp/reports/figuras/pixel/01-barra-secuencial-50.png" alt="El K-means corriendo en un Pixel 9a con Termux" width="420">
-  <br><sub>El mismo binario, compilado para Android, a mitad de corrida en un Pixel 9a.</sub>
-</p>
-
-<p align="right">(<a href="#inicio">volver arriba</a>)</p>
-
-<a id="como-esta-hecho"></a>
-
-## Cómo está hecho
-
-```
-TLC (Parquet) ──► bronze ──► silver ──► gold (CSV, 6 features)
-                  Polars: 7 reglas      │  DuckDB re-verifica en SQL
-                                        ▼
-                     tp/kmeans (Go) ──► secuencial / worker pool ──► tp/reports/*.json
-                            │                                           │
-                     tp/spin (Promela)                        tp/scripts ──► tablas del informe
-                     verifica la sincronización               (ninguna cifra a mano)
-```
-
-> [!NOTE]
-> **Verificar y probar son cosas distintas, y hacen falta las dos.** Spin recorre todos los
-> entrelazados de un modelo reducido y confirma que ningún punto se pierde ni se duplica; un mutante
-> con un acumulador compartido demuestra que el modelo detecta la carrera. `go test -race` prueba la
-> implementación en cada pull request.
-
-> [!IMPORTANT]
-> Los datos no se versionan. `tp/data/` se genera con el pipeline, y `materials/` (el material del
-> Aula Virtual, que es del profesor) se reconstruye desde el índice de `manifest.json`.
-
-<p align="right">(<a href="#inicio">volver arriba</a>)</p>
-
-<a id="empezar"></a>
-
-## Empezar
-
-**Requisitos:** Go 1.26, [uv](https://docs.astral.sh/uv/) y, para los modelos, Spin 6.5
-(`labs/spin/bootstrap.sh` lo compila sin sudo).
-
-**1. Datos.** Descarga el mes de TLC, lo limpia y escribe el gold:
-
-```bash
-cd tp
-uv sync --extra dev
-uv run nyc-tlc all      # unos 2 minutos, casi todo es la descarga
-uv run pytest -q
-```
-
-Debería terminar con `tp/data/gold/yellow_2024-01_features.csv` de 2 831 486 viajes y el reporte en
-`tp/reports/limpieza_yellow_2024-01.md` con 0 violaciones en la auditoría.
-
-**2. El K-means.** Las dos versiones, con barra de progreso:
-
-```bash
-cd tp/kmeans
-go test -race ./...
-go run ./cmd/kmeans -modo seq  -k 8 -iter 10 -centroides /tmp/c.txt -progreso
-go run ./cmd/kmeans -modo conc -k 8 -iter 10 -centroides /tmp/c.txt -progreso -workers 8
-```
-
-Las dos corridas tienen que terminar con la misma inercia, `4.531799e+06`. La primera genera los
-centroides iniciales en `/tmp/c.txt` y la segunda los reusa.
-
-**3. El benchmark.** El protocolo completo, unos 11 minutos en una máquina de 11 núcleos:
-
-```bash
-go run ./cmd/benchmark      # escribe tp/reports/benchmark_<máquina>_<fecha>.json
-```
-
-**4. La verificación.**
-
-```bash
-cd tp/spin && make check    # 0 errores en el modelo correcto, 1 en el mutante
-```
-
-<p align="right">(<a href="#inicio">volver arriba</a>)</p>
-
-<a id="mapa"></a>
-
-## Mapa del repo
-
-| Ruta | Qué hay |
-|------|---------|
-| `tp/` | Trabajo Parcial: pipeline de datos, `kmeans/` en Go, `spin/`, benchmarks, informes en LaTeX y documentación en `docs/`. Contexto completo en [`tp/CLAUDE.md`](tp/CLAUDE.md). |
-| `labs/go/` | Laboratorios de Go, un paquete por semana. |
-| `labs/spin/` | Laboratorios de Promela verificados con Spin. |
-| `notes/` | Apuntes por sesión. |
-| `manifest.json` | Inventario del curso: temario, cronograma de evaluación y el índice del material del Aula Virtual. |
-| `docs/` | Propuestas de caso de uso del TP. |
-
-<p align="right">(<a href="#inicio">volver arriba</a>)</p>
-
-<a id="curso"></a>
-
-## El curso
-
-| Unidad | Semanas | Tema |
-|--------|---------|------|
-| 1 | 1 a 8 | Construcción y verificación de aplicaciones concurrentes: Go, sección crítica, semáforos, patrones, model checking con Spin |
-| 2 | 9 a 16 | Computación distribuida: canales, servicios y algoritmos distribuidos, exclusión mutua distribuida, consenso, tiempo real |
-
-| Evaluación | Semana | Peso |
-|------------|--------|------|
-| PC1, PC2 | 3, 5 | 10 % cada una |
-| TB1 | 7 | 5 % |
-| EA1 | 8 | 10 % |
-| PC3, PC4 | 11, 13 | 10 % cada una |
-| TB2, DD1 | 15 | 15 % cada una |
-| EB1 | 16 | 15 % |
-
-<p align="right">(<a href="#inicio">volver arriba</a>)</p>
-
-<a id="convenciones"></a>
-
-## Convenciones
-
-- **TDD**: el test antes que la goroutine o el modelo. Toda prueba de concurrencia corre con `-race`.
-- **Git Flow**: nada entra directo a `develop` ni a `main`. Una rama por unidad de trabajo, PR
-  revisada, y una fusión a `main` por entregable, con tag (`pc1`, `pc2`, …).
-- **Ninguna cifra a mano**: las tablas de los informes se generan desde `tp/reports/*.json`.
-- **Tareas en beads** (`bd ready`), no en TODOs sueltos.
-- **IA como herramienta del curso**: el sílabo incorpora prompt engineering para diseñar algoritmos
-  concurrentes e interpretar Spin, siempre contrastando contra la teoría; el uso se registra en el TP.
-
-Las reglas completas están en [`CLAUDE.md`](CLAUDE.md).
-
-<p align="right">(<a href="#inicio">volver arriba</a>)</p>
-
-<a id="equipo"></a>
-
-## Equipo
+## 📸 Demostración Visual del Sistema
 
 <div align="center">
 <table>
   <tr>
-    <td align="center" width="170">
+    <td align="center" width="50%">
+      <b>📱 App Web Cartográfica HCD (Pixel 9a / Web)</b><br>
+      <sub>Inspección de micro-viajes (&le; 1 mi) en Midtown Center a las 12:00</sub><br><br>
+      <img src="tp/informe/tp/img/app-movil-midtown.png" alt="App Móvil en Midtown" width="360">
+    </td>
+    <td align="center" width="50%">
+      <b>⚡ CLI de Alto Rendimiento en Go Puro</b><br>
+      <sub>8 workers procesando 2,83M viajes con reproducibilidad numérica bit a bit</sub><br><br>
+      <img src="tp/informe/tp/img/cli-concurrente.png" alt="CLI Concurrente en Go" width="460">
+    </td>
+  </tr>
+</table>
+</div>
+
+---
+
+<a id="pilares"></a>
+
+## ⚡ Pilares del Proyecto
+
+Este repositorio trasciende una entrega académica tradicional: es una suite de **ingeniería de sistemas, métodos formales, computación paralela y analítica geoespacial urbana**.
+
+```
+                        ARQUITECTURA DEL PIPELINE
+┌───────────────────────────┐      ┌───────────────────────────┐
+│     NYC TLC PARQUET       │ ──►  │    PIPELINE DE DATOS      │
+│   2,83M viajes crudos     │      │   Polars + DuckDB (SQL)   │
+└───────────────────────────┘      └─────────────┬─────────────┘
+                                                 │ Gold CSV (6 features normalizadas)
+                                                 ▼
+┌───────────────────────────┐      ┌───────────────────────────┐
+│   VERIFICACIÓN FORMAL     │      │    MOTOR K-MEANS EN GO    │
+│  Spin/Promela + Mutantes  │ ◄──► │  Worker Pool + Barrera    │
+│  LTL, Deadlock & Progreso │      │  Reducción Determinista   │
+└───────────────────────────┘      └─────────────┬─────────────┘
+                                                 │
+                                                 ├───────────────────────────────┐
+                                                 ▼                               ▼
+                                  ┌───────────────────────────┐   ┌───────────────────────────┐
+                                  │   BENCHMARK HARNESS       │   │    AGREGADOR ESPACIAL     │
+                                  │ 4 plataformas + GPU CUDA  │   │  JSON Compacto (735 KB)   │
+                                  └─────────────┬─────────────┘   └──────────────┬────────────┘
+                                                │                                │
+                                                ▼                                ▼
+                                  ┌───────────────────────────┐   ┌───────────────────────────┐
+                                  │    INFORME EN LATEX       │   │  APP WEB INTERACTIVA HCD  │
+                                  │  78 págs. reproducibles   │   │  Leaflet + PWA Offline    │
+                                  └───────────────────────────┘   └───────────────────────────┘
+```
+
+### 1. 🏎️ Motor Concurrente en Go sin Dependencias
+* **Worker Pool Persistente:** Cero overhead de instanciación dinámica; las goroutines viven durante toda la corrida y consumen bloques de viajes mediante canales.
+* **Reducción Asociativa y Determinista:** Acumuladores privados de sumas y conteos por bloque, sincronizados al final de cada iteración con `sync.WaitGroup`. La reducción final preserva un **orden determinista estricto**, garantizando que la inercia calculada (`4461447.05`) sea **idéntica bit a bit** sin importar el número de hilos o la máquina.
+* **Cero Contención de Locks:** Eliminación intencional de `sync.Mutex` en el bucle caliente de asignación de centroides, evitando contención de caché.
+
+### 2. 🛡️ Verificación Formal con Spin / Promela
+* **Espacio Exhaustivo de Estados:** Modelado formal de la concurrencia (coordinador, canal, acumuladores y barrera).
+* **Fórmulas LTL:** Verificación de **exclusión mutua** ($\Box \neg(\text{publicando} \land \text{leyendo})$), ausencia de **deadlock** y **progreso** bajo *weak fairness*.
+* **Batería de Mutantes en CI:** Filosofía de prueba negativa (*si una prueba no puede fallar, no sirve*). Tres mutantes deliberados verifican que Spin detecte con precisión omisiones de `wg.Done` o publicaciones anticipadas sin esperar la barrera (`make check`).
+
+### 3. 📱 Visor Geoespacial Interactivo HCD (*InWatch*)
+* **Arquitectura Desacoplada y Offline-First:** Un agregador en Go comprime las 2,83 millones de asignaciones en un payload JSON ultraligero de **735 KB**, consumido por una app cliente en Leaflet / Esri Dark Gray.
+* **Diseño Centrado en el Humano:** Onboarding guiado en 3 pasos (Coach Marks), selector horario de 24 horas con momentos clave (`☕ Mañana`, `🥪 Almuerzo`, `✈️ Salidas`, `🌙 Madrugada`), gestos táctiles de deslizamiento y buscador predictivo de zonas TLC.
+* **Principio de Honestidad Cartográfica (*InWatch*):** Las zonas sin cobertura de taxis amarillos no se ocultan ni se interpolan fraudulentamente; la aplicación informa honestamente la cobertura por transporte público masivo (Metro MTA) o taxis comunitarios.
+
+---
+
+<a id="benchmarks"></a>
+
+## 📊 Benchmarks y Escalabilidad Multi-Plataforma
+
+Medición con protocolo estadístico estricto: **20 repeticiones barajadas**, media recortada al 10 % e intervalos de confianza por bootstrap sobre el dataset completo (2 831 486 viajes, $K=8$, 10 iteraciones):
+
+| Entorno / Hardware | Secuencial | 4 Workers | 8 Workers | Speedup Máx. | Características Clave |
+|---|---:|---:|---:|---:|---|
+| **Servidor Proxmox** (Ryzen 5 7600X, 11 vCPU) | 1,11 s | 0,29 s | **0,19 s** | **5,82×** | 6 núcleos Zen 4 de alta frecuencia |
+| **PC Desktop WSL2** (Core i7-10700, 16 hilos) | 1,65 s | 0,48 s | **0,27 s** | **6,12×** | Escala hasta 7,88× con 16 hilos SMT |
+| **Laptop Ultrabook** (Core i5-10210U, 4c/8t) | 2,31 s | 0,70 s | 0,71 s | **3,29×** | Límite por 4 núcleos físicos |
+| **Google Pixel 9a** (Google Tensor G4, ARM64) | 3,61 s | 1,03 s | **0,91 s** | **3,95×** | 1 Prime + 3 Med + 4 Little cores |
+| **GPU NVIDIA RTX 4060** (PyTorch / CUDA fp32) | — | — | 0,19 s | 8,73× | 1,11× vs CPU 16 hilos (en fp64 pierde: 0,55×) |
+
+<div align="center">
+  <img src="tp/reports/figuras/pixel/01-barra-secuencial-50.png" alt="K-means en Google Pixel 9a" width="400">
+  <p><sub>El mismo binario Go compilado para ARM64 corriendo nativamente en Android con Termux sobre el Pixel 9a.</sub></p>
+</div>
+
+> [!NOTE]
+> **Hallazgos Clave de Concurrencia:**
+> 1. **El límite es coordinar, no Amdahl:** La fracción serial efectiva crece al añadir hilos por el costo de paso de mensajes y sincronización en la barrera.
+> 2. **Punto de Equilibrio ($N \approx 20\,000$):** Por debajo de 20 000 viajes, el costo de inicializar el pool supera al cómputo y la versión secuencial es superior.
+> 3. **La GPU no es la panacea:** En doble precisión (`float64`), la GPU de consumo es **más lenta (0,55×)** que el pool de 16 hilos en CPU debido a la penalización de hardware de fp64. Además, el análisis con IA reveló que las sumas en GPU no son deterministas (8 valores de inercia distintos en 21 repeticiones).
+
+---
+
+<a id="hallazgos"></a>
+
+## 🏙️ Diagnóstico Urbano: Los 8 Arquetipos y el ODS 11.2
+
+El agrupamiento en $K=8$ reveló tres regímenes funcionales del transporte en Nueva York:
+
+```
+  ┌────────────────────────────────────────────────────────────────────────┐
+  │                   DISTRIBUCIÓN DE ARQUETIPOS DE VIAJE                  │
+  ├────────────────────────────────────┬───────────────────────────────────┤
+  │ 🏢 Micro-viajes de Almuerzo & Fin  │ 23,2 % (1,0 mi · 6 min · 9,5 mph) │
+  │    de Semana (Clusters 2 y 7)      │                                   │
+  ├────────────────────────────────────┼───────────────────────────────────┤
+  │ 🚗 Saturación Vial & Congestión    │ 53,8 % (1,2–2,4 mi · 8–10 mph)    │
+  │    (Clusters 0, 1, 3 y 6)          │                                   │
+  ├────────────────────────────────────┼───────────────────────────────────┤
+  │ ✈️ Conexión Troncal a Aeropuertos │ 23,0 % (4,1–12,6 mi · 13–21 mph)  │
+  │    y Puentes (Clusters 4 y 5)      │                                   │
+  └────────────────────────────────────┴───────────────────────────────────┘
+```
+
+* **Hallazgo Crítico para el ODS 11.2 (Sustituibilidad Peatonal y Ciclista):**  
+  En **Midtown Center (zona 161) al mediodía (12:00)**, el **41,2 % de los viajes mide 1 milla o menos** (2 550 viajes/hora a una velocidad de tortuga de 8,1 mph). En la cuadrícula de Manhattan, estos trayectos se realizan en 12–15 min a pie o 5–7 min en **Citi Bike**, proveyendo **justificación matemática directa para la zona de tarificación por congestión (*Congestion Pricing*)**.
+* **Asimetría Aeroportuaria:**  
+  A las 14:00, Manhattan origina más de **7 700 viajes hacia aeropuertos**, nutriendo el pico masivo de las 15:00 en JFK (92,4 % Cluster 5) y LaGuardia (90,8 %). Identificar este patrón previene el rodaje en vacío (*deadheading*).
+
+---
+
+<a id="app-web"></a>
+
+## 📱 Cómo Correr la App Web Interactiva
+
+La aplicación cliente no requiere instalación ni frameworks pesados (vanilla HTML5/CSS3/JavaScript con Leaflet):
+
+```bash
+# Iniciar servidor local apuntando al directorio de la app
+python3 -m http.server 8080 --directory tp/app
+```
+
+Abre en tu navegador:
+* **En PC:** [`http://localhost:8080/`](http://localhost:8080/)
+* **En Móvil (misma red WiFi):** `http://<TU_IP_LOCAL>:8080/`
+* **En Pixel 9a vía ADB:**
+  ```bash
+  adb reverse tcp:8080 tcp:8080
+  # Y navegar a http://localhost:8080/ desde Chrome en el celular
+  ```
+
+---
+
+<a id="verificacion"></a>
+
+## 🛡️ Cómo Ejecutar la Verificación Formal en Spin
+
+Para comprobar la ausencia de deadlocks, la exclusión mutua formal y la suite de mutantes:
+
+```bash
+cd tp/spin
+make check
+```
+
+**Salida de la regresión automatizada:**
+```text
+  ok    correcto             sin-ltl              errores: 0  seguridad: aserciones y estados finales válidos (sin deadlock)
+  ok    correcto             -a -N exclusion      errores: 0  LTL: nadie publica centroides mientras hay lectores
+  ok    correcto             -a -f -N termina     errores: 0  LTL: las dos iteraciones terminan (weak fairness)
+  ok    MUTANTE              sin-ltl              errores: 1  acumulador compartido sin mutex: incremento perdido
+  ok    MUTANTE_DEADLOCK     sin-ltl              errores: 1  un worker pierde el wg.Done: deadlock en la barrera
+  ok    MUTANTE_DEADLOCK     -a -f -N termina     errores: 1  el mismo wg.Done perdido: la corrida nunca termina
+  ok    MUTANTE_SIN_BARRERA  -a -N exclusion      errores: 1  el coordinador publica sin esperar la barrera
+== regresión OK: 7 casos ==
+```
+
+---
+
+<a id="inicio-rapido"></a>
+
+## 🚀 Inicio Rápido con el Motor Go
+
+### Requisitos
+* **Go:** 1.22+ (desarrollado y probado con Go 1.26).
+* **Python uv:** (opcional, solo para regenerar el dataset de 2,83M viajes desde Parquet).
+* **Spin:** 6.5+ (para model checking).
+
+### 1. Pruebas Unitarias y Detección de Carreras
+```bash
+cd tp/kmeans
+go test -v -race ./...
+```
+
+### 2. Ejecución Comparativa (Secuencial vs Concurrente)
+```bash
+cd tp/kmeans
+
+# Corrida Secuencial
+go run ./cmd/kmeans -modo seq -k 8 -iter 10 -centroides /tmp/c.txt -progreso
+
+# Corrida Concurrente (8 Workers) con los mismos centroides
+go run ./cmd/kmeans -modo conc -k 8 -iter 10 -centroides /tmp/c.txt -workers 8 -progreso
+```
+
+### 3. Compilación del Informe Académico (78 Páginas)
+```bash
+cd tp/informe/tp
+./compilar.sh
+# El PDF resultante se genera en build/main.pdf sin ninguna cifra copiada a mano.
+```
+
+---
+
+<a id="equipo"></a>
+
+## 👥 Equipo de Desarrollo
+
+<div align="center">
+<table>
+  <tr>
+    <td align="center" width="180">
       <a href="https://github.com/R0SEWT">
-        <img src="https://avatars.githubusercontent.com/u/102562850?v=4" width="88" alt="Rody Vilchez"><br>
-        <b>Rody Vilchez</b><br><sub>@R0SEWT · coordinador</sub>
+        <img src="https://avatars.githubusercontent.com/u/102562850?v=4" width="90" alt="Rody Vilchez" style="border-radius: 50%;"><br><br>
+        <b>Rody Vilchez</b><br>
+        <sub>@R0SEWT · Coordinador</sub>
       </a>
     </td>
-    <td align="center" width="170">
+    <td align="center" width="180">
       <a href="https://github.com/dnnygz">
-        <img src="https://avatars.githubusercontent.com/u/185146901?v=4" width="88" alt="Dayana Gómez"><br>
-        <b>Dayana Gómez</b><br><sub>@dnnygz</sub>
+        <img src="https://avatars.githubusercontent.com/u/185146901?v=4" width="90" alt="Dayana Gómez" style="border-radius: 50%;"><br><br>
+        <b>Dayana Gómez</b><br>
+        <sub>@dnnygz</sub>
       </a>
     </td>
-    <td align="center" width="170">
+    <td align="center" width="180">
       <a href="https://github.com/ElJulioGG">
-        <img src="https://avatars.githubusercontent.com/u/68710147?v=4" width="88" alt="Julio Meza"><br>
-        <b>Julio Meza</b><br><sub>@ElJulioGG</sub>
+        <img src="https://avatars.githubusercontent.com/u/68710147?v=4" width="90" alt="Julio Meza" style="border-radius: 50%;"><br><br>
+        <b>Julio Meza</b><br>
+        <sub>@ElJulioGG</sub>
       </a>
     </td>
   </tr>
 </table>
 </div>
 
-<p align="center"><sub>Programación Concurrente y Distribuida · UPC · 2026-20 · Docente: Carlos Alberto Jara García</sub></p>
+<br>
+
+<details>
+  <summary><b>📚 Contexto Académico e Institucional (UPC)</b></summary>
+  <br>
+  <ul>
+    <li><b>Institución:</b> Universidad Peruana de Ciencias Aplicadas (UPC).</li>
+    <li><b>Curso:</b> Programación Concurrente y Distribuida (1ACC0065, ciclo 2026-20).</li>
+    <li><b>Docente:</b> Carlos Alberto Jara García.</li>
+    <li><b>Entregables de referencia:</b>
+      <ul>
+        <li><b>PC1 (Tag <code>pc1</code>):</b> Selección de dataset TLC, pipeline de limpieza Polars y revisión bibliográfica.</li>
+        <li><b>PC2 (Tag <code>pc2</code>):</b> Algoritmo de Lloyd secuencial y concurrente en Go, modelo Promela inicial y benchmark de speedup.</li>
+        <li><b>TB1 / Entregable 3:</b> Verificación formal en Spin con LTL y mutantes, auditoría de GAPs con IA, interpretación de clusters ODS 11.2, app web interactiva HCD y guion de sustentación.</li>
+      </ul>
+    </li>
+  </ul>
+</details>
 
 <p align="right">(<a href="#inicio">volver arriba</a>)</p>
