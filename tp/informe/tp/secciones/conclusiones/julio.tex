@@ -7,4 +7,18 @@
 %   - En lo que hiciste tú (tu PR), ¿qué harías distinto?
 % Para compilar y ver el PDF: cd tp/informe/tp && ./compilar.sh  (sale en build/main.pdf).
 \subsubsection*{\nombreTercero}
-\pendiente{conclusiones y recomendaciones de \nombreTercero}
+Al probar casos borde de K-means aprendí que la concurrencia exige más que repartir viajes entre
+goroutines. Cada punto debe procesarse una vez, los resultados parciales deben sumarse en un orden
+fijo y los centroides solo pueden actualizarse después de la barrera. Las pruebas que aporté, con
+más workers que puntos y con clusters vacíos, me ayudaron a comprobar que el algoritmo también
+funciona fuera del caso habitual. Además, entendí por qué conviene combinar esas pruebas con Spin:
+un resultado correcto en una ejecución no garantiza que todos los posibles órdenes de trabajo
+respeten la sincronización.
+
+Me sorprendió que el speedup no creciera al mismo ritmo que la cantidad de workers: con el dataset
+completo fue de 3,80 con cuatro, 5,82 con ocho y 6,25 con dieciséis. Con 10.000 viajes, en cambio,
+la versión concurrente fue más lenta que la secuencial. Concluyo que el costo de coordinación solo
+se justifica cuando hay suficiente trabajo.
+
+Recomiendo ampliar las pruebas con distintas relaciones entre workers y bloques. Así podríamos comprobar que el reparto sigue siendo correcto en
+configuraciones que las pruebas actuales no cubren.
