@@ -1,2 +1,15 @@
 # Artefactos de LaTeX: el PDF se regenera con `latexmk`.
 build/
+
+# Artefactos generados cuando LaTeX compila directamente en esta carpeta.
+/*.aux
+/*.bbl
+/*.bcf
+/*.blg
+/*.fdb_latexmk
+/*.fls
+/*.log
+/*.pdf
+/*.run.xml
+/*.synctex.gz
+/*.toc

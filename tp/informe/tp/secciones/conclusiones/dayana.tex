@@ -7,4 +7,24 @@
 %   - En lo que hiciste tú (tu PR), ¿qué harías distinto?
 % Para compilar y ver el PDF: cd tp/informe/tp && ./compilar.sh  (sale en build/main.pdf).
 \subsubsection*{\nombreDayana}
-\pendiente{conclusiones y recomendaciones de \nombreDayana}
+
+Este trabajo me ayudó a entender que implementar concurrencia se trata más allá de crear
+goroutines, es importante decidir qué información comparte cada una y cuándo deben sincronizarse. Evaluando la 
+correspondencia entre la implementación en Go y el modelo Promela, comprendí mejor
+el papel del \emph{worker pool}, los acumuladores privados y la barrera: los workers pueden procesar
+los bloques en cualquier orden, pero el coordinador no debe actualizar los centroides hasta que
+todos hayan terminado. También aprendí que un modelo debe conservar las decisiones esenciales del
+programa sin copiar todos sus detalles. En este caso, fue posible estudiar la sincronización sin
+representar los cálculos numéricos de K-means y comprobar que los puntos no se pierdan y que los
+centroides no se escriban mientras están siendo leídos.
+
+Me sorprendió que aumentar los workers no produzca una mejora proporcional: con cuatro se obtuvo
+un speedup de \cifra{speedup-p4}$\times$ y con ocho de \cifra{speedup-p8}$\times$, pero con una menor
+eficiencia. Esto demuestra que la coordinación y los núcleos físicos también limitan el rendimiento.
+Como el modelo de Spin usa un dominio pequeño y no representa el cierre del pool, considero que sus
+resultados respaldan el diseño, pero deben complementarse con las pruebas de la implementación en
+Go. Para mejorar el trabajo, recomendaría modelar el cierre de las goroutines y realizar mediciones
+con más datos y en equipos con más núcleos físicos. Si volviera a realizar mi aporte, incluiría
+desde el inicio una tabla que relacione cada elemento de Go con su abstracción en Promela y con la
+propiedad que permite verificar, dado que esa trazabilidad facilitaría comprender por qué el modelo sí
+representa el comportamiento concurrente que se busca validar.
