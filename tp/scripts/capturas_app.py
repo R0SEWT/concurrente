@@ -43,38 +43,42 @@ def main() -> None:
         def log_message(self, *_):
             pass
 
+    args.salida.mkdir(parents=True, exist_ok=True)
     manejador = functools.partial(Silencioso, directory=TP / "app")
     servidor = http.server.ThreadingHTTPServer(("127.0.0.1", 0), manejador)
     threading.Thread(target=servidor.serve_forever, daemon=True).start()
     base = f"http://127.0.0.1:{servidor.server_port}/index.html"
 
-    with sync_playwright() as pw:
-        nav = pw.chromium.launch(executable_path=args.chrome)
-        # 412x915: el mismo viewport de las capturas originales (un Android de gama media).
-        ctx = nav.new_context(
-            viewport={"width": 412, "height": 915},
-            device_scale_factor=2,
-            is_mobile=True,
-            has_touch=True,
-        )
-        ctx.add_init_script(
-            "try{localStorage.setItem('nyc_taxi_pulse_tour_seen','true')}catch(e){}"
-        )
-        for nombre, (query, expandir) in VISTAS.items():
-            pag = ctx.new_page()
-            errores: list[str] = []
-            pag.on("pageerror", lambda e, errores=errores: errores.append(str(e)))
-            pag.goto(base + query, wait_until="networkidle")
-            pag.wait_for_timeout(2500)  # transiciones del bottom sheet y teselas
-            if expandir:
-                pag.click("#sheetHandle")
-                pag.wait_for_timeout(900)
-            if errores:
-                raise SystemExit(f"{nombre}: errores de JavaScript: {errores}")
-            pag.screenshot(path=args.salida / nombre)
-            print(f"→ {args.salida / nombre}")
-        nav.close()
-    servidor.shutdown()
+    # El servidor se apaga aunque falle el navegador o una captura; el `with` cierra el navegador.
+    try:
+        with sync_playwright() as pw:
+            nav = pw.chromium.launch(executable_path=args.chrome)
+            # 412x915: el mismo viewport de las capturas originales (un Android de gama media).
+            ctx = nav.new_context(
+                viewport={"width": 412, "height": 915},
+                device_scale_factor=2,
+                is_mobile=True,
+                has_touch=True,
+            )
+            ctx.add_init_script(
+                "try{localStorage.setItem('nyc_taxi_pulse_tour_seen','true')}catch(e){}"
+            )
+            for nombre, (query, expandir) in VISTAS.items():
+                pag = ctx.new_page()
+                errores: list[str] = []
+                pag.on("pageerror", lambda e, errores=errores: errores.append(str(e)))
+                pag.goto(base + query, wait_until="networkidle")
+                pag.wait_for_timeout(2500)  # transiciones del bottom sheet y teselas
+                if expandir:
+                    pag.click("#sheetHandle")
+                    pag.wait_for_timeout(900)
+                if errores:
+                    raise SystemExit(f"{nombre}: errores de JavaScript: {errores}")
+                pag.screenshot(path=args.salida / nombre)
+                print(f"→ {args.salida / nombre}")
+    finally:
+        servidor.shutdown()
+        servidor.server_close()
 
 
 if __name__ == "__main__":
