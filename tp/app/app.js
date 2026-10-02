@@ -1,11 +1,13 @@
 // NYC Taxi Pulse — App Logic
-// Los textos del resumen JSON se insertan escapados. No vienen del usuario (los genera
-// tp/kmeans/cmd/resumen_zonas), pero el visor no asume que nunca traigan HTML: los nombres
-// ya llevan '&' y una descripción '<8 mph'.
-const esc = (s) => String(s).replace(/[&<>"']/g, (ch) => (
-  { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]
-));
-// Los colores van dentro de un atributo style: solo se acepta #RRGGBB.
+// Los textos del resumen JSON nunca se interpretan como HTML: se arman nodos con el(), que
+// los inserta como texto. No vienen del usuario (los genera tp/kmeans/cmd/resumen_zonas),
+// pero los nombres ya llevan '&' y una descripción '<8 mph'.
+function el(tag, props = {}, ...hijos) {
+  const nodo = Object.assign(document.createElement(tag), props);
+  nodo.append(...hijos);
+  return nodo;
+}
+// Los colores van a style.background: solo se acepta #RRGGBB.
 const colorSeguro = (c) => (/^#[0-9A-Fa-f]{6}$/.test(c) ? c : '#6B7280');
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -541,10 +543,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         statDist.textContent = `${cluster.distancia_mi}mi`;
         statDominance.textContent = `0%`;
 
-        archetypeDesc.innerHTML = `
-          <strong>Sin salidas a las ${timeText.textContent}:</strong> Esta zona no registra viajes en esta hora exacta.<br>
-          <em>Su arquetipo habitual para este día es <strong>${esc(cluster.nombre)}</strong> (${resumen.total.toLocaleString()} viajes en el mes).</em>
-        `;
+        archetypeDesc.replaceChildren(
+          el('strong', { textContent: `Sin salidas a las ${timeText.textContent}:` }),
+          ' Esta zona no registra viajes en esta hora exacta.',
+          el('br'),
+          el('em', {},
+            'Su arquetipo habitual para este día es ',
+            el('strong', { textContent: cluster.nombre }),
+            ` (${resumen.total.toLocaleString()} viajes en el mes).`)
+        );
 
         updateStreetTip(resumen.dom);
         updateElenaDiagnostics(resumen.dom);
@@ -585,12 +592,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     statDominance.textContent = `${dominancePct}%`;
 
     const isLow = info.total < 8;
-    const notaMuestra = isLow ? `<br><small style="color:#D55E00; font-weight:600;">Muestra reducida: ${info.total} viajes/h registrados (InWatch).</small>` : '';
+    const notaMuestra = isLow
+      ? [el('br'), el('small', {
+          textContent: `Muestra reducida: ${info.total} viajes/h registrados (InWatch).`,
+          style: 'color:#D55E00; font-weight:600;'
+        })]
+      : [];
 
-    archetypeDesc.innerHTML = `
-      <strong>${esc(cluster.nombre)}:</strong> ${esc(cluster.subtitulo)}.${notaMuestra}<br>
-      ${esc(cluster.desc)}
-    `;
+    archetypeDesc.replaceChildren(
+      el('strong', { textContent: `${cluster.nombre}:` }),
+      ` ${cluster.subtitulo}.`,
+      ...notaMuestra,
+      el('br'),
+      cluster.desc
+    );
 
     updateStreetTip(info.dom);
     updateElenaDiagnostics(info.dom);
@@ -637,12 +652,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       distributionBar.appendChild(seg);
 
       if (pct >= 8) {
-        const legItem = document.createElement('div');
-        legItem.className = 'dist-legend-item';
-        legItem.innerHTML = `
-          <span class="dist-color-box" style="background: ${colorSeguro(cMeta.color)};"></span>
-          <span>${esc(cMeta.nombre)} (${Math.round(pct)}%)</span>
-        `;
+        const caja = el('span', { className: 'dist-color-box' });
+        caja.style.background = colorSeguro(cMeta.color);
+        const legItem = el('div', { className: 'dist-legend-item' },
+          caja, el('span', { textContent: `${cMeta.nombre} (${Math.round(pct)}%)` }));
         distributionLegend.appendChild(legItem);
       }
     });
@@ -931,24 +944,27 @@ document.addEventListener('DOMContentLoaded', async () => {
       const card = document.createElement('div');
       const isSelected = (activeFilterCluster === c.id);
       card.className = `archetype-card ${isSelected ? 'active-filter' : ''}`;
-      card.innerHTML = `
-        <div class="arch-header">
-          <div class="arch-title-group">
-            <span class="arch-color-badge" style="background: ${colorSeguro(c.color)};"></span>
-            <span class="arch-name">${esc(c.nombre)}</span>
-          </div>
-          <span class="arch-pct">${c.porcentaje}% (${c.viajes_total.toLocaleString()})</span>
-        </div>
-        <p class="arch-desc">${esc(c.desc)}</p>
-        <div class="arch-metrics">
-          <span>Duración: ~${c.duracion_min} min</span>
-          <span>Distancia: ~${c.distancia_mi} mi</span>
-          <span>Pico: ~${Math.round(c.hora_pico)}:00 (${esc(c.dia_nombre)})</span>
-        </div>
-        <div style="font-size: 10.5px; color: ${isSelected ? '#38BDF8' : '#6B7280'}; margin-top: 4px; font-weight: 600;">
-          ${isSelected ? 'Activo en el mapa (toca para quitar)' : 'Toca para aislar en el mapa'}
-        </div>
-      `;
+      const insignia = el('span', { className: 'arch-color-badge' });
+      insignia.style.background = colorSeguro(c.color);
+      const pista = el('div', {
+        textContent: isSelected ? 'Activo en el mapa (toca para quitar)' : 'Toca para aislar en el mapa'
+      });
+      pista.style.cssText = `font-size: 10.5px; color: ${isSelected ? '#38BDF8' : '#6B7280'}; margin-top: 4px; font-weight: 600;`;
+      card.append(
+        el('div', { className: 'arch-header' },
+          el('div', { className: 'arch-title-group' },
+            insignia, el('span', { className: 'arch-name', textContent: c.nombre })),
+          el('span', {
+            className: 'arch-pct',
+            textContent: `${c.porcentaje}% (${c.viajes_total.toLocaleString()})`
+          })),
+        el('p', { className: 'arch-desc', textContent: c.desc }),
+        el('div', { className: 'arch-metrics' },
+          el('span', { textContent: `Duración: ~${c.duracion_min} min` }),
+          el('span', { textContent: `Distancia: ~${c.distancia_mi} mi` }),
+          el('span', { textContent: `Pico: ~${Math.round(c.hora_pico)}:00 (${c.dia_nombre})` })),
+        pista
+      );
 
       card.addEventListener('click', () => {
         if (activeFilterCluster === c.id) {
