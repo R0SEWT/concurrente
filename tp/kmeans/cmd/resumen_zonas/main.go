@@ -165,14 +165,14 @@ func main() {
 	fmt.Println("4. Interpretando centroides y des-normalizando métricas...")
 	diasSemana := []string{"Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"}
 	colores := []string{
-		"#3B82F6", // Azul (Pendular mañana)
-		"#EC4899", // Rosa/Fucsia (Nocturno)
-		"#F59E0B", // Ámbar/Naranja (Aeropuertos)
-		"#10B981", // Esmeralda (Diurno vecinal)
-		"#8B5CF6", // Violeta (Pendular tarde)
-		"#06B6D4", // Cian (Inter-borough)
-		"#E11D48", // Carmesí (Fin de semana)
-		"#84CC16", // Lima (Micro-viajes)
+		"#0072B2", // Azul Bang Wong (Salida laboral & cena)
+		"#CC79A7", // Púrpura rojizo Bang Wong (Noche & ocio)
+		"#009E73", // Verde azulado Bang Wong (Micro-salto almuerzo)
+		"#D55E00", // Bermellón Bang Wong (Tráfico denso)
+		"#56B4E9", // Azul cielo Bang Wong (Retorno nocturno)
+		"#E69F00", // Naranja Bang Wong (Aeropuertos & autopista)
+		"#F0E442", // Amarillo Bang Wong (Paseo fin de semana)
+		"#2DD4BF", // Menta/Teal accesible (Cierre rápido viernes)
 	}
 
 	clustersConteo := make([]int, *k)

@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // DOM Elements - Temporal & Story
   const hourSlider = document.getElementById('hourSlider');
   const timeText = document.getElementById('timeText');
-  const storyIcon = document.getElementById('storyIcon');
+  const storyTimeTag = document.getElementById('storyTimeTag');
   const storyText = document.getElementById('storyText');
   const momentBtns = document.querySelectorAll('.moment-btn');
   const btnSemana = document.getElementById('btnSemana');
@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Filter Elements
   const activeFilterPill = document.getElementById('activeFilterPill');
+  const filterColorDot = document.getElementById('filterColorDot');
   const filterLabel = document.getElementById('filterLabel');
   const btnClearFilter = document.getElementById('btnClearFilter');
 
@@ -41,7 +42,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const zoneBorough = document.getElementById('zoneBorough');
   const zoneName = document.getElementById('zoneName');
   const clusterBadge = document.getElementById('clusterBadge');
-  const clusterIcon = document.getElementById('clusterIcon');
+  const clusterColorDot = document.getElementById('clusterColorDot');
   const clusterName = document.getElementById('clusterName');
   const archetypeDesc = document.getElementById('archetypeDesc');
   const odsCard = document.getElementById('odsCard');
@@ -89,107 +90,136 @@ document.addEventListener('DOMContentLoaded', async () => {
   const dot2 = document.getElementById('dot2');
   const dot3 = document.getElementById('dot3');
 
+  // Map Controls & Collapsible Elements
+  const appContainer = document.getElementById('app');
+  const btnTogglePanels = document.getElementById('btnTogglePanels');
+  const btnRestorePanels = document.getElementById('btnRestorePanels');
+  const iconEyeOpen = document.querySelector('.icon-eye-open');
+  const iconEyeClosed = document.querySelector('.icon-eye-closed');
+  const btnMinimizeTemporal = document.getElementById('btnMinimizeTemporal');
+  const temporalControls = document.getElementById('temporalControls');
+
   let currentTourStep = 1;
 
   // 1. Stories by Hour (Elena's Narrative Guide)
   const hourStories = {
     semana: {
-      0: { icon: "🌙", text: "Madrugada (00h): Regreso a casa cruzando puentes y salidas tardías de bares." },
-      1: { icon: "🌙", text: "Madrugada (01h): Flujo escaso, viajes largos entre distritos hacia residencias." },
-      2: { icon: "🌙", text: "Noche profunda (02h): La ciudad descansa; los taxis atienden zonas sin metro nocturno." },
-      3: { icon: "🌙", text: "Noche profunda (03h): Mínimo histórico de viajes en toda la ciudad." },
-      4: { icon: "🌙", text: "Antes del alba (04h): Movimientos preliminares de trabajadores esenciales y guardias." },
-      5: { icon: "✈️", text: "Amanecer (05h): Primeros viajes del día hacia estaciones y aeropuertos." },
-      6: { icon: "☕", text: "Despertar (06h): Comienza a activarse el flujo hacia oficinas de Manhattan." },
-      7: { icon: "☕", text: "Inicio de jornada (07h): Congestión en aumento en las entradas a la isla." },
-      8: { icon: "💼", text: "Hora punta matutina (08h): Manhattan se inunda de viajes corporativos y oficinas." },
-      9: { icon: "💼", text: "Pico matutino (09h): Máxima actividad en Midtown y el Distrito Financiero." },
-      10: { icon: "💼", text: "Media mañana (10h): Desplazamientos entre reuniones en el centro de Manhattan." },
-      11: { icon: "🥪", text: "Antes de almuerzo (11h): Tráfico denso y micro-viajes corporativos." },
-      12: { icon: "🥪", text: "Mediodía (12h): Almuerzos de trabajo; muchos micro-saltos de 1 milla en Manhattan." },
-      13: { icon: "🥪", text: "Sobremesa (13h): Retorno a oficinas y diligencias rápidas en el centro." },
-      14: { icon: "✈️", text: "Primeros vuelos (14h): Comienza a formarse el flujo vespertino hacia JFK y LaGuardia." },
-      15: { icon: "✈️", text: "Pico de aeropuerto (15h): Alta demanda de viajes largos por autopista hacia terminales." },
-      16: { icon: "🌇", text: "Tarde (16h): Transición hacia la hora punta de salida; tráfico en arterias clave." },
-      17: { icon: "🌇", text: "Salida de oficinas (17h): Oficinas vaciándose hacia trenes, buses y restaurantes." },
-      18: { icon: "🌇", text: "Hora punta vespertina (18h): Retorno a hogares y cenas en Manhattan." },
-      19: { icon: "🍽️", text: "Cena & Relax (19h): Gastronomía activa en Soho, Flatiron y Hell's Kitchen." },
-      20: { icon: "🎭", text: "Cultura & Ocio (20h): Movilidad hacia teatros de Broadway y restaurantes." },
-      21: { icon: "🍸", text: "Inicio nocturno (21h): Bares y vida nocturna en Lower East Side y Brooklyn." },
-      22: { icon: "🍸", text: "Noche de bares (22h): Viajes de media distancia entre locales de ocio." },
-      23: { icon: "🍸", text: "Noche activa (23h): Salidas nocturnas y retornos hacia otros distritos." }
+      0: { time: "00:00", text: "Madrugada: Regreso a casa cruzando puentes y salidas tardías de zonas de ocio." },
+      1: { time: "01:00", text: "Madrugada: Flujo escaso, viajes largos entre distritos hacia áreas residenciales." },
+      2: { time: "02:00", text: "Noche profunda: La ciudad descansa; los taxis atienden zonas con menor frecuencia de metro nocturno." },
+      3: { time: "03:00", text: "Noche profunda: Mínimo histórico de viajes en toda la ciudad." },
+      4: { time: "04:00", text: "Antes del alba: Movimientos preliminares de trabajadores esenciales y turnos rotativos." },
+      5: { time: "05:00", text: "Amanecer: Primeros viajes del día hacia estaciones troncales y terminales aéreas." },
+      6: { time: "06:00", text: "Despertar: Comienza a activarse el flujo hacia distritos financieros y corporativos." },
+      7: { time: "07:00", text: "Inicio de jornada: Congestión en aumento en los accesos y túneles hacia Manhattan." },
+      8: { time: "08:00", text: "Hora punta matutina: Manhattan absorbe viajes corporativos hacia centros de empleo." },
+      9: { time: "09:00", text: "Pico matutino: Máxima densidad de tráfico en Midtown y el Distrito Financiero." },
+      10: { time: "10:00", text: "Media mañana: Desplazamientos entre reuniones en el núcleo de oficinas." },
+      11: { time: "11:00", text: "Antes de almuerzo: Tráfico denso y micro-viajes corporativos de corta distancia." },
+      12: { time: "12:00", text: "Mediodía laboral: Almuerzos de negocios y micro-saltos de 1 milla en Manhattan." },
+      13: { time: "13:00", text: "Sobremesa: Retorno a oficinas y diligencias rápidas en el centro financiero." },
+      14: { time: "14:00", text: "Salidas tempranas: Se forma el corredor vespertino hacia terminales JFK y LaGuardia." },
+      15: { time: "15:00", text: "Pico aeroportuario: Máxima demanda de enlaces largos por autopista hacia terminales aéreas." },
+      16: { time: "16:00", text: "Tarde: Transición hacia la hora punta de salida; tráfico saturado en avenidas norte-sur." },
+      17: { time: "17:00", text: "Salida de oficinas: Desplazamientos masivos hacia estaciones de tren y restaurantes." },
+      18: { time: "18:00", text: "Hora punta vespertina: Retorno a residencias y cenas en distritos céntricos." },
+      19: { time: "19:00", text: "Cena y esparcimiento: Corredores gastronómicos activos en SoHo, Flatiron y Hell's Kitchen." },
+      20: { time: "20:00", text: "Cultura y entretenimiento: Concentración de viajes en Broadway y distritos teatrales." },
+      21: { time: "21:00", text: "Inicio nocturno: Ocio nocturno activo en Lower East Side, Williamsburg y Meatpacking." },
+      22: { time: "22:00", text: "Noche activa: Traslados de media distancia entre polos gastronómicos y bares." },
+      23: { time: "23:00", text: "Noche cerrada: Retornos tardíos hacia distritos exteriores y puentes." }
     },
     finde: {
-      0: { icon: "🍸", text: "Madrugada de fiesta (00h): Vida nocturna en su apogeo en Meatpacking y Soho." },
-      1: { icon: "🍸", text: "Madrugada de fiesta (01h): Bares de Lower East Side y Williamsburg colmados." },
-      2: { icon: "🍸", text: "Salida de discotecas (02h): Gran demanda de taxis para volver a casa." },
-      3: { icon: "🌙", text: "Cierre nocturno (03h): Retornos tardíos por los puentes hacia Queens y Brooklyn." },
-      4: { icon: "🌙", text: "Calma de fin de semana (04h): La ciudad finalmente baja el ritmo." },
-      5: { icon: "🌙", text: "Amanecer de fin de semana (05h): Mínimo absoluto de tráfico del fin de semana." },
-      6: { icon: "☕", text: "Amanecer tranquilo (06h): Pocos viajes, principalmente aeropuertos." },
-      7: { icon: "☕", text: "Mañana de descanso (07h): Despertar lento en la ciudad." },
-      8: { icon: "☕", text: "Mañana relajada (08h): Viajes hacia parques y cafeterías de barrio." },
-      9: { icon: "🥐", text: "Hora de brunch (09h): Comienza la movilidad hacia cafeterías y Central Park." },
-      10: { icon: "🥐", text: "Brunch y paseos (10h): Central Park, Greenwich Village y DUMBO activos." },
-      11: { icon: "☀️", text: "Mediodía de paseo (11h): Compras en SoHo y paseos familiares." },
-      12: { icon: "☀️", text: "Paseos de fin de semana (12h): Familias y turistas recorriendo museos." },
-      13: { icon: "☀️", text: "Tarde de ocio (13h): Turismo activo y restaurantes en toda la isla." },
-      14: { icon: "☀️", text: "Tarde de compras (14h): Mucha actividad en 5th Avenue y Broadway." },
-      15: { icon: "☀️", text: "Pico recreativo (15h): El momento con más viajes de placer de la semana." },
-      16: { icon: "☀️", text: "Tarde al aire libre (16h): Regreso de parques y museos." },
-      17: { icon: "🌇", text: "Atardecer (17h): Preparación para cenas y espectáculos nocturnos." },
-      18: { icon: "🍽️", text: "Cena de fin de semana (18h): Restaurantes llenos en Manhattan y Brooklyn." },
-      19: { icon: "🍽️", text: "Noche gastronómica (19h): Traslados hacia eventos y cenas de fin de semana." },
-      20: { icon: "🎭", text: "Broadway y cultura (20h): Alta concentración en el Theatre District." },
-      21: { icon: "🍸", text: "La noche arranca (21h): Vida nocturna activa en todo Lower Manhattan." },
-      22: { icon: "🍸", text: "Pico de ocio (22h): Máxima actividad en bares, coctelerías y música en vivo." },
-      23: { icon: "🍸", text: "Fiesta de fin de semana (23h): Calles llenas de taxis en zonas nocturnas." }
+      0: { time: "00:00", text: "Madrugada de fin de semana: Vida nocturna activa en Meatpacking, SoHo y Lower East Side." },
+      1: { time: "01:00", text: "Madrugada de fin de semana: Alta demanda en locales de ocio en Manhattan y Brooklyn." },
+      2: { time: "02:00", text: "Cierre de locales: Demanda sostenida de retornos hacia zonas residenciales." },
+      3: { time: "03:00", text: "Cierre nocturno: Retornos tardíos por los puentes hacia Queens y Brooklyn." },
+      4: { time: "04:00", text: "Madrugada tranquila: La ciudad reduce sensiblemente el volumen de viajes." },
+      5: { time: "05:00", text: "Amanecer de fin de semana: Mínimo semanal absoluto de tráfico vehicular." },
+      6: { time: "06:00", text: "Amanecer tranquilo: Tráfico fluido orientado principalmente hacia aeropuertos." },
+      7: { time: "07:00", text: "Mañana de descanso: Despertar lento y tráfico ligero en toda el área urbana." },
+      8: { time: "08:00", text: "Mañana relajada: Viajes recreativos hacia parques, muelles y cafeterías." },
+      9: { time: "09:00", text: "Brunch matutino: Movilidad hacia Central Park, Greenwich Village y Brooklyn." },
+      10: { time: "10:00", text: "Media mañana recreativa: Central Park, DUMBO y polos peatonales activos." },
+      11: { time: "11:00", text: "Mediodía de paseo: Turismo y compras en SoHo, Quinta Avenida y Flatiron." },
+      12: { time: "12:00", text: "Paseos de fin de semana: Familias y turistas recorriendo museos y centros culturales." },
+      13: { time: "13:00", text: "Tarde de ocio: Turismo activo y gastronomía en distritos históricos." },
+      14: { time: "14:00", text: "Tarde comercial: Alta concentración en corredores peatonales y comerciales." },
+      15: { time: "15:00", text: "Pico recreativo: Mayor volumen de viajes de placer y esparcimiento de la semana." },
+      16: { time: "16:00", text: "Tarde al aire libre: Retorno gradual desde parques, museos y zonas costeras." },
+      17: { time: "17:00", text: "Atardecer: Desplazamientos hacia cenas tempranas y espectáculos teatrales." },
+      18: { time: "18:00", text: "Cena de fin de semana: Restaurantes y teatros con alta afluencia en Manhattan." },
+      19: { time: "19:00", text: "Noche gastronómica: Movilidad sostenida hacia eventos y gastronomía." },
+      20: { time: "20:00", text: "Broadway y cultura: Gran concentración en Theatre District y Lincoln Center." },
+      21: { time: "21:00", text: "Noche de fin de semana: Vida nocturna activa en todo Lower Manhattan y Brooklyn." },
+      22: { time: "22:00", text: "Pico de ocio nocturno: Máxima actividad en bares, coctelerías y música en vivo." },
+      23: { time: "23:00", text: "Fiesta de fin de semana: Demanda elevada de traslados urbanos en distritos nocturnos." }
     }
   };
 
   // Elena's ODS 11 Diagnostics
   const elenaRecommendations = {
-    0: { speed: 9.1, text: "Salida laboral masiva. Oportunidad de descongestión mediante buses lanzadera y ensanchamiento de veredas en horas punta vespertinas." },
-    1: { speed: 10.1, text: "Demanda recreativa nocturna. Fomentar paraderos seguros de taxi y extender la frecuencia de trenes del metro en líneas alimentadoras." },
-    2: { speed: 9.7, text: "🎯 <strong>Alta sustituibilidad (ODS 11.2):</strong> 1 milla en 6 min. Zona prioritaria para ciclovías protegidas (Citi Bike) que reemplacen taxis en micro-trayectos." },
-    3: { speed: 8.1, text: "⚠️ <strong>Fricción severa por congestión (< 8.5 mph):</strong> Justificación empírica directa para el peaje de congestión (Congestion Pricing) y prioridad semafórica para buses." },
-    4: { speed: 13.4, text: "🌙 <strong>Brecha de red nocturna:</strong> Retornos cruzando puentes hacia Brooklyn/Queens. Revela la necesidad de líneas SBS (Select Bus Service) nocturnas." },
-    5: { speed: 20.8, text: "✈️ <strong>Corredor troncal masivo:</strong> Fortalecer la conexión ferroviaria JFK AirTrain / LIRR para reducir la dependencia de vehículos particulares por autopista." },
-    6: { speed: 8.9, text: "Movilidad recreativa de fin de semana hacia parques y museos. Implementar corredores peatonales 'Calles Abiertas' (Open Streets)." },
-    7: { speed: 9.2, text: "🎯 <strong>Micro-desplazamientos de última milla:</strong> Oportunidad de descarbonización mediante micro-movilidad eléctrica compartida." }
+    0: { speed: 9.1, text: "<strong>Salida laboral masiva:</strong> Oportunidad de descongestión mediante buses lanzadera y ensanchamiento de veredas en horas punta vespertinas." },
+    1: { speed: 10.1, text: "<strong>Demanda recreativa nocturna:</strong> Fomentar paraderos seguros de taxi y extender la frecuencia de trenes del metro en líneas alimentadoras." },
+    2: { speed: 9.7, text: "<strong>Alta sustituibilidad (ODS 11.2):</strong> 1 milla en 6 min. Zona prioritaria para ciclovías protegidas (Citi Bike) que reemplacen taxis en micro-trayectos." },
+    3: { speed: 8.1, text: "<strong>Fricción severa por congestión (< 8.5 mph):</strong> Justificación empírica directa para el peaje de congestión (Congestion Pricing) y prioridad semafórica para buses." },
+    4: { speed: 13.4, text: "<strong>Brecha de red nocturna:</strong> Retornos cruzando puentes hacia Brooklyn/Queens. Revela la necesidad de líneas SBS (Select Bus Service) nocturnas." },
+    5: { speed: 20.8, text: "<strong>Corredor troncal masivo:</strong> Fortalecer la conexión ferroviaria JFK AirTrain / LIRR para reducir la dependencia de vehículos particulares por autopista." },
+    6: { speed: 8.9, text: "<strong>Movilidad recreativa de fin de semana:</strong> Destinos hacia parques y museos. Implementar corredores peatonales 'Calles Abiertas' (Open Streets)." },
+    7: { speed: 9.2, text: "<strong>Micro-desplazamientos de última milla:</strong> Oportunidad de descarbonización mediante micro-movilidad eléctrica compartida." }
   };
 
   // Marco & Leo's Street Advice and Fare Estimates
   const streetAdvice = {
-    0: { fare: "$18 - $24", tip: "🚗 <strong>Salida laboral pesada:</strong> Tráfico lento hacia el norte. Pasajero: si vas a menos de 1.5 mi, caminar o Citi Bike te ahorrará 10 min. Conductor: alta demanda continua hacia Upper Manhattan." },
-    1: { fare: "$15 - $20", tip: "🍸 <strong>Ruta nocturna:</strong> Tráfico fluido entre zonas de ocio (SoHo, Meatpacking, Williamsburg). Conductor: clientela de buen humor y flujo rápido de carreras cortas." },
-    2: { fare: "$10 - $14", tip: "⚡ <strong>Micro-carrera:</strong> Apenas ~1 milla. Pasajero: llegas caminando en 12 minutos y te ahorras $12+. Conductor: bajadas de bandera continuas sin salir del distrito." },
-    3: { fare: "$14 - $18", tip: "🐢 <strong>Paso de tortuga (<8.5 mph):</strong> Midtown colapsado al mediodía. Conductor: evita la 5ta y 6ta Ave. Pasajero: el metro (líneas B/D/F/M o N/Q/R) es el doble de rápido." },
-    4: { fare: "$28 - $36", tip: "🌉 <strong>Cruce de puentes:</strong> Retorno cruzando hacia Brooklyn/Queens. Conductor: buena recaudación, pero ojo con volver vacío ('deadheading'). Pasajero: ideal para compartir con amigos." },
-    5: { fare: "$70 - $85", tip: "✈️ <strong>Carrera estrella a Aeropuerto:</strong> JFK Tarifa plana (~$70) o taxímetro a LGA. Conductor: alta propina en terminales. Pasajero: sal con 50-60 min de margen por la Van Wyck / BQE." },
-    6: { fare: "$15 - $20", tip: "🌳 <strong>Paseo de fin de semana:</strong> Destinos hacia Central Park, museos y compras en SoHo. Conductor: turismo familiar con propinas promedio superiores (~20%)." },
-    7: { fare: "$11 - $15", tip: "🚶 <strong>Conexión de última milla:</strong> De estaciones troncales (Penn Station/Grand Central) a oficinas. Pasajero: si no llevas maletas pesadas, cruzar a pie o en bus M42 es veloz." }
+    0: { fare: "$18 - $24", tip: "<strong>Salida laboral pesada:</strong> Tráfico lento hacia el norte. Pasajero: si vas a menos de 1.5 mi, caminar o Citi Bike te ahorrará 10 min. Conductor: alta demanda continua hacia Upper Manhattan." },
+    1: { fare: "$15 - $20", tip: "<strong>Ruta nocturna:</strong> Tráfico fluido entre zonas de ocio (SoHo, Meatpacking, Williamsburg). Conductor: clientela de ocio y flujo rápido de carreras cortas." },
+    2: { fare: "$10 - $14", tip: "<strong>Micro-carrera:</strong> Apenas ~1 milla. Pasajero: llegas caminando en 12 minutos y te ahorras $12+. Conductor: bajadas de bandera continuas sin salir del distrito." },
+    3: { fare: "$14 - $18", tip: "<strong>Paso de congestión (<8.5 mph):</strong> Midtown saturado al mediodía. Conductor: evitar 5ta y 6ta Ave. Pasajero: el metro (líneas B/D/F/M o N/Q/R) es el doble de rápido." },
+    4: { fare: "$28 - $36", tip: "<strong>Cruce de puentes:</strong> Retorno cruzando hacia Brooklyn/Queens. Conductor: buena recaudación, pero considerar el retorno en vacío. Pasajero: ideal para viajes compartidos." },
+    5: { fare: "$70 - $85", tip: "<strong>Enlace a aeropuerto:</strong> JFK Tarifa plana (~$70) o taxímetro a LGA. Conductor: alta recaudación en terminales. Pasajero: salir con 50-60 min de margen por autopista." },
+    6: { fare: "$15 - $20", tip: "<strong>Paseo de fin de semana:</strong> Destinos hacia Central Park, museos y compras en SoHo. Conductor: turismo familiar con propinas promedio superiores." },
+    7: { fare: "$11 - $15", tip: "<strong>Conexión de última milla:</strong> De estaciones troncales (Penn Station/Grand Central) a oficinas. Pasajero: a pie o en bus M42 es veloz si no se lleva equipaje." }
   };
+
+  // High-performance SVG renderer with wide padding (200% margin around viewport)
+  // Ensures all NYC polygons stay rendered, painted, and visible during drag gestures
+  const svgRenderer = L.svg({ padding: 2.0 });
 
   // 2. Initialize Map
   function initMap() {
+    const nycBounds = L.latLngBounds([40.45, -74.35], [40.96, -73.60]);
+
     map = L.map('map', {
       center: [40.7350, -73.9500],
       zoom: 11,
       minZoom: 10,
       maxZoom: 16,
+      maxBounds: nycBounds,
+      maxBoundsViscosity: 0.7,
+      renderer: svgRenderer,
       zoomControl: false,
-      attributionControl: false
+      attributionControl: false,
+      inertia: true,
+      inertiaDeceleration: 3000,
+      fadeAnimation: true,
+      zoomAnimation: true
     });
+    window.map = map;
+
+    const tileOptions = {
+      maxZoom: 16,
+      updateWhenIdle: false,   // Crucial on mobile: load tiles during drag instead of waiting for finger release
+      updateWhenZooming: true, // Keep updating tiles during zoom
+      updateInterval: 80,      // Fast 80ms check while dragging
+      keepBuffer: 8            // Preload 8 rows/cols of tiles around viewport
+    };
 
     // Dark Map Layer (Esri Dark Gray - libre, sin marcas de agua)
-    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
-      maxZoom: 16
-    }).addTo(map);
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', tileOptions).addTo(map);
 
     // Subtle reference labels
     L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}', {
-      maxZoom: 16,
+      ...tileOptions,
       opacity: 0.5
     }).addTo(map);
   }
@@ -253,7 +283,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       const f = parseInt(params.get('filter'), 10);
       if (summaryData.clusters[f]) {
         activeFilterCluster = f;
-        filterLabel.textContent = `${summaryData.clusters[f].icono} ${summaryData.clusters[f].nombre}`;
+        if (filterColorDot) filterColorDot.style.backgroundColor = summaryData.clusters[f].color;
+        filterLabel.textContent = summaryData.clusters[f].nombre;
         activeFilterPill.classList.remove('hidden');
       }
     }
@@ -271,6 +302,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     if (params.has('tab') && params.get('tab') === 'elena') {
       if (tabElena) tabElena.click();
+    }
+    if (params.has('min') && temporalControls) {
+      temporalControls.classList.add('minimized');
+    }
+    if (params.has('clean')) {
+      toggleCleanMapMode(true);
     }
     if (params.has('modal')) {
       if (params.get('modal') === 'info' && infoModal) {
@@ -296,11 +333,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     geojsonLayer = L.geoJSON(geojsonData, {
+      renderer: svgRenderer,
       style: getFeatureStyle,
       onEachFeature: (feature, layer) => {
         layer.on({
-          click: () => onZoneSelect(feature, layer),
-          touchend: () => onZoneSelect(feature, layer)
+          click: () => onZoneSelect(feature, layer)
         });
       }
     }).addTo(map);
@@ -321,7 +358,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const total = (info && info.total) ? info.total : 0;
       const pct = total > 0 ? (count / total) : 0;
       const cluster = summaryData.clusters[activeFilterCluster];
-      const color = cluster ? cluster.color : '#3B82F6';
+      const color = cluster ? cluster.color : '#0072B2';
 
       // Criterio de volumen o concentración real (auditado por Marco y Elena):
       // Si es dominante O volumen absoluto relevante (>=35 viajes) O alta concentración (>=12 viajes y >=18%)
@@ -358,7 +395,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Caso 1: La zona tiene viajes activos en este horario (>= 1 viaje)
     if (info && info.total > 0) {
       const cluster = summaryData.clusters[info.dom];
-      const color = cluster ? cluster.color : '#3B82F6';
+      const color = cluster ? cluster.color : '#0072B2';
       const isLow = info.total < 8;
 
       return {
@@ -373,7 +410,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Caso 2: Sin viajes en esta hora específica, pero con actividad histórica en el tipo de día
     if (resumen && resumen.total > 0) {
       const cluster = summaryData.clusters[resumen.dom];
-      const color = cluster ? cluster.color : '#3B82F6';
+      const color = cluster ? cluster.color : '#0072B2';
 
       return {
         fillColor: color,
@@ -418,7 +455,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Update Story of the current hour
     const story = hourStories[currentDayType][currentHour];
     if (story) {
-      storyIcon.textContent = story.icon;
+      if (storyTimeTag) storyTimeTag.textContent = story.time || `${currentHour.toString().padStart(2, '0')}:00`;
       storyText.textContent = story.text;
     }
 
@@ -445,6 +482,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   // 6. Zone Selection
   function onZoneSelect(feature, layer) {
     selectedZoneId = feature.properties.id;
+    if (typeof toggleCleanMapMode === 'function') {
+      toggleCleanMapMode(false);
+    }
 
     // Smooth pan leaving room for the bottom card
     map.fitBounds(layer.getBounds(), {
@@ -483,7 +523,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const cluster = summaryData.clusters[resumen.dom];
         clusterBadge.style.display = 'inline-flex';
         clusterBadge.style.borderColor = cluster.color;
-        clusterIcon.textContent = cluster.icono;
+        if (clusterColorDot) clusterColorDot.style.backgroundColor = cluster.color;
         clusterName.textContent = `${cluster.nombre} (Habitual)`;
         clusterName.style.color = cluster.color;
 
@@ -506,8 +546,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       clusterBadge.style.display = 'none';
       if (odsCard) odsCard.style.display = 'none';
       archetypeDesc.innerHTML = `
-        <strong>🚕 Zona Atendida por Metro MTA y Apps:</strong> Esta zona no registra viajes de Yellow Cabs en el mes analizado.<br>
-        <em>Los taxis amarillos concentran su servicio en Manhattan y aeropuertos (JFK/LGA). En este sector la movilidad se realiza principalmente con <strong>Metro (MTA)</strong> o aplicaciones (Uber/Lyft).</em>
+        <strong>Zona atendida por Metro MTA y flotas locales:</strong> Esta zona no registra viajes de Yellow Cabs en el mes analizado.<br>
+        <em>Los taxis amarillos concentran su servicio en Manhattan y aeropuertos (JFK/LGA). En este sector la movilidad se canaliza principalmente mediante <strong>Metro (MTA)</strong> o flotas locales (Uber/Lyft).</em>
       `;
       statTrips.textContent = '0';
       statDur.textContent = '--';
@@ -526,7 +566,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     clusterBadge.style.display = 'inline-flex';
     clusterBadge.style.borderColor = cluster.color;
-    clusterIcon.textContent = cluster.icono;
+    if (clusterColorDot) clusterColorDot.style.backgroundColor = cluster.color;
     clusterName.textContent = cluster.nombre;
     clusterName.style.color = cluster.color;
 
@@ -536,10 +576,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     statDominance.textContent = `${dominancePct}%`;
 
     const isLow = info.total < 8;
-    const notaMuestra = isLow ? `<br><small style="color:#F59E0B">⚠️ Flujo ligero: ${info.total} viajes registrados en esta hora.</small>` : '';
+    const notaMuestra = isLow ? `<br><small style="color:#D55E00; font-weight:600;">Muestra reducida: ${info.total} viajes/h registrados (InWatch).</small>` : '';
 
     archetypeDesc.innerHTML = `
-      <strong>${cluster.icono} ${cluster.nombre}:</strong> ${cluster.subtitulo}.${notaMuestra}<br>
+      <strong>${cluster.nombre}:</strong> ${cluster.subtitulo}.${notaMuestra}<br>
       ${cluster.desc}
     `;
 
@@ -552,7 +592,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!fareEstimate || !streetTipText) return;
     if (clusterId === null || clusterId === undefined || !streetAdvice[clusterId]) {
       fareEstimate.textContent = 'Metro $2.90 / App';
-      streetTipText.innerHTML = '🚇 <strong>Alternativa de transporte:</strong> Utiliza el metro MTA (24/7) o solicita un auto por app (Uber/Lyft). Los Yellow Cabs rara vez circulan vacíos por este cuadrante.';
+      streetTipText.innerHTML = '<strong>Alternativa de transporte:</strong> Utiliza el metro MTA (24/7) o solicita un auto por app (Uber/Lyft). Los Yellow Cabs rara vez circulan vacíos por este cuadrante.';
       return;
     }
     const adv = streetAdvice[clusterId];
@@ -592,7 +632,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         legItem.className = 'dist-legend-item';
         legItem.innerHTML = `
           <span class="dist-color-box" style="background: ${cMeta.color};"></span>
-          <span>${cMeta.icono} ${Math.round(pct)}%</span>
+          <span>${cMeta.nombre} (${Math.round(pct)}%)</span>
         `;
         distributionLegend.appendChild(legItem);
       }
@@ -688,7 +728,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (dot3) dot3.classList.toggle('active', step === 3);
 
     if (btnTourPrev) btnTourPrev.classList.toggle('hidden', step === 1);
-    if (btnTourNext) btnTourNext.textContent = (step === 3) ? '¡Empezar a explorar! 🚀' : 'Siguiente →';
+    if (btnTourNext) btnTourNext.textContent = (step === 3) ? 'Comenzar exploración' : 'Siguiente →';
   }
 
   function closeTour() {
@@ -731,6 +771,40 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (btnRecenter) {
     btnRecenter.addEventListener('click', () => {
       map.setView([40.7350, -73.9500], 11, { animate: true, duration: 0.6 });
+    });
+  }
+
+  // Toggle Clean Map Mode (ocultar menú superior y controles para vista completa)
+  function toggleCleanMapMode(forceClean) {
+    if (!appContainer) return;
+    const shouldClean = (forceClean !== undefined) ? forceClean : !appContainer.classList.contains('clean-map-mode');
+    appContainer.classList.toggle('clean-map-mode', shouldClean);
+    if (btnRestorePanels) btnRestorePanels.classList.toggle('hidden', !shouldClean);
+    if (iconEyeOpen && iconEyeClosed) {
+      iconEyeOpen.classList.toggle('hidden', shouldClean);
+      iconEyeClosed.classList.toggle('hidden', !shouldClean);
+    }
+    if (btnTogglePanels) {
+      btnTogglePanels.setAttribute('title', shouldClean ? 'Mostrar menú y controles' : 'Ocultar paneles');
+    }
+  }
+
+  if (btnTogglePanels) {
+    btnTogglePanels.addEventListener('click', () => toggleCleanMapMode());
+  }
+
+  if (btnRestorePanels) {
+    btnRestorePanels.addEventListener('click', () => toggleCleanMapMode(false));
+  }
+
+  // Minimize / Expand Temporal Controls Deck
+  if (btnMinimizeTemporal && temporalControls) {
+    btnMinimizeTemporal.addEventListener('click', (e) => {
+      e.stopPropagation();
+      temporalControls.classList.toggle('minimized');
+      const isMin = temporalControls.classList.contains('minimized');
+      btnMinimizeTemporal.setAttribute('title', isMin ? 'Expandir' : 'Minimizar');
+      btnMinimizeTemporal.setAttribute('aria-label', isMin ? 'Expandir controles de tiempo' : 'Minimizar controles de tiempo');
     });
   }
 
@@ -852,18 +926,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         <div class="arch-header">
           <div class="arch-title-group">
             <span class="arch-color-badge" style="background: ${c.color};"></span>
-            <span class="arch-name">${c.icono} ${c.nombre}</span>
+            <span class="arch-name">${c.nombre}</span>
           </div>
           <span class="arch-pct">${c.porcentaje}% (${c.viajes_total.toLocaleString()})</span>
         </div>
         <p class="arch-desc">${c.desc}</p>
         <div class="arch-metrics">
-          <span>⏱ ~${c.duracion_min} min</span>
-          <span>📍 ~${c.distancia_mi} mi</span>
-          <span>🕒 Pico: ~${Math.round(c.hora_pico)}:00 (${c.dia_nombre})</span>
+          <span>Duración: ~${c.duracion_min} min</span>
+          <span>Distancia: ~${c.distancia_mi} mi</span>
+          <span>Pico: ~${Math.round(c.hora_pico)}:00 (${c.dia_nombre})</span>
         </div>
         <div style="font-size: 10.5px; color: ${isSelected ? '#38BDF8' : '#6B7280'}; margin-top: 4px; font-weight: 600;">
-          ${isSelected ? '✓ Filtrando en el mapa (toca para quitar)' : '🔍 Toca para aislar en el mapa'}
+          ${isSelected ? 'Activo en el mapa (toca para quitar)' : 'Toca para aislar en el mapa'}
         </div>
       `;
 
@@ -873,7 +947,8 @@ document.addEventListener('DOMContentLoaded', async () => {
           activeFilterPill.classList.add('hidden');
         } else {
           activeFilterCluster = c.id;
-          filterLabel.textContent = `${c.icono} ${c.nombre}`;
+          if (filterColorDot) filterColorDot.style.backgroundColor = c.color;
+          filterLabel.textContent = c.nombre;
           activeFilterPill.classList.remove('hidden');
         }
         legendModal.classList.add('hidden');
