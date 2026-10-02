@@ -46,10 +46,10 @@ type ZonaHoraInfo struct {
 }
 
 type SalidaResumen struct {
-	TotalViajes int                            `json:"total_viajes"`
-	K           int                            `json:"k"`
-	Inercia     float64                        `json:"inercia"`
-	Clusters    []ClusterMeta                  `json:"clusters"`
+	TotalViajes int                               `json:"total_viajes"`
+	K           int                               `json:"k"`
+	Inercia     float64                           `json:"inercia"`
+	Clusters    []ClusterMeta                     `json:"clusters"`
 	Zonas       map[int]map[string][]ZonaHoraInfo `json:"zonas"` // zona_id -> "semana"|"finde" -> array de 24 horas
 }
 
@@ -110,14 +110,14 @@ func main() {
 		if angH < 0 {
 			angH += tau
 		}
-		horaAprox := int(math.Round(angH * 24 / tau)) % 24
+		horaAprox := int(math.Round(angH*24/tau)) % 24
 
 		// Decodificar día aproximado (0=Lunes, 4=Viernes, 5=Sábado, 6=Domingo)
 		angD := math.Atan2(dSin, dCos)
 		if angD < 0 {
 			angD += tau
 		}
-		diaAprox := int(math.Round(angD * 7 / tau)) % 7
+		diaAprox := int(math.Round(angD*7/tau)) % 7
 		finde := (diaAprox == 5 || diaAprox == 6)
 
 		puLocations = append(puLocations, pu)
