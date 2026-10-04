@@ -41,6 +41,17 @@ agregados en \texttt{tp/reports/}, para poder recalcular cualquier estadística 
 Todas las tablas de esta sección y las siguientes se generan desde esos JSON con
 \texttt{tp/scripts/tablas\_informe.py}; ninguna cifra se transcribió a mano.
 
+La Figura~\ref{fig:ejec-benchmark} muestra el comando funcionando en una corrida reducida en la
+laptop del equipo (3 repeticiones, solo trabajo fijo, $P \in \{1, 4, 8\}$). Sirve como evidencia de
+la ejecución y del formato de salida; sus cifras no entran a las tablas, que salen de la corrida
+oficial completa.
+
+\begin{figure}[H]
+\caption{Ejecución reducida del benchmark (demostración; no es la corrida oficial)}\label{fig:ejec-benchmark}
+\centering
+\includegraphics[width=\textwidth]{img/ejec-benchmark.png}
+\end{figure}
+
 \subsection{Tabla de speedup}\label{sec:fuerte}
 
 \input{generado/tabla-speedup-fuerte}

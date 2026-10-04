@@ -190,7 +190,7 @@ escondida. Este es el mismo incremento perdido que el curso estudia con el algor
 
 \subsection{Resultados}
 
-Los Listados~\ref{lst:spin-ok} y~\ref{lst:spin-mut} son la salida de \texttt{pan} sobre el modelo
+Las Figuras~\ref{fig:spin-ok} y~\ref{fig:spin-mut} son la salida de \texttt{pan} sobre el modelo
 correcto y sobre el mutante con SPIN 6.5.2. Se usó búsqueda exhaustiva, no \emph{bitstate}; la
 reducción de orden parcial que informa la salida elimina conmutaciones equivalentes sin convertir la
 búsqueda en aproximada. El modelo correcto termina con \texttt{errors: 0} tras almacenar 2\,412
@@ -220,11 +220,17 @@ ronda que viola \texttt{assert(compartido == 4)}}\label{fig:traza-mutante}
 \includegraphics[width=\textwidth]{img/traza-mutante.pdf}
 \end{figure}
 
-\lstinputlisting[style=terminal, caption={Salida de \texttt{pan} sobre el modelo correcto},
-                 label={lst:spin-ok}, lastline=22]{generado/spin-correcto.txt}
+\begin{figure}[H]
+\caption{Ejecución de \texttt{pan} sobre el modelo correcto}\label{fig:spin-ok}
+\centering
+\includegraphics[width=\textwidth]{img/ejec-spin-correcto.png}
+\end{figure}
 
-\lstinputlisting[style=terminal, caption={Salida de \texttt{pan} sobre el mutante con acumulador compartido},
-                 label={lst:spin-mut}, lastline=16]{generado/spin-mutante.txt}
+\begin{figure}[H]
+\caption{Ejecución de \texttt{pan} sobre el mutante con acumulador compartido}\label{fig:spin-mut}
+\centering
+\includegraphics[width=\textwidth]{img/ejec-spin-mutante.png}
+\end{figure}
 
 \subsection{Hasta dónde llega esta prueba}
 

@@ -102,3 +102,11 @@ equivalencia entre versiones son:
 Sobre el gold real, una prueba adicional (que se omite con \texttt{-short}) corre ambas versiones y
 comprueba la equivalencia con \cifra{n}~viajes. La Tabla~\ref{tab:inercias} de la
 Sección~\ref{sec:reproducibilidad} muestra el resultado de esa comparación en las corridas oficiales.
+La Figura~\ref{fig:ejec-go-test} es la ejecución completa, con el detector de carreras y sin
+\texttt{-short}: incluida la prueba sobre el gold real, toma cerca de tres minutos.
+
+\begin{figure}[H]
+\caption{Ejecución de \texttt{go vet} y de todas las pruebas con \texttt{-race}}\label{fig:ejec-go-test}
+\centering
+\includegraphics[width=0.78\textwidth]{img/ejec-go-test.png}
+\end{figure}
