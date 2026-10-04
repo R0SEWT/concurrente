@@ -46,10 +46,10 @@ type ZonaHoraInfo struct {
 }
 
 type SalidaResumen struct {
-	TotalViajes int                            `json:"total_viajes"`
-	K           int                            `json:"k"`
-	Inercia     float64                        `json:"inercia"`
-	Clusters    []ClusterMeta                  `json:"clusters"`
+	TotalViajes int                               `json:"total_viajes"`
+	K           int                               `json:"k"`
+	Inercia     float64                           `json:"inercia"`
+	Clusters    []ClusterMeta                     `json:"clusters"`
 	Zonas       map[int]map[string][]ZonaHoraInfo `json:"zonas"` // zona_id -> "semana"|"finde" -> array de 24 horas
 }
 
@@ -110,14 +110,14 @@ func main() {
 		if angH < 0 {
 			angH += tau
 		}
-		horaAprox := int(math.Round(angH * 24 / tau)) % 24
+		horaAprox := int(math.Round(angH*24/tau)) % 24
 
 		// Decodificar día aproximado (0=Lunes, 4=Viernes, 5=Sábado, 6=Domingo)
 		angD := math.Atan2(dSin, dCos)
 		if angD < 0 {
 			angD += tau
 		}
-		diaAprox := int(math.Round(angD * 7 / tau)) % 7
+		diaAprox := int(math.Round(angD*7/tau)) % 7
 		finde := (diaAprox == 5 || diaAprox == 6)
 
 		puLocations = append(puLocations, pu)
@@ -165,14 +165,14 @@ func main() {
 	fmt.Println("4. Interpretando centroides y des-normalizando métricas...")
 	diasSemana := []string{"Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"}
 	colores := []string{
-		"#3B82F6", // Azul (Pendular mañana)
-		"#EC4899", // Rosa/Fucsia (Nocturno)
-		"#F59E0B", // Ámbar/Naranja (Aeropuertos)
-		"#10B981", // Esmeralda (Diurno vecinal)
-		"#8B5CF6", // Violeta (Pendular tarde)
-		"#06B6D4", // Cian (Inter-borough)
-		"#E11D48", // Carmesí (Fin de semana)
-		"#84CC16", // Lima (Micro-viajes)
+		"#0072B2", // Azul Bang Wong (Salida laboral & cena)
+		"#CC79A7", // Púrpura rojizo Bang Wong (Noche & ocio)
+		"#009E73", // Verde azulado Bang Wong (Micro-salto almuerzo)
+		"#D55E00", // Bermellón Bang Wong (Tráfico denso)
+		"#56B4E9", // Azul cielo Bang Wong (Retorno nocturno)
+		"#E69F00", // Naranja Bang Wong (Aeropuertos & autopista)
+		"#F0E442", // Amarillo Bang Wong (Paseo fin de semana)
+		"#2DD4BF", // Menta/Teal accesible (Cierre rápido viernes)
 	}
 
 	clustersConteo := make([]int, *k)

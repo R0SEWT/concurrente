@@ -76,8 +76,10 @@ informe.
 \#43 & \nombreRody & Spin: deadlock, exclusión mutua y progreso con LTL y mutantes & Fusionada \\
 \#44 & \nombreRody & Informe del TP en LaTeX, a partir del de la PC2 & Fusionada \\
 \#45 & \nombreRody & GAPs con IA, participación, empaquetado y guion del video & Fusionada \\
-\pendiente{PR} & \nombreDayana & \pendiente{contenido} & \pendiente{estado} \\
-\pendiente{PR} & \nombreTercero & \pendiente{contenido} & \pendiente{estado} \\
+\#46 & \nombreRody & Historial: alias de autor unificado por nombre & Fusionada \\
+\#48 & \nombreTercero & Conclusiones y recomendaciones individuales & Fusionada \\
+\#49 & \nombreDayana & Conclusiones individuales y compilación del informe en macOS & Fusionada \\
+\#50 & \nombreRody & Visor rediseñado, capturas regenerables y PRs del grupo en el informe & Fusionada \\
 \end{xltabular}
 }
 
@@ -103,6 +105,13 @@ el código, el guion del video y el empaquetado de la entrega (PR~\#45); resolvi
 los clusters con agregación espaciotemporal hacia el ODS~11 y desarrolló la aplicación de
 exploración interactiva (Sección~\ref{sec:interpretacion-clusters}). Revisó e integró las \emph{pull requests} del resto del grupo.
 
-\paragraph{\nombreDayana.} \pendiente{aporte de \nombreDayana{} en el Entregable 3, con su PR}
+\paragraph{\nombreDayana.} Contrastó la implementación en Go con el modelo Promela (\emph{worker
+pool}, acumuladores privados y barrera) y redactó sus conclusiones y recomendaciones sobre esa
+correspondencia; además adaptó \texttt{compilar.sh} para que el informe compile en macOS con MacTeX
+y conserve el historial anterior si no puede regenerarlo, y excluyó del repositorio los artefactos
+de LaTeX (PR~\#49).
 
-\paragraph{\nombreTercero.} \pendiente{aporte de \nombreTercero{} en el Entregable 3, con su PR}
+\paragraph{\nombreTercero.} A partir de los tests de casos borde que aportó en la PC2 (más
+\emph{workers} que puntos y clusters vacíos), redactó sus conclusiones sobre por qué la corrección de
+una ejecución no sustituye a la verificación de todos los entrelazados, y sobre el costo de
+coordinación que el speedup deja ver con pocos datos (PR~\#48).
