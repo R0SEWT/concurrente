@@ -82,7 +82,15 @@ de la Sección~\ref{sec:promela}.
 
 La Tabla~\ref{tab:spin-casos} resume los siete casos. Cada fila es una corrida de \texttt{pan} con
 búsqueda exhaustiva sobre SPIN 6.5.2; la tabla se genera desde la salida de la regresión
-(\texttt{make informe} en \texttt{tp/spin/}), sin transcribir cifras.
+(\texttt{make informe} en \texttt{tp/spin/}), sin transcribir cifras. La
+Figura~\ref{fig:ejec-spin-check} es la ejecución de esa regresión: cada caso compara el número de
+errores contra el esperado.
+
+\begin{figure}[H]
+\caption{Ejecución de la regresión de Spin: los siete casos}\label{fig:ejec-spin-check}
+\centering
+\includegraphics[width=\textwidth]{img/ejec-spin-check.png}
+\end{figure}
 
 \begin{table}[H]
 \caption{Verificación del modelo correcto y de los tres mutantes}\label{tab:spin-casos}
@@ -100,14 +108,17 @@ menos estados.\par}
 \paragraph{El modelo correcto cumple las tres propiedades.} Las tres búsquedas recorren los mismos
 2\,412 estados y terminan sin errores. La de progreso es la más costosa, porque con fairness
 \texttt{pan} explora el producto del modelo con el autómata de la fórmula
-(Listado~\ref{lst:spin-termina}).
+(Figura~\ref{fig:spin-termina}).
 
 \needspace{21\baselineskip}
-\lstinputlisting[style=terminal, caption={\texttt{pan -a -f -N termina} sobre el modelo correcto},
-                 label={lst:spin-termina}, lastline=17]{generado/spin-termina.txt}
+\begin{figure}[H]
+\caption{Ejecución de \texttt{pan -a -f -N termina} sobre el modelo correcto}\label{fig:spin-termina}
+\centering
+\includegraphics[width=0.88\textwidth]{img/ejec-spin-termina.png}
+\end{figure}
 
 \paragraph{El deadlock aparece en la primera iteración.} Con el \texttt{wg.Done} perdido, Spin
-encuentra un estado final inválido a profundidad 64. El Listado~\ref{lst:traza-deadlock} es el
+encuentra un estado final inválido a profundidad 64. La Figura~\ref{fig:traza-deadlock} es el
 estado del sistema al final del contraejemplo, reproducido con \texttt{spin -t}: los cuatro puntos
 fueron procesados (\texttt{seen[i] = 1}), los dos bloques tienen sus dos puntos
 (\texttt{conteo[c] = 2}), pero \texttt{pendientes} quedó en 1. Los dos workers están en la línea 61,
@@ -116,9 +127,11 @@ en la línea 113, la guarda \texttt{pendientes == 0}, que no lo es. Nadie puede 
 trabajo se hizo y el programa no termina: es exactamente el síntoma de un \texttt{wg.Done} perdido.
 
 \needspace{30\baselineskip}
-\lstinputlisting[style=terminal, caption={Estado final del contraejemplo de
-                 \texttt{MUTANTE\_DEADLOCK} (\texttt{spin -t -g -l -p})},
-                 label={lst:traza-deadlock}, lastline=26]{generado/traza-deadlock.txt}
+\begin{figure}[H]
+\caption{Estado final del contraejemplo de \texttt{MUTANTE\_DEADLOCK} (\texttt{spin -t -g -l -p})}\label{fig:traza-deadlock}
+\centering
+\includegraphics[width=0.86\textwidth]{img/ejec-traza-deadlock.png}
+\end{figure}
 
 El mismo mutante viola también la fórmula de progreso: \texttt{pan -a -f -N termina} encuentra un
 ciclo de aceptación, una ejecución infinita en la que \texttt{fin} no se activa nunca. Las dos

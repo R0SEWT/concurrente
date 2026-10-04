@@ -1,0 +1,18 @@
+$ spin -a kmeans.pml && cc -O2 -o pan-ltl pan.c && ./pan-ltl -a -f -N termina
+pan: ltl formula termina
+
+(Spin Version 6.5.2 -- 18 September 2025)
+        + Partial Order Reduction
+
+Full statespace search for:
+        never claim             + (termina)
+        assertion violations    + (if within scope of claim)
+        acceptance   cycles     + (fairness enabled)
+        invalid end states      - (disabled by never claim)
+
+State-vector 64 byte, depth reached 361, errors: 0
+     2412 states, stored (12643 visited)
+    10057 states, matched
+    22700 transitions (= visited+matched)
+        1 atomic steps
+hash conflicts:         0 (resolved)

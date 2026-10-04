@@ -1,0 +1,17 @@
+$ spin -DMUTANTE -a kmeans.pml && cc -O2 -DNOCLAIM -o pan-mutante pan.c && ./pan-mutante
+pan:1: assertion violated (compartido==4) (at depth 205)
+pan: wrote kmeans.pml.trail
+
+(Spin Version 6.5.2 -- 18 September 2025)
+Warning: Search not completed
+        + Partial Order Reduction
+
+Full statespace search for:
+        never claim             - (not selected)
+        assertion violations    +
+        acceptance   cycles     - (not selected)
+        invalid end states      +
+
+State-vector 56 byte, depth reached 209, errors: 1
+      393 states, stored
+       42 states, matched

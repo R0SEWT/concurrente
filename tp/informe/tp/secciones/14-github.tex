@@ -7,7 +7,15 @@ El proyecto se aloja en el repositorio público \url{https://github.com/R0SEWT/c
 Trabajo Parcial ocupa el directorio \texttt{tp/}, con su propio toolchain y una integración continua
 en GitHub Actions que, en cada \emph{pull request}, corre \texttt{go test -race}, \texttt{go vet} y
 \texttt{gofmt} sobre el módulo de Go, \texttt{ruff} y \texttt{pytest} sobre el pipeline de datos, y la
-regresión de Spin de la Sección~\ref{sec:verificacion} sobre el modelo Promela.
+regresión de Spin de la Sección~\ref{sec:verificacion} sobre el modelo Promela. La
+Figura~\ref{fig:ejec-ci} es el resultado de esos controles sobre la \emph{pull request} que cierra
+este entregable.
+
+\begin{figure}[H]
+\caption{Controles de integración continua sobre la \emph{pull request} \#50}\label{fig:ejec-ci}
+\centering
+\includegraphics[width=\textwidth]{img/ejec-ci.png}
+\end{figure}
 
 \subsection{Flujo Git Flow}
 

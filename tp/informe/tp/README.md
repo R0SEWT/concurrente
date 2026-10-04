@@ -37,6 +37,11 @@ latexmk                                                  # pdflatex + biber, APA
   ```
 
   (la primera línea `$ ...` de cada `.txt` es el comando, agregada a mano para la figura).
+- **Capturas de cada ejecución** (`img/ejec-*.png`): el docente pide una captura de cada
+  ejecución, no un listado ni una mención. `tp/scripts/capturar_ejecuciones.sh` corre el pipeline,
+  `pytest`, `go vet` + `go test -race`, la regresión de Spin, un benchmark reducido y los checks de
+  CI, guarda la salida real en `img/ejec-*.txt` (primera línea: el comando) y la renderiza. Se
+  puede rehacer un solo grupo: `capturar_ejecuciones.sh spin`.
 - **Todo lo de Spin**: `cd tp/spin && make informe`. Deja en `generado/` las salidas de `pan`
   (`spin-*.txt`), el estado final del contraejemplo de deadlock (`traza-deadlock.txt`), la tabla
   de los siete casos de la regresión (`spin-casos.tsv` → `tabla-spin-casos.tex`) y las figuras
