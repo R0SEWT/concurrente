@@ -54,6 +54,8 @@ un bug en una de ellas.
 | `scripts/kmeans_gpu.py` | Lloyd en GPU con PyTorch, mismo contrato que `kmeans/`, para el contraste del TB1. Se corre en `ssh gpu` con `scripts/gpu/correr_remoto.sh`; cómo y por qué, en `docs/kmeans-gpu.md`. |
 | `docs/pixel.md` | El K-means en un Pixel 9a con Termux: resultados, heterogeneidad de núcleos, deriva térmica, y cómo compilar para Android (`GOOS=android`). |
 | `scripts/analisis_gpu.py` | Tablas del contraste GPU vs CPU desde `reports/gpu_*.json` y el benchmark de Go de la misma máquina. |
+| `scripts/hero_mapa.py` | El mapa de Nueva York en cuatro momentos (`reports/figuras/mapa.svg`), desde `app/data/` y los reports. Es la cabecera del README y la card del perfil. |
+| `scripts/hero.py` | La figura de paneles (`reports/figuras/hero.svg`): mecanismo, escalamiento en las cuatro máquinas y la inercia idéntica en las 20 corridas. Falla si los reports contradicen el dibujo. |
 
 ## Data Conventions
 

@@ -11,6 +11,10 @@
 </p>
 
 <p>
+  <img src="tp/reports/figuras/mapa.svg" alt="Cuatro mapas de las zonas de taxi de Nueva York, cada zona pintada con su tipo de viaje más común: el tráfico de negocios domina Manhattan en la mañana de semana, la salida laboral y la cena en la noche de semana, los paseos la tarde del fin de semana y la vida nocturna la noche del fin de semana." width="100%">
+</p>
+
+<p>
   <img alt="Go" src="https://img.shields.io/badge/Go-1.26-00ADD8?style=for-the-badge&logo=go&logoColor=white">
   <img alt="Promela" src="https://img.shields.io/badge/Promela-Spin_6.5-6E4C9E?style=for-the-badge">
   <img alt="Python" src="https://img.shields.io/badge/Python-uv-3776AB?style=for-the-badge&logo=python&logoColor=white">
@@ -103,6 +107,11 @@ clustering, 10 iteraciones sobre los 2,8 M viajes; la carga del CSV queda fuera.
 - **La GPU de consumo no le gana a 16 hilos en doble precisión** (0,55×). En simple precisión gana
   por poco y cambia de cluster el 0,2 % de los viajes. Además, las sumas en GPU no son deterministas:
   en 21 repeticiones iguales la inercia toma 8 valores distintos en `float64`.
+
+<p align="center">
+  <img src="tp/reports/figuras/hero.svg" alt="A: esquema de una iteración, con los workers tomando chunks en cualquier orden y las sumas parciales guardadas por índice. B: speedup frente a la cantidad de workers en las cuatro máquinas, con su intervalo de confianza. C: las 20 combinaciones de máquina y workers terminan con la misma inercia." width="100%">
+  <br><sub>(A) Por qué el resultado no depende de la planificación. (B) Escalamiento fuerte con IC 95 %. (C) La misma inercia en las 20 corridas, y los mutantes que detecta Spin. Generada por <code>tp/scripts/hero.py</code> desde <code>tp/reports/</code>.</sub>
+</p>
 
 <p align="center">
   <img src="tp/reports/figuras/pixel/01-barra-secuencial-50.png" alt="El K-means corriendo en un Pixel 9a con Termux" width="420">
