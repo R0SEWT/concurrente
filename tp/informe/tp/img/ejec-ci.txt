@@ -1,7 +1,0 @@
-$ gh pr checks 50
-GitGuardian Security Checks  pass  2s    https://dashboard.gitguardian.com
-Sourcery review              pass  1m9s  https://sourcery.ai
-labs/go                      pass  25s   https://github.com/R0SEWT/concurrente/actions/runs/36960426166/job/110692692815
-test                         pass  13s   https://github.com/R0SEWT/concurrente/actions/runs/36960422838/job/110692682752
-test                         pass  10s   https://github.com/R0SEWT/concurrente/actions/runs/36960426163/job/110692692603
-tp/kmeans                    pass  23s   https://github.com/R0SEWT/concurrente/actions/runs/36960426166/job/110692692551

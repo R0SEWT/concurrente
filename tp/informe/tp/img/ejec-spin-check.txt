@@ -1,9 +1,0 @@
-$ make check
-  ok    correcto             sin-ltl              errores: 0  seguridad: aserciones y estados finales válidos (sin deadlock)
-  ok    correcto             -a -N exclusion      errores: 0  LTL: nadie publica centroides mientras hay lectores
-  ok    correcto             -a -f -N termina     errores: 0  LTL: las dos iteraciones terminan (weak fairness)
-  ok    MUTANTE              sin-ltl              errores: 1  acumulador compartido sin mutex: incremento perdido
-  ok    MUTANTE_DEADLOCK     sin-ltl              errores: 1  un worker pierde el wg.Done: deadlock en la barrera
-  ok    MUTANTE_DEADLOCK     -a -f -N termina     errores: 1  el mismo wg.Done perdido: la corrida nunca termina
-  ok    MUTANTE_SIN_BARRERA  -a -N exclusion      errores: 1  el coordinador publica sin esperar la barrera
-== regresión OK: 7 casos ==

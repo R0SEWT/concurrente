@@ -56,22 +56,23 @@ Sección~\ref{sec:sync}.
 \subsection{Evidencia de funcionamiento}
 
 Las Figuras~\ref{fig:cli-seq} y~\ref{fig:cli-conc} son la salida de la CLI sobre el dataset
-completo en la laptop del equipo, con $k = \cifra{k}$ y \cifra{iter-fijas} iteraciones. Los textos
-de origen están en \texttt{tp/informe/pc2/img/} junto a las imágenes, y cualquiera puede rehacerlas
-con los comandos que encabezan cada captura. Ambas corridas parten del mismo archivo de centroides
+completo en la laptop del equipo, con $k = \cifra{k}$ y \cifra{iter-fijas} iteraciones. Son capturas
+de pantalla de la terminal tal como se corrió cada comando, con el comando en el prompt;
+\texttt{tp/scripts/capturar\_ejecuciones.sh} las rehace. La concurrente va con \texttt{-progreso},
+que dibuja cada iteración de Lloyd con su inercia mientras corre. Ambas corridas parten del mismo archivo de centroides
 iniciales (la primera lo genera y la segunda lo lee, como muestra el \texttt{init 0 ms}), y ambas
 terminan con la misma inercia, lo que es la primera comprobación de que calculan lo mismo.
 
-\begin{figure}[H]
+\begin{figure}[tbp]
 \caption{CLI en modo secuencial sobre el dataset completo}\label{fig:cli-seq}
 \centering
-\includegraphics[width=\textwidth]{img/cli-secuencial.png}
+\includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{img/cli-secuencial.png}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[tbp]
 \caption{CLI en modo concurrente con 8 workers, mismos centroides iniciales}\label{fig:cli-conc}
 \centering
-\includegraphics[width=\textwidth]{img/cli-concurrente.png}
+\includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{img/cli-concurrente.png}
 \end{figure}
 
 Cada corrida imprime, además del resultado, lo que hace falta para reproducirla: sha256 del gold y
@@ -102,11 +103,19 @@ equivalencia entre versiones son:
 Sobre el gold real, una prueba adicional (que se omite con \texttt{-short}) corre ambas versiones y
 comprueba la equivalencia con \cifra{n}~viajes. La Tabla~\ref{tab:inercias} de la
 Sección~\ref{sec:reproducibilidad} muestra el resultado de esa comparación en las corridas oficiales.
-La Figura~\ref{fig:ejec-go-test} es la ejecución completa, con el detector de carreras y sin
-\texttt{-short}: incluida la prueba sobre el gold real, toma cerca de tres minutos.
+Las Figuras~\ref{fig:ejec-go-test} y~\ref{fig:ejec-go-test-resto} son la ejecución completa, con el
+detector de carreras, sin \texttt{-short} y con \texttt{-v}, que lista cada prueba con su resultado.
+La suite se parte en dos pantallas para que se pueda leer: primero el núcleo (secuencial,
+concurrente y las pruebas sobre el gold real, que toman cerca de tres minutos) y después el resto.
 
-\begin{figure}[H]
-\caption{Ejecución de \texttt{go vet} y de todas las pruebas con \texttt{-race}}\label{fig:ejec-go-test}
+\begin{figure}[tbp]
+\caption{Ejecución de \texttt{go vet} y de las pruebas del núcleo con \texttt{-race -v}}\label{fig:ejec-go-test}
 \centering
-\includegraphics[width=0.78\textwidth]{img/ejec-go-test.png}
+\includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{img/ejec-go-test.png}
+\end{figure}
+
+\begin{figure}[tbp]
+\caption{Ejecución del resto de las pruebas con \texttt{-race -v}}\label{fig:ejec-go-test-resto}
+\centering
+\includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{img/ejec-go-test-resto.png}
 \end{figure}

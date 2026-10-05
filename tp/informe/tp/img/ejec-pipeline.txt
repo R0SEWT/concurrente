@@ -1,2 +1,0 @@
-$ uv run nyc-tlc all
-bronze 2,964,624 → silver 2,831,486 → gold 2,831,486 (cumple el mínimo de 1,000,000)

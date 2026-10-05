@@ -28,18 +28,18 @@ Todo el proceso se reproduce con tres comandos:
 
 Las Figuras~\ref{fig:ejec-pipeline} y~\ref{fig:ejec-pytest} son la ejecución de los dos últimos
 sobre los datos de esta entrega: el pipeline reconstruye gold con el mismo sha256 que cita el
-anexo, y las 66 pruebas pasan.
+anexo, y las 66 pruebas pasan, listadas una por una con \texttt{-v}.
 
-\begin{figure}[H]
+\begin{figure}[tbp]
 \caption{Ejecución del pipeline completo: bronze $\rightarrow$ silver $\rightarrow$ gold}\label{fig:ejec-pipeline}
 \centering
-\includegraphics[width=0.95\textwidth]{img/ejec-pipeline.png}
+\includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{img/ejec-pipeline.png}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[tbp]
 \caption{Ejecución de las pruebas del pipeline de datos}\label{fig:ejec-pytest}
 \centering
-\includegraphics[width=0.9\textwidth]{img/ejec-pytest.png}
+\includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{img/ejec-pytest.png}
 \end{figure}
 
 \subsection{Reglas de limpieza}
