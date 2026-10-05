@@ -2,27 +2,29 @@
 # requires-python = ">=3.11"
 # dependencies = []
 # ///
-"""Hero del K-means concurrente: una iteración de Lloyd en un SVG autocontenido.
+"""Figura hero del K-means concurrente, en estilo de figura de revista (Frontiers).
 
-    uv run scripts/hero.py                      # → reports/figuras/hero.svg
-    uv run scripts/hero.py -o /tmp/hero.svg
+    uv run scripts/hero.py           # → reports/figuras/hero.svg, ancho completo (README)
+    uv run scripts/hero.py card      # → reports/figuras/card.svg, solo B y C (card de ~470 px)
 
-Una sola idea: el planificador decide QUIÉN procesa cada chunk; el índice decide DÓNDE se
-suma. Por eso el resultado es idéntico bit a bit para cualquier cantidad de workers.
+Tres paneles, una tesis: el orden de suma está fijado por el índice del chunk, así que el
+resultado no depende de la planificación.
 
-Las cifras salen del repo, no se escriben a mano:
+  A  el mecanismo: workers que toman chunks en cualquier orden, sumas parciales guardadas por
+     índice, barrera y suma en orden de índice. Esquemático (4 workers, 8 chunks), y lo dice.
+  B  escalamiento fuerte sobre el dataset completo, una curva por máquina con su IC 95 %.
+  C  la evidencia del «bit a bit»: la inercia final de cada máquina × cada P, más los mutantes
+     que Spin detecta.
 
-  speedup        reports/benchmark_gorgo.json, experimento «fijas» sobre el dataset completo
-  bit a bit      la misma inercia en todas las filas concurrentes de ese experimento; si
-                 alguna difiere, el script falla en vez de dibujar una afirmación falsa
-  Spin           informe/tp/generado/spin-casos.tsv (lo escribe spin/check.sh): un mutante
-                 cuenta como atrapado si TODAS sus corridas dan errores > 0
+Las cifras salen del repo y el script falla si contradicen el dibujo:
 
-El Gantt de la izquierda es ilustrativo: 4 workers, 8 chunks, con una planificación coherente
-con un canal FIFO (cada worker libre recibe el chunk siguiente).
+  B, C   reports/benchmark_<maquina>.json, experimento «fijas» con el dataset completo. Si dos
+         corridas concurrentes dan inercias distintas, no hay figura.
+  C      informe/tp/generado/spin-casos.tsv (lo escribe spin/check.sh): un mutante cuenta como
+         detectado si todas sus corridas dan errores > 0.
 
-Las fuentes (Inter y JetBrains Mono, OFL) se bajan una vez de npm con sha256 fijo y se
-incrustan en base64, así el SVG se ve igual en un <img> de GitHub que en el navegador.
+Tipografía Arimo (métrica de Arial, la que pide Frontiers), bajada de npm con sha256 fijo e
+incrustada en base64: el SVG se ve igual dentro de un <img> de GitHub que en el navegador.
 """
 
 import argparse
@@ -31,6 +33,7 @@ import csv
 import hashlib
 import io
 import json
+import math
 import tarfile
 import urllib.request
 from pathlib import Path
@@ -39,29 +42,27 @@ from xml.sax.saxutils import escape
 TP = Path(__file__).resolve().parent.parent
 CACHE = Path.home() / ".cache" / "concurrente-hero"
 
-FUENTES = {
-    # paquete npm: (sha256 del tarball, subsets)
-    "inter": (
-        "d26710dd38e7217484a1d47ee76c024977ec550548876f26d06ed1844af09a14",
-        ["latin", "greek"],
-    ),
-    "jetbrains-mono": (
-        "996fe6368a480c9ce15d4de22a2682b7c40b403718fee2b15e7272f244fd993f",
-        ["latin"],
-    ),
-}
-FAMILIA = {"inter": "Inter", "jetbrains-mono": "JetBrains Mono"}
-VERSION_FUENTES = "5.3.0"
+ARIMO = ("5.3.0", "df44945077a74905969f15bba3b442f9fb6773818b2b59c970911deace01132f")
 
 W, H = 2400, 1280
-INK, MUTED, FAINT, LINE = "#1d2433", "#5b6474", "#9aa3b2", "#d7dce4"
-RED, TEAL = "#d6334a", "#0f6b56"
-SANS, MONO = "Inter, sans-serif", "'JetBrains Mono', monospace"
+INK, MUTED, FAINT, RULE = "#111111", "#555555", "#9a9a9a", "#d0d0d0"
+FONT = "Arimo, Arial, Helvetica, sans-serif"
 
-# Tono por índice de chunk, claro → oscuro: en parciales[c] el orden se lee como gradiente.
-TONOS = ["#d3efe5", "#b3e3d3", "#8fd3bd", "#66bfa3", "#3fa688", "#238b6f", "#147459", "#0b5b46"]
+# Máquinas en orden fijo; color Okabe–Ito y forma de marcador por máquina (la forma es la
+# codificación secundaria para lectores con daltonismo). Núcleos: docs/analisis-pc2.md y
+# docs/pixel.md.
+MAQUINAS = [
+    ("wsl4060", "i7 desktop", "#0072B2", "circulo"),
+    ("gorgo", "Ryzen VM", "#E69F00", "cuadrado"),
+    ("pixel9a", "Pixel 9a", "#009E73", "triangulo"),
+    ("laptop_i5", "i5 laptop", "#CC79A7", "rombo"),
+]
 
-# (chunk, inicio, fin) por worker. Canal FIFO: el primer worker libre recibe el siguiente.
+# Rampa secuencial de un tono para el índice del chunk (claro → oscuro).
+TONOS = ["#d4ede4", "#b2dfcf", "#8dcfb8", "#64bb9f", "#3ea385", "#22876b", "#126e55", "#085641"]
+
+# (chunk, inicio, fin) por worker, coherente con un canal FIFO: el primer worker libre
+# recibe el chunk siguiente. Unidades arbitrarias.
 CARRILES = [
     [(1, 0, 190), (5, 200, 400)],
     [(0, 10, 230), (6, 240, 450)],
@@ -73,300 +74,366 @@ CARRILES = [
 # --- datos -------------------------------------------------------------------------------------
 
 
-def cifras_benchmark(ruta: Path, workers: int) -> dict:
-    d = json.loads(ruta.read_text())
-    n = d["datos"]["n"]
-    filas = [
-        r
-        for r in d["resumen"]
-        if r["experimento"] == "fijas" and r["tamano"] == n and r["modo"] == "conc"
-    ]
-    inercias = {r["inercia"] for r in filas}
-    if len(inercias) != 1:
-        raise SystemExit(
-            f"{ruta}: la inercia concurrente cambia con P ({inercias}); no es bit a bit"
+def benchmarks(reports: Path) -> list[dict]:
+    salida, inercias = [], set()
+    for clave, nombre, color, forma in MAQUINAS:
+        d = json.loads((reports / f"benchmark_{clave}.json").read_text())
+        n = d["datos"]["n"]
+        filas = sorted(
+            (
+                r
+                for r in d["resumen"]
+                if r["experimento"] == "fijas" and r["tamano"] == n and r["modo"] == "conc"
+            ),
+            key=lambda r: r["workers"],
         )
-    fila = next((r for r in filas if r["workers"] == workers), None)
-    if fila is None:
-        raise SystemExit(f"{ruta}: no hay corrida concurrente con {workers} workers")
-    return {
-        "n": n,
-        "k": d["protocolo"]["k"],
-        "speedup": fila["speedup"]["punto"],
-        "workers": workers,
-        "ps": sorted(r["workers"] for r in filas),
-    }
+        inercias |= {r["inercia"] for r in filas}
+        salida.append(
+            {
+                "nombre": nombre,
+                "color": color,
+                "forma": forma,
+                "n": n,
+                "k": d["protocolo"]["k"],
+                "puntos": [
+                    (
+                        r["workers"],
+                        r["speedup"]["punto"],
+                        r["speedup"]["inferior"],
+                        r["speedup"]["superior"],
+                    )
+                    for r in filas
+                ],
+            }
+        )
+    if len(inercias) != 1:
+        raise SystemExit(f"las corridas concurrentes no coinciden bit a bit: {sorted(inercias)}")
+    if len({m["n"] for m in salida}) != 1:
+        raise SystemExit("las máquinas no corrieron sobre el mismo dataset")
+    for m in salida:
+        m["inercia"] = inercias.copy().pop()
+    return salida
 
 
 def cifras_spin(ruta: Path) -> dict:
     with ruta.open(newline="") as f:
         casos = list(csv.DictReader(f, delimiter="\t"))
+    if any(int(c["errores"]) for c in casos if c["variante"] == "correcto"):
+        raise SystemExit(f"{ruta}: el modelo correcto tiene errores")
     mutantes: dict[str, bool] = {}
     for c in casos:
         if c["variante"] != "correcto":
             mutantes[c["variante"]] = mutantes.get(c["variante"], True) and int(c["errores"]) > 0
-    correctos = [c for c in casos if c["variante"] == "correcto"]
-    if any(int(c["errores"]) for c in correctos):
-        raise SystemExit(f"{ruta}: el modelo correcto tiene errores")
-    return {"atrapados": sum(mutantes.values()), "mutantes": len(mutantes)}
+    return {"detectados": sum(mutantes.values()), "mutantes": len(mutantes)}
 
 
 def fuentes_css() -> str:
+    version, sha = ARIMO
+    tgz = CACHE / f"arimo-{version}.tgz"
+    if not tgz.exists():
+        CACHE.mkdir(parents=True, exist_ok=True)
+        url = f"https://registry.npmjs.org/@fontsource/arimo/-/{tgz.name}"
+        tgz.write_bytes(urllib.request.urlopen(url, timeout=60).read())
+    datos = tgz.read_bytes()
+    if hashlib.sha256(datos).hexdigest() != sha:
+        raise SystemExit(f"{tgz}: sha256 inesperado")
     reglas = []
-    for paquete, (sha, subsets) in FUENTES.items():
-        tgz = CACHE / f"{paquete}-{VERSION_FUENTES}.tgz"
-        if not tgz.exists():
-            url = f"https://registry.npmjs.org/@fontsource-variable/{paquete}/-/{tgz.name}"
-            CACHE.mkdir(parents=True, exist_ok=True)
-            tgz.write_bytes(urllib.request.urlopen(url, timeout=60).read())
-        datos = tgz.read_bytes()
-        if hashlib.sha256(datos).hexdigest() != sha:
-            raise SystemExit(f"{tgz}: sha256 inesperado")
-        with tarfile.open(fileobj=io.BytesIO(datos)) as tar:
-            for s in subsets:
-                woff2 = tar.extractfile(f"package/files/{paquete}-{s}-wght-normal.woff2").read()
+    with tarfile.open(fileobj=io.BytesIO(datos)) as tar:
+        for subset in ("latin", "greek"):  # greek: Σ
+            for peso in (400, 700):
+                woff2 = tar.extractfile(f"package/files/arimo-{subset}-{peso}-normal.woff2").read()
                 b64 = base64.b64encode(woff2).decode()
                 reglas.append(
-                    f'@font-face{{font-family:"{FAMILIA[paquete]}";font-weight:100 900;'
+                    f'@font-face{{font-family:"Arimo";font-weight:{peso};'
                     f'src:url(data:font/woff2;base64,{b64}) format("woff2")}}'
                 )
     return "\n".join(reglas)
 
 
-# --- dibujo ------------------------------------------------------------------------------------
+# --- primitivas --------------------------------------------------------------------------------
 
 
-def texto(x, y, s, size=34, weight=500, fill=INK, font=SANS, anchor="start", ls=0):
+def texto(x, y, s, size=30, bold=False, fill=INK, anchor="start", extra=""):
+    peso = 700 if bold else 400
     return (
-        f'<text x="{x:g}" y="{y:g}" font-family="{font}" font-size="{size}" font-weight="{weight}" '
-        f'fill="{fill}" text-anchor="{anchor}" letter-spacing="{ls}">{escape(s)}</text>'
+        f'<text x="{x:g}" y="{y:g}" font-family="{FONT}" font-size="{size}" font-weight="{peso}" '
+        f'fill="{fill}" text-anchor="{anchor}"{extra}>{escape(s)}</text>'
     )
 
 
-def rect(x, y, w, h, fill, rx=12, stroke=None, sw=2):
-    borde = f' stroke="{stroke}" stroke-width="{sw}"' if stroke else ""
+def linea(x1, y1, x2, y2, color=INK, ancho=2, extra=""):
+    return (
+        f'<line x1="{x1:g}" y1="{y1:g}" x2="{x2:g}" y2="{y2:g}" stroke="{color}" '
+        f'stroke-width="{ancho}"{extra}/>'
+    )
+
+
+def rect(x, y, w, h, fill, rx=6, stroke=None):
+    borde = f' stroke="{stroke}" stroke-width="2"' if stroke else ""
     return (
         f'<rect x="{x:g}" y="{y:g}" width="{w:g}" height="{h:g}" rx="{rx}" fill="{fill}"{borde}/>'
     )
 
 
+def marcador(forma, x, y, color, r=11):
+    anillo = 'stroke="#ffffff" stroke-width="3"'
+    if forma == "circulo":
+        return f'<circle cx="{x:g}" cy="{y:g}" r="{r}" fill="{color}" {anillo}/>'
+    if forma == "cuadrado":
+        return f'<rect x="{x - r:g}" y="{y - r:g}" width="{2 * r}" height="{2 * r}" fill="{color}" {anillo}/>'
+    if forma == "triangulo":
+        q = r * 1.25
+        return f'<path d="M {x:g} {y - q:g} L {x + q:g} {y + q * 0.8:g} L {x - q:g} {y + q * 0.8:g} Z" fill="{color}" {anillo}/>'
+    q = r * 1.3
+    return f'<path d="M {x:g} {y - q:g} L {x + q:g} {y:g} L {x:g} {y + q:g} L {x - q:g} {y:g} Z" fill="{color}" {anillo}/>'
+
+
+def encabezado(x, y, letra, titulo, k=1.0):
+    return texto(x, y, letra, size=round(60 * k), bold=True) + texto(
+        x + round(62 * k), y - round(4 * k), titulo, size=round(38 * k), bold=True
+    )
+
+
 def sobre(c):
-    return "#0b3d30" if c < 4 else "#ffffff"
+    return "#0b3328" if c < 4 else "#ffffff"
 
 
-def dibujar(b: dict, spin: dict) -> list[str]:
-    s: list[str] = []
-    gx, gw, tmax = 470, 830, 450
+# --- paneles -----------------------------------------------------------------------------------
+
+
+def panel_a() -> list[str]:
+    s = [encabezado(70, 118, "A", "Scheduling varies, summation order does not")]
+    s.append(texto(132, 168, "One Lloyd iteration · 4 workers, 8 chunks (schematic)", fill=MUTED))
+
+    gx, gw, tmax = 270, 630, 450
     tx = lambda t: gx + t / tmax * gw
-    ly0, lh, lg = 290, 92, 22
-    ly = lambda i: ly0 + i * (lh + lg)
-    bx = 1350  # barrera
-    py, ph, pw, pp = 810, 92, 92, 104  # fila de parciales
-    px = lambda c: gx + c * pp
+    y0, lh, lg = 232, 86, 22
+    bx = 935  # barrera
 
-    s.append(
-        texto(80, 104, "ONE LLOYD ITERATION", size=30, weight=700, fill=MUTED, font=MONO, ls=3)
-    )
-    s.append(texto(80, 150, "tp/kmeans/concurrente.go", size=30, fill=FAINT, font=MONO))
-
-    # Lo que los workers leen sin locks
-    s.append(rect(gx, 180, gw, 74, "#f1f3f7", rx=14, stroke=LINE))
-    s.append(texto(gx + 28, 230, "X · centroids", size=36, weight=700, font=MONO))
-    s.append(texto(gx + gw - 28, 230, "read-only, no locks", size=32, fill=MUTED, anchor="end"))
-
-    # Canal
-    cx, cw, ct, ch = 90, 170, 56, 46
-    s.append(texto(cx, 230, "chan", size=30, fill=MUTED, font=MONO))
-    s.append(texto(cx, 266, "trabajos", size=36, weight=700, font=MONO))
-    s.append(rect(cx - 14, ly0 - 14, cw + 28, 8 * ct + 18, "none", rx=18, stroke=LINE, sw=3))
-    for c in range(8):
-        y = ly0 + c * ct
-        s.append(rect(cx, y, cw, ch, TONOS[c], rx=9))
-        s.append(
-            texto(
-                cx + cw / 2,
-                y + 34,
-                f"c{c}",
-                size=32,
-                weight=700,
-                font=MONO,
-                fill=sobre(c),
-                anchor="middle",
-            )
-        )
-    ymid = ly0 + 8 * ct / 2 - 10
-    s.append(
-        f'<path d="M {cx + cw + 30} {ymid} L {gx - 110} {ymid}" stroke="{FAINT}" stroke-width="4" marker-end="url(#gris)"/>'
-    )
-    s.append(texto(cx + cw + 40, ymid + 64, "FIFO", size=30, fill=FAINT, font=MONO))
-
-    # Workers
     for i, carril in enumerate(CARRILES):
-        y = ly(i)
-        s.append(
-            texto(
-                gx - 22,
-                y + lh / 2 + 12,
-                f"G{i + 1}",
-                size=34,
-                weight=700,
-                font=MONO,
-                fill=MUTED,
-                anchor="end",
-            )
-        )
-        s.append(
-            f'<line x1="{gx}" y1="{y + lh / 2}" x2="{bx}" y2="{y + lh / 2}" stroke="{LINE}" stroke-width="2"/>'
-        )
-        fin = 0.0
+        y = y0 + i * (lh + lg)
+        s.append(texto(gx - 22, y + lh / 2 + 11, f"Worker {i + 1}", anchor="end"))
+        fin = gx
         for c, a, z in carril:
-            x0, x1 = tx(a), tx(z) - 6
+            x0, x1 = tx(a), tx(z) - 5
             s.append(rect(x0, y, x1 - x0, lh, TONOS[c]))
             s.append(
                 texto(
                     (x0 + x1) / 2,
-                    y + lh / 2 + 13,
-                    f"c{c}",
-                    size=36,
-                    weight=700,
-                    font=MONO,
+                    y + lh / 2 + 12,
+                    str(c),
+                    size=34,
+                    bold=True,
                     fill=sobre(c),
                     anchor="middle",
                 )
             )
             fin = x1
         s.append(
-            f'<line x1="{fin + 14:g}" y1="{y + lh / 2}" x2="{bx - 12}" y2="{y + lh / 2}" stroke="{RED}" '
-            'stroke-width="4" stroke-dasharray="3 11" stroke-linecap="round"/>'
+            linea(
+                fin + 10,
+                y + lh / 2,
+                bx - 10,
+                y + lh / 2,
+                FAINT,
+                3,
+                ' stroke-dasharray="2 9" stroke-linecap="round"',
+            )
         )
-        s.append(f'<circle cx="{fin + 2:g}" cy="{y + lh / 2}" r="9" fill="{RED}"/>')
-    s.append(texto(gx, ly(3) + lh + 52, "workers take chunks in any order", size=32, fill=MUTED))
-    s.append(texto(bx - 24, ly(3) + lh + 52, "Done()", size=30, fill=RED, font=MONO, anchor="end"))
 
-    # Parciales, guardados por índice
+    s.append(linea(bx, 205, bx, 905, INK, 4, ' stroke-dasharray="14 10"'))
+    s.append(texto(bx, 196, "barrier", bold=True, anchor="middle"))
+    s.append(
+        texto(gx, y0 + 4 * (lh + lg) + 22, "Each worker pulls the next free chunk", fill=MUTED)
+    )
+
+    # Sumas parciales, una por índice de chunk
+    py, pw, pp = 760, 70, 79
+    s.append(texto(gx - 22, py + 34, "Partial", anchor="end"))
+    s.append(texto(gx - 22, py + 68, "sums", anchor="end"))
     for c in range(8):
-        s.append(rect(px(c), py, pw, ph, TONOS[c]))
+        x = gx + c * pp
+        s.append(rect(x, py, pw, 80, TONOS[c]))
+        s.append(
+            texto(x + pw / 2, py + 52, str(c), size=34, bold=True, fill=sobre(c), anchor="middle")
+        )
+
+    # Suma en orden de índice → centroides nuevos
+    ay = py + 118
+    s.append(
+        f'<path d="M {gx} {ay} L {gx + 7 * pp + pw + 12} {ay}" stroke="{INK}" stroke-width="4" marker-end="url(#flecha)"/>'
+    )
+    s.append(texto(gx, ay + 46, "Σ in chunk-index order  →  new centroids", bold=True))
+
+    s.append(
+        texto(70, 1040, "Floating-point addition is not associative, so a fixed order", fill=MUTED)
+    )
+    s.append(texto(70, 1082, "of summation is what makes the result reproducible.", fill=MUTED))
+    return s
+
+
+def panel_b(
+    maquinas: list[dict],
+    ox: float,
+    oy: float,
+    ancho: float,
+    alto: float,
+    k: float = 1.0,
+    letra: str = "B",
+) -> list[str]:
+    """Speedup contra P. (ox, oy): esquina del encabezado; alto: alto del área de datos."""
+    m0 = maquinas[0]
+    f = lambda v: round(v * k)
+    s = [
+        encabezado(ox, oy, letra, f"Strong scaling, {m0['n'] / 1e6:.2f} M trips, k = {m0['k']}", k)
+    ]
+
+    x0, x1 = ox + f(150), ox + ancho - f(300)
+    y0, y1 = oy + f(72), oy + f(72) + alto
+    ymax = 8
+    px = lambda p: x0 + math.log2(p) / 4 * (x1 - x0)
+    py = lambda v: y1 - v / ymax * (y1 - y0)
+
+    # Ejes (solo izquierda y abajo), ticks hacia afuera
+    s.append(linea(x0 - 20, y1, x1 + 20, y1))
+    s.append(linea(x0 - 20, y0 - 10, x0 - 20, y1))
+    for p in (1, 2, 4, 8, 16):
+        s.append(linea(px(p), y1, px(p), y1 + 12))
+        s.append(texto(px(p), y1 + f(46), str(p), size=f(30), anchor="middle"))
+    for v in (0, 2, 4, 6, 8):
+        s.append(linea(x0 - 32, py(v), x0 - 20, py(v)))
+        s.append(texto(x0 - 42, py(v) + f(10), str(v), size=f(30), anchor="end"))
+    s.append(texto((x0 + x1) / 2, y1 + f(92), "Workers (P)", size=f(30), anchor="middle"))
+    yl, xl = (y0 + y1) / 2, x0 - f(92)
+    s.append(
+        texto(
+            xl,
+            yl,
+            "Speedup",
+            size=f(30),
+            anchor="middle",
+            extra=f' transform="rotate(-90 {xl} {yl})"',
+        )
+    )
+
+    # Ideal lineal
+    s.append(linea(px(1), py(1), px(8), py(8), FAINT, 3, ' stroke-dasharray="10 8"'))
+    s.append(texto(px(8) - f(20), py(8) - f(6), "ideal", size=f(30), fill=MUTED, anchor="end"))
+
+    etiquetas = []
+    for m in maquinas:
+        pts = m["puntos"]
+        d = " ".join(
+            f"{'M' if i == 0 else 'L'} {px(p):.1f} {py(v):.1f}"
+            for i, (p, v, _, _) in enumerate(pts)
+        )
+        s.append(f'<path d="{d}" fill="none" stroke="{m["color"]}" stroke-width="{f(3)}"/>')
+        for p, _, lo, hi in pts:
+            s.append(linea(px(p), py(lo), px(p), py(hi), m["color"], f(3)))
+        for p, v, _, _ in pts:
+            s.append(marcador(m["forma"], px(p), py(v), m["color"], r=f(11)))
+        p, v, _, _ = pts[-1]
+        etiquetas.append([py(v), m, v])
+
+    # Etiquetas directas al final de cada curva, sin solaparse
+    etiquetas.sort(key=lambda e: e[0])
+    for i in range(1, len(etiquetas)):
+        etiquetas[i][0] = max(etiquetas[i][0], etiquetas[i - 1][0] + f(36))
+    for y, m, v in etiquetas:
+        s.append(texto(x1 + f(40), y + f(10), f"{m['nombre']} {v:.1f}×", size=f(30)))
+    return s
+
+
+def panel_c(
+    maquinas: list[dict],
+    spin: dict,
+    ox: float,
+    oy: float,
+    cw: float,
+    ch: float,
+    k: float = 1.0,
+    letra: str = "C",
+) -> list[str]:
+    """Matriz máquina × P: cada celda es una corrida con la inercia común."""
+    f = lambda v: round(v * k)
+    s = [encabezado(ox, oy, letra, "Same result on every machine and P", k)]
+    ps = [p for p, *_ in maquinas[0]["puntos"]]
+    cx0, gap = ox + f(290), f(8)
+    y0 = oy + f(80)
+    for j, p in enumerate(ps):
         s.append(
             texto(
-                px(c) + pw / 2,
-                py + ph / 2 + 12,
-                str(c),
-                size=36,
-                weight=700,
-                font=MONO,
-                fill=sobre(c),
+                cx0 + j * (cw + gap) + cw / 2,
+                y0 - f(16),
+                f"P={p}",
+                size=f(30),
+                fill=MUTED,
                 anchor="middle",
             )
         )
-    s.append(texto(gx, py + ph + 50, "parciales[c]", size=34, weight=700, font=MONO))
+    for i, m in enumerate(maquinas):
+        y = y0 + i * (ch + gap)
+        s.append(marcador(m["forma"], ox + f(20), y + ch / 2, m["color"], r=f(10)))
+        s.append(texto(ox + f(48), y + ch / 2 + f(10), m["nombre"], size=f(30)))
+        for j, _ in enumerate(ps):
+            x = cx0 + j * (cw + gap)
+            s.append(rect(x, y, cw, ch, "#126e55", rx=4))
+            s.append(
+                f'<path d="M {x + cw / 2 - f(14)} {y + ch / 2} l {f(9)} {f(9)} l {f(18)} {-f(18)}" fill="none" '
+                f'stroke="#ffffff" stroke-width="{f(5)}" stroke-linecap="round" stroke-linejoin="round"/>'
+            )
+    n = len(maquinas) * len(ps)
+    yb = y0 + len(maquinas) * (ch + gap) + f(44)
+    inercia = f"{maquinas[0]['inercia']:.9f}"
     s.append(
-        texto(gx + 262, py + ph + 50, "stored by index · one writer each", size=32, fill=MUTED)
+        texto(ox, yb, f"{n}/{n} runs end at inertia {inercia}, bit for bit.", size=f(30), bold=True)
     )
-
-    # Barrera
-    s.append(
-        f'<line x1="{bx}" y1="180" x2="{bx}" y2="{py + ph + 24}" stroke="{RED}" stroke-width="6" stroke-dasharray="18 12"/>'
-    )
-    s.append(texto(bx, 160, "wg.Wait()", size=34, weight=700, font=MONO, fill=RED, anchor="middle"))
-
-    # Reducción en orden de chunk → centroides nuevos
-    ry, sx = py + ph / 2, 1490
-    s.append(
-        f'<path d="M {px(7) + pw + 16} {ry} L {sx - 62} {ry}" stroke="{TEAL}" stroke-width="6" marker-end="url(#verde)"/>'
-    )
-    s.append(f'<circle cx="{sx}" cy="{ry}" r="52" fill="{TEAL}"/>')
-    s.append(texto(sx, ry + 22, "Σ", size=62, weight=700, fill="#fff", anchor="middle"))
-    s.append(texto(sx, ry + 104, "in chunk order", size=32, weight=600, fill=TEAL, anchor="middle"))
-    nx, nw = 1590, 270
-    s.append(
-        f'<path d="M {sx + 56} {ry} L {nx - 14} {ry}" stroke="{TEAL}" stroke-width="6" marker-end="url(#verde)"/>'
-    )
-    s.append(rect(nx, py, nw, ph, "#fff", rx=14, stroke=INK, sw=3))
     s.append(
         texto(
-            nx + nw / 2,
-            py + ph / 2 + 13,
-            "centroids′",
-            size=36,
-            weight=700,
-            font=MONO,
-            anchor="middle",
+            ox,
+            yb + f(46),
+            f"Spin: {spin['detectados']}/{spin['mutantes']} injected concurrency bugs detected.",
+            size=f(30),
+            fill=MUTED,
         )
-    )
-
-    # Lazo a la siguiente iteración
-    lx = nx + nw / 2
-    s.append(
-        f'<path d="M {lx} {py - 14} L {lx} 217 L {gx + gw + 22} 217" fill="none" stroke="{INK}" stroke-width="4" marker-end="url(#tinta)"/>'
-    )
-    s.append(texto(lx + 22, 520, "next", size=32, fill=MUTED))
-    s.append(texto(lx + 22, 560, "iteration", size=32, fill=MUTED))
-
-    # Resultados, del repo
-    mx = 1980
-    s.append(
-        f'<line x1="{mx - 40}" y1="180" x2="{mx - 40}" y2="{py + ph + 60}" stroke="{LINE}" stroke-width="2"/>'
-    )
-    ps = ", ".join(map(str, b["ps"]))
-    for y, grande, a, z in [
-        (
-            290,
-            f"{b['speedup']:.2f}×",
-            f"speedup, {b['workers']} workers",
-            f"{b['n'] / 1e6:.2f}M trips · k={b['k']}",
-        ),
-        (560, "1 result", "bit-identical", f"for P = {ps}"),
-        (
-            830,
-            f"{spin['atrapados']} / {spin['mutantes']}",
-            "mutants caught",
-            "by Spin, all interleavings",
-        ),
-    ]:
-        s.append(texto(mx, y, grande, size=92, weight=800, ls=-1))
-        s.append(texto(mx, y + 52, a, size=32, weight=600))
-        s.append(texto(mx, y + 92, z, size=30, fill=MUTED))
-
-    # Tesis
-    s.append(f'<line x1="80" y1="1090" x2="{W - 80}" y2="1090" stroke="{LINE}" stroke-width="2"/>')
-    s.append(
-        f'<text x="80" y="1180" font-family="{SANS}" font-size="46" font-weight="500" fill="{INK}">'
-        'Scheduling decides <tspan font-weight="800">who</tspan> computes a chunk; its index decides '
-        '<tspan font-weight="800">where</tspan> it is summed.</text>'
     )
     return s
 
 
-def marcador(id_, color):
-    return (
-        f'<marker id="{id_}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4.2" markerHeight="4.2" '
-        f'orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="{color}"/></marker>'
-    )
-
-
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
-    ap.add_argument("-o", "--salida", type=Path, default=TP / "reports" / "figuras" / "hero.svg")
-    ap.add_argument("--benchmark", type=Path, default=TP / "reports" / "benchmark_gorgo.json")
+    ap.add_argument("variante", nargs="?", choices=["hero", "card"], default="hero")
+    ap.add_argument("-o", "--salida", type=Path)
+    ap.add_argument("--reports", type=Path, default=TP / "reports")
     ap.add_argument(
         "--spin", type=Path, default=TP / "informe" / "tp" / "generado" / "spin-casos.tsv"
     )
-    ap.add_argument("--workers", type=int, default=8)
     args = ap.parse_args()
 
-    cuerpo = "\n".join(
-        dibujar(cifras_benchmark(args.benchmark, args.workers), cifras_spin(args.spin))
+    maquinas, spin = benchmarks(args.reports), cifras_spin(args.spin)
+    if args.variante == "hero":
+        # Ancho completo (README del repo): mecanismo, rendimiento y evidencia.
+        cuerpo = [linea(1210, 70, 1210, 1210, RULE, 2)]
+        cuerpo += panel_a() + panel_b(maquinas, 1270, 118, 1090, 370)
+        cuerpo += panel_c(maquinas, spin, 1270, 760, 110, 54)
+    else:
+        # Card del perfil, vista a ~470 px: solo B y C, con el texto 1,3 veces más grande.
+        cuerpo = [linea(1200, 70, 1200, 1210, RULE, 2)]
+        cuerpo += panel_b(maquinas, 70, 130, 1090, 760, k=1.3, letra="A")
+        cuerpo += panel_c(maquinas, spin, 1260, 130, 128, 150, k=1.3, letra="B")
+    salida = args.salida or TP / "reports" / "figuras" / f"{args.variante}.svg"
+    flecha = (
+        '<marker id="flecha" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" '
+        f'orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="{INK}"/></marker>'
     )
     svg = (
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}">\n'
-        f"<style>{fuentes_css()}</style>\n"
-        f"<defs>{marcador('gris', FAINT)}{marcador('verde', TEAL)}{marcador('tinta', INK)}</defs>\n"
-        f'<rect width="{W}" height="{H}" fill="#ffffff"/>\n'
-        f'<g transform="translate(0 16)">\n{cuerpo}\n</g>\n</svg>\n'
+        f"<style>{fuentes_css()}</style>\n<defs>{flecha}</defs>\n"
+        f'<rect width="{W}" height="{H}" fill="#ffffff"/>\n' + "\n".join(cuerpo) + "\n</svg>\n"
     )
-    args.salida.parent.mkdir(parents=True, exist_ok=True)
-    args.salida.write_text(svg)
-    print(f"{args.salida} ({len(svg) / 1024:.0f} KB)")
+    salida.parent.mkdir(parents=True, exist_ok=True)
+    salida.write_text(svg)
+    print(f"{salida} ({len(svg) / 1024:.0f} KB)")
 
 
 if __name__ == "__main__":

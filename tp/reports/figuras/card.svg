@@ -5,187 +5,136 @@
 @font-face{font-family:"Arimo";font-weight:700;src:url(data:font/woff2;base64,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) format("woff2")}</style>
 <defs><marker id="flecha" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#111111"/></marker></defs>
 <rect width="2400" height="1280" fill="#ffffff"/>
-<line x1="1210" y1="70" x2="1210" y2="1210" stroke="#d0d0d0" stroke-width="2"/>
-<text x="70" y="118" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="60" font-weight="700" fill="#111111" text-anchor="start">A</text><text x="132" y="114" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="38" font-weight="700" fill="#111111" text-anchor="start">Scheduling varies, summation order does not</text>
-<text x="132" y="168" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="30" font-weight="400" fill="#555555" text-anchor="start">One Lloyd iteration · 4 workers, 8 chunks (schematic)</text>
-<text x="248" y="286" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="30" font-weight="400" fill="#111111" text-anchor="end">Worker 1</text>
-<rect x="270" y="232" width="261" height="86" rx="6" fill="#b2dfcf"/>
-<text x="400.5" y="287" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#0b3328" text-anchor="middle">1</text>
-<rect x="550" y="232" width="275" height="86" rx="6" fill="#22876b"/>
-<text x="687.5" y="287" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#ffffff" text-anchor="middle">5</text>
-<line x1="835" y1="275" x2="925" y2="275" stroke="#9a9a9a" stroke-width="3" stroke-dasharray="2 9" stroke-linecap="round"/>
-<text x="248" y="394" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="30" font-weight="400" fill="#111111" text-anchor="end">Worker 2</text>
-<rect x="284" y="340" width="303" height="86" rx="6" fill="#d4ede4"/>
-<text x="435.5" y="395" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#0b3328" text-anchor="middle">0</text>
-<rect x="606" y="340" width="289" height="86" rx="6" fill="#126e55"/>
-<text x="750.5" y="395" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#ffffff" text-anchor="middle">6</text>
-<line x1="905" y1="383" x2="925" y2="383" stroke="#9a9a9a" stroke-width="3" stroke-dasharray="2 9" stroke-linecap="round"/>
-<text x="248" y="502" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="30" font-weight="400" fill="#111111" text-anchor="end">Worker 3</text>
-<rect x="298" y="448" width="219" height="86" rx="6" fill="#64bb9f"/>
-<text x="407.5" y="503" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#0b3328" text-anchor="middle">3</text>
-<rect x="536" y="448" width="317" height="86" rx="6" fill="#3ea385"/>
-<text x="694.5" y="503" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#ffffff" text-anchor="middle">4</text>
-<line x1="863" y1="491" x2="925" y2="491" stroke="#9a9a9a" stroke-width="3" stroke-dasharray="2 9" stroke-linecap="round"/>
-<text x="248" y="610" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="30" font-weight="400" fill="#111111" text-anchor="end">Worker 4</text>
-<rect x="312" y="556" width="317" height="86" rx="6" fill="#8dcfb8"/>
-<text x="470.5" y="611" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#0b3328" text-anchor="middle">2</text>
-<rect x="648" y="556" width="149" height="86" rx="6" fill="#085641"/>
-<text x="722.5" y="611" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#ffffff" text-anchor="middle">7</text>
-<line x1="807" y1="599" x2="925" y2="599" stroke="#9a9a9a" stroke-width="3" stroke-dasharray="2 9" stroke-linecap="round"/>
-<line x1="935" y1="205" x2="935" y2="905" stroke="#111111" stroke-width="4" stroke-dasharray="14 10"/>
-<text x="935" y="196" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="30" font-weight="700" fill="#111111" text-anchor="middle">barrier</text>
-<text x="270" y="686" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="30" font-weight="400" fill="#555555" text-anchor="start">Each worker pulls the next free chunk</text>
-<text x="248" y="794" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="30" font-weight="400" fill="#111111" text-anchor="end">Partial</text>
-<text x="248" y="828" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="30" font-weight="400" fill="#111111" text-anchor="end">sums</text>
-<rect x="270" y="760" width="70" height="80" rx="6" fill="#d4ede4"/>
-<text x="305" y="812" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#0b3328" text-anchor="middle">0</text>
-<rect x="349" y="760" width="70" height="80" rx="6" fill="#b2dfcf"/>
-<text x="384" y="812" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#0b3328" text-anchor="middle">1</text>
-<rect x="428" y="760" width="70" height="80" rx="6" fill="#8dcfb8"/>
-<text x="463" y="812" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#0b3328" text-anchor="middle">2</text>
-<rect x="507" y="760" width="70" height="80" rx="6" fill="#64bb9f"/>
-<text x="542" y="812" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#0b3328" text-anchor="middle">3</text>
-<rect x="586" y="760" width="70" height="80" rx="6" fill="#3ea385"/>
-<text x="621" y="812" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#ffffff" text-anchor="middle">4</text>
-<rect x="665" y="760" width="70" height="80" rx="6" fill="#22876b"/>
-<text x="700" y="812" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#ffffff" text-anchor="middle">5</text>
-<rect x="744" y="760" width="70" height="80" rx="6" fill="#126e55"/>
-<text x="779" y="812" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#ffffff" text-anchor="middle">6</text>
-<rect x="823" y="760" width="70" height="80" rx="6" fill="#085641"/>
-<text x="858" y="812" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#ffffff" text-anchor="middle">7</text>
-<path d="M 270 878 L 905 878" stroke="#111111" stroke-width="4" marker-end="url(#flecha)"/>
-<text x="270" y="924" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="30" font-weight="700" fill="#111111" text-anchor="start">Σ in chunk-index order  →  new centroids</text>
-<text x="70" y="1040" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="30" font-weight="400" fill="#555555" text-anchor="start">Floating-point addition is not associative, so a fixed order</text>
-<text x="70" y="1082" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="30" font-weight="400" fill="#555555" text-anchor="start">of summation is what makes the result reproducible.</text>
-<text x="1270" y="118" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="60" font-weight="700" fill="#111111" text-anchor="start">B</text><text x="1332" y="114" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="38" font-weight="700" fill="#111111" text-anchor="start">Strong scaling, 2.83 M trips, k = 8</text>
-<line x1="1400" y1="560" x2="2080" y2="560" stroke="#111111" stroke-width="2"/>
-<line x1="1400" y1="180" x2="1400" y2="560" stroke="#111111" stroke-width="2"/>
-<line x1="1420" y1="560" x2="1420" y2="572" stroke="#111111" stroke-width="2"/>
-<text x="1420" y="606" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="30" font-weight="400" fill="#111111" text-anchor="middle">1</text>
-<line x1="1580" y1="560" x2="1580" y2="572" stroke="#111111" stroke-width="2"/>
-<text x="1580" y="606" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="30" font-weight="400" fill="#111111" text-anchor="middle">2</text>
-<line x1="1740" y1="560" x2="1740" y2="572" stroke="#111111" stroke-width="2"/>
-<text x="1740" y="606" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="30" font-weight="400" fill="#111111" text-anchor="middle">4</text>
-<line x1="1900" y1="560" x2="1900" y2="572" stroke="#111111" stroke-width="2"/>
-<text x="1900" y="606" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="30" font-weight="400" fill="#111111" text-anchor="middle">8</text>
-<line x1="2060" y1="560" x2="2060" y2="572" stroke="#111111" stroke-width="2"/>
-<text x="2060" y="606" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="30" font-weight="400" fill="#111111" text-anchor="middle">16</text>
-<line x1="1388" y1="560" x2="1400" y2="560" stroke="#111111" stroke-width="2"/>
-<text x="1378" y="570" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="30" font-weight="400" fill="#111111" text-anchor="end">0</text>
-<line x1="1388" y1="467.5" x2="1400" y2="467.5" stroke="#111111" stroke-width="2"/>
-<text x="1378" y="477.5" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="30" font-weight="400" fill="#111111" text-anchor="end">2</text>
-<line x1="1388" y1="375" x2="1400" y2="375" stroke="#111111" stroke-width="2"/>
-<text x="1378" y="385" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="30" font-weight="400" fill="#111111" text-anchor="end">4</text>
-<line x1="1388" y1="282.5" x2="1400" y2="282.5" stroke="#111111" stroke-width="2"/>
-<text x="1378" y="292.5" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="30" font-weight="400" fill="#111111" text-anchor="end">6</text>
-<line x1="1388" y1="190" x2="1400" y2="190" stroke="#111111" stroke-width="2"/>
-<text x="1378" y="200" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="30" font-weight="400" fill="#111111" text-anchor="end">8</text>
-<text x="1740" y="652" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="30" font-weight="400" fill="#111111" text-anchor="middle">Workers (P)</text>
-<text x="1328" y="375" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="30" font-weight="400" fill="#111111" text-anchor="middle" transform="rotate(-90 1328 375.0)">Speedup</text>
-<line x1="1420" y1="513.75" x2="1900" y2="190" stroke="#9a9a9a" stroke-width="3" stroke-dasharray="10 8"/>
-<text x="1880" y="184" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="30" font-weight="400" fill="#555555" text-anchor="end">ideal</text>
-<path d="M 1420.0 513.7 L 1580.0 479.9 L 1740.0 402.0 L 1900.0 276.9 L 2060.0 195.8" fill="none" stroke="#0072B2" stroke-width="3"/>
-<line x1="1420" y1="513.833" x2="1420" y2="513.66" stroke="#0072B2" stroke-width="3"/>
-<line x1="1580" y1="480.978" x2="1580" y2="478.818" stroke="#0072B2" stroke-width="3"/>
-<line x1="1740" y1="403.567" x2="1740" y2="400.658" stroke="#0072B2" stroke-width="3"/>
-<line x1="1900" y1="280.473" x2="1900" y2="273.299" stroke="#0072B2" stroke-width="3"/>
-<line x1="2060" y1="198.672" x2="2060" y2="194.673" stroke="#0072B2" stroke-width="3"/>
-<circle cx="1420" cy="513.748" r="11" fill="#0072B2" stroke="#ffffff" stroke-width="3"/>
-<circle cx="1580" cy="479.929" r="11" fill="#0072B2" stroke="#ffffff" stroke-width="3"/>
-<circle cx="1740" cy="402.006" r="11" fill="#0072B2" stroke="#ffffff" stroke-width="3"/>
-<circle cx="1900" cy="276.927" r="11" fill="#0072B2" stroke="#ffffff" stroke-width="3"/>
-<circle cx="2060" cy="195.777" r="11" fill="#0072B2" stroke="#ffffff" stroke-width="3"/>
-<path d="M 1420.0 515.2 L 1580.0 470.9 L 1740.0 384.2 L 1900.0 290.9 L 2060.0 271.0" fill="none" stroke="#E69F00" stroke-width="3"/>
-<line x1="1420" y1="515.307" x2="1420" y2="515.032" stroke="#E69F00" stroke-width="3"/>
-<line x1="1580" y1="471.218" x2="1580" y2="470.65" stroke="#E69F00" stroke-width="3"/>
-<line x1="1740" y1="385.829" x2="1740" y2="383.351" stroke="#E69F00" stroke-width="3"/>
-<line x1="1900" y1="294.863" x2="1900" y2="287.625" stroke="#E69F00" stroke-width="3"/>
-<line x1="2060" y1="274.465" x2="2060" y2="268.136" stroke="#E69F00" stroke-width="3"/>
-<rect x="1409" y="504.165" width="22" height="22" fill="#E69F00" stroke="#ffffff" stroke-width="3"/>
-<rect x="1569" y="459.928" width="22" height="22" fill="#E69F00" stroke="#ffffff" stroke-width="3"/>
-<rect x="1729" y="373.198" width="22" height="22" fill="#E69F00" stroke="#ffffff" stroke-width="3"/>
-<rect x="1889" y="279.877" width="22" height="22" fill="#E69F00" stroke="#ffffff" stroke-width="3"/>
-<rect x="2049" y="260.029" width="22" height="22" fill="#E69F00" stroke="#ffffff" stroke-width="3"/>
-<path d="M 1420.0 514.3 L 1580.0 472.0 L 1740.0 398.0 L 1900.0 377.5 L 2060.0 377.7" fill="none" stroke="#009E73" stroke-width="3"/>
-<line x1="1420" y1="522.628" x2="1420" y2="504.259" stroke="#009E73" stroke-width="3"/>
-<line x1="1580" y1="486.679" x2="1580" y2="452.703" stroke="#009E73" stroke-width="3"/>
-<line x1="1740" y1="426.679" x2="1740" y2="361.903" stroke="#009E73" stroke-width="3"/>
-<line x1="1900" y1="409.896" x2="1900" y2="338.516" stroke="#009E73" stroke-width="3"/>
-<line x1="2060" y1="408.34" x2="2060" y2="339.255" stroke="#009E73" stroke-width="3"/>
-<path d="M 1420 500.598 L 1433.75 525.348 L 1406.25 525.348 Z" fill="#009E73" stroke="#ffffff" stroke-width="3"/>
-<path d="M 1580 458.273 L 1593.75 483.023 L 1566.25 483.023 Z" fill="#009E73" stroke="#ffffff" stroke-width="3"/>
-<path d="M 1740 384.232 L 1753.75 408.982 L 1726.25 408.982 Z" fill="#009E73" stroke="#ffffff" stroke-width="3"/>
-<path d="M 1900 363.765 L 1913.75 388.515 L 1886.25 388.515 Z" fill="#009E73" stroke="#ffffff" stroke-width="3"/>
-<path d="M 2060 363.928 L 2073.75 388.678 L 2046.25 388.678 Z" fill="#009E73" stroke="#ffffff" stroke-width="3"/>
-<path d="M 1420.0 514.1 L 1580.0 475.5 L 1740.0 407.7 L 1900.0 408.9 L 2060.0 406.6" fill="none" stroke="#CC79A7" stroke-width="3"/>
-<line x1="1420" y1="514.889" x2="1420" y2="513.255" stroke="#CC79A7" stroke-width="3"/>
-<line x1="1580" y1="479.445" x2="1580" y2="473.406" stroke="#CC79A7" stroke-width="3"/>
-<line x1="1740" y1="413.585" x2="1740" y2="404.585" stroke="#CC79A7" stroke-width="3"/>
-<line x1="1900" y1="417.13" x2="1900" y2="405.056" stroke="#CC79A7" stroke-width="3"/>
-<line x1="2060" y1="417.614" x2="2060" y2="403.359" stroke="#CC79A7" stroke-width="3"/>
-<path d="M 1420 499.787 L 1434.3 514.087 L 1420 528.387 L 1405.7 514.087 Z" fill="#CC79A7" stroke="#ffffff" stroke-width="3"/>
-<path d="M 1580 461.211 L 1594.3 475.511 L 1580 489.811 L 1565.7 475.511 Z" fill="#CC79A7" stroke="#ffffff" stroke-width="3"/>
-<path d="M 1740 393.424 L 1754.3 407.724 L 1740 422.024 L 1725.7 407.724 Z" fill="#CC79A7" stroke="#ffffff" stroke-width="3"/>
-<path d="M 1900 394.576 L 1914.3 408.876 L 1900 423.176 L 1885.7 408.876 Z" fill="#CC79A7" stroke="#ffffff" stroke-width="3"/>
-<path d="M 2060 392.278 L 2074.3 406.578 L 2060 420.878 L 2045.7 406.578 Z" fill="#CC79A7" stroke="#ffffff" stroke-width="3"/>
-<text x="2100" y="205.777" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="30" font-weight="400" fill="#111111" text-anchor="start">i7 desktop 7.9×</text>
-<text x="2100" y="281.029" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="30" font-weight="400" fill="#111111" text-anchor="start">Ryzen VM 6.2×</text>
-<text x="2100" y="387.678" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="30" font-weight="400" fill="#111111" text-anchor="start">Pixel 9a 3.9×</text>
-<text x="2100" y="423.678" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="30" font-weight="400" fill="#111111" text-anchor="start">i5 laptop 3.3×</text>
-<text x="1270" y="760" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="60" font-weight="700" fill="#111111" text-anchor="start">C</text><text x="1332" y="756" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="38" font-weight="700" fill="#111111" text-anchor="start">Same result on every machine and P</text>
-<text x="1615" y="824" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="30" font-weight="400" fill="#555555" text-anchor="middle">P=1</text>
-<text x="1733" y="824" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="30" font-weight="400" fill="#555555" text-anchor="middle">P=2</text>
-<text x="1851" y="824" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="30" font-weight="400" fill="#555555" text-anchor="middle">P=4</text>
-<text x="1969" y="824" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="30" font-weight="400" fill="#555555" text-anchor="middle">P=8</text>
-<text x="2087" y="824" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="30" font-weight="400" fill="#555555" text-anchor="middle">P=16</text>
-<circle cx="1290" cy="867" r="10" fill="#0072B2" stroke="#ffffff" stroke-width="3"/>
-<text x="1318" y="877" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="30" font-weight="400" fill="#111111" text-anchor="start">i7 desktop</text>
-<rect x="1560" y="840" width="110" height="54" rx="4" fill="#126e55"/>
-<path d="M 1601.0 867.0 l 9 9 l 18 -18" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-<rect x="1678" y="840" width="110" height="54" rx="4" fill="#126e55"/>
-<path d="M 1719.0 867.0 l 9 9 l 18 -18" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-<rect x="1796" y="840" width="110" height="54" rx="4" fill="#126e55"/>
-<path d="M 1837.0 867.0 l 9 9 l 18 -18" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-<rect x="1914" y="840" width="110" height="54" rx="4" fill="#126e55"/>
-<path d="M 1955.0 867.0 l 9 9 l 18 -18" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-<rect x="2032" y="840" width="110" height="54" rx="4" fill="#126e55"/>
-<path d="M 2073.0 867.0 l 9 9 l 18 -18" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-<rect x="1280" y="919" width="20" height="20" fill="#E69F00" stroke="#ffffff" stroke-width="3"/>
-<text x="1318" y="939" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="30" font-weight="400" fill="#111111" text-anchor="start">Ryzen VM</text>
-<rect x="1560" y="902" width="110" height="54" rx="4" fill="#126e55"/>
-<path d="M 1601.0 929.0 l 9 9 l 18 -18" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-<rect x="1678" y="902" width="110" height="54" rx="4" fill="#126e55"/>
-<path d="M 1719.0 929.0 l 9 9 l 18 -18" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-<rect x="1796" y="902" width="110" height="54" rx="4" fill="#126e55"/>
-<path d="M 1837.0 929.0 l 9 9 l 18 -18" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-<rect x="1914" y="902" width="110" height="54" rx="4" fill="#126e55"/>
-<path d="M 1955.0 929.0 l 9 9 l 18 -18" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-<rect x="2032" y="902" width="110" height="54" rx="4" fill="#126e55"/>
-<path d="M 2073.0 929.0 l 9 9 l 18 -18" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M 1290 978.5 L 1302.5 1001 L 1277.5 1001 Z" fill="#009E73" stroke="#ffffff" stroke-width="3"/>
-<text x="1318" y="1001" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="30" font-weight="400" fill="#111111" text-anchor="start">Pixel 9a</text>
-<rect x="1560" y="964" width="110" height="54" rx="4" fill="#126e55"/>
-<path d="M 1601.0 991.0 l 9 9 l 18 -18" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-<rect x="1678" y="964" width="110" height="54" rx="4" fill="#126e55"/>
-<path d="M 1719.0 991.0 l 9 9 l 18 -18" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-<rect x="1796" y="964" width="110" height="54" rx="4" fill="#126e55"/>
-<path d="M 1837.0 991.0 l 9 9 l 18 -18" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-<rect x="1914" y="964" width="110" height="54" rx="4" fill="#126e55"/>
-<path d="M 1955.0 991.0 l 9 9 l 18 -18" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-<rect x="2032" y="964" width="110" height="54" rx="4" fill="#126e55"/>
-<path d="M 2073.0 991.0 l 9 9 l 18 -18" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M 1290 1040 L 1303 1053 L 1290 1066 L 1277 1053 Z" fill="#CC79A7" stroke="#ffffff" stroke-width="3"/>
-<text x="1318" y="1063" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="30" font-weight="400" fill="#111111" text-anchor="start">i5 laptop</text>
-<rect x="1560" y="1026" width="110" height="54" rx="4" fill="#126e55"/>
-<path d="M 1601.0 1053.0 l 9 9 l 18 -18" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-<rect x="1678" y="1026" width="110" height="54" rx="4" fill="#126e55"/>
-<path d="M 1719.0 1053.0 l 9 9 l 18 -18" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-<rect x="1796" y="1026" width="110" height="54" rx="4" fill="#126e55"/>
-<path d="M 1837.0 1053.0 l 9 9 l 18 -18" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-<rect x="1914" y="1026" width="110" height="54" rx="4" fill="#126e55"/>
-<path d="M 1955.0 1053.0 l 9 9 l 18 -18" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-<rect x="2032" y="1026" width="110" height="54" rx="4" fill="#126e55"/>
-<path d="M 2073.0 1053.0 l 9 9 l 18 -18" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="1270" y="1132" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="30" font-weight="700" fill="#111111" text-anchor="start">20/20 runs end at inertia 4531798.747970126, bit for bit.</text>
-<text x="1270" y="1178" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="30" font-weight="400" fill="#555555" text-anchor="start">Spin: 3/3 injected concurrency bugs detected.</text>
+<line x1="1200" y1="70" x2="1200" y2="1210" stroke="#d0d0d0" stroke-width="2"/>
+<text x="70" y="130" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="78" font-weight="700" fill="#111111" text-anchor="start">A</text><text x="151" y="125" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="49" font-weight="700" fill="#111111" text-anchor="start">Strong scaling, 2.83 M trips, k = 8</text>
+<line x1="245" y1="984" x2="790" y2="984" stroke="#111111" stroke-width="2"/>
+<line x1="245" y1="214" x2="245" y2="984" stroke="#111111" stroke-width="2"/>
+<line x1="265" y1="984" x2="265" y2="996" stroke="#111111" stroke-width="2"/>
+<text x="265" y="1044" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="39" font-weight="400" fill="#111111" text-anchor="middle">1</text>
+<line x1="391.25" y1="984" x2="391.25" y2="996" stroke="#111111" stroke-width="2"/>
+<text x="391.25" y="1044" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="39" font-weight="400" fill="#111111" text-anchor="middle">2</text>
+<line x1="517.5" y1="984" x2="517.5" y2="996" stroke="#111111" stroke-width="2"/>
+<text x="517.5" y="1044" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="39" font-weight="400" fill="#111111" text-anchor="middle">4</text>
+<line x1="643.75" y1="984" x2="643.75" y2="996" stroke="#111111" stroke-width="2"/>
+<text x="643.75" y="1044" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="39" font-weight="400" fill="#111111" text-anchor="middle">8</text>
+<line x1="770" y1="984" x2="770" y2="996" stroke="#111111" stroke-width="2"/>
+<text x="770" y="1044" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="39" font-weight="400" fill="#111111" text-anchor="middle">16</text>
+<line x1="233" y1="984" x2="245" y2="984" stroke="#111111" stroke-width="2"/>
+<text x="223" y="997" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="39" font-weight="400" fill="#111111" text-anchor="end">0</text>
+<line x1="233" y1="794" x2="245" y2="794" stroke="#111111" stroke-width="2"/>
+<text x="223" y="807" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="39" font-weight="400" fill="#111111" text-anchor="end">2</text>
+<line x1="233" y1="604" x2="245" y2="604" stroke="#111111" stroke-width="2"/>
+<text x="223" y="617" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="39" font-weight="400" fill="#111111" text-anchor="end">4</text>
+<line x1="233" y1="414" x2="245" y2="414" stroke="#111111" stroke-width="2"/>
+<text x="223" y="427" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="39" font-weight="400" fill="#111111" text-anchor="end">6</text>
+<line x1="233" y1="224" x2="245" y2="224" stroke="#111111" stroke-width="2"/>
+<text x="223" y="237" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="39" font-weight="400" fill="#111111" text-anchor="end">8</text>
+<text x="517.5" y="1104" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="39" font-weight="400" fill="#111111" text-anchor="middle">Workers (P)</text>
+<text x="145" y="604" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="39" font-weight="400" fill="#111111" text-anchor="middle" transform="rotate(-90 145 604.0)">Speedup</text>
+<line x1="265" y1="889" x2="643.75" y2="224" stroke="#9a9a9a" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="617.75" y="216" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="39" font-weight="400" fill="#555555" text-anchor="end">ideal</text>
+<path d="M 265.0 889.0 L 391.2 819.5 L 517.5 659.5 L 643.8 402.6 L 770.0 235.9" fill="none" stroke="#0072B2" stroke-width="4"/>
+<line x1="265" y1="889.171" x2="265" y2="888.815" stroke="#0072B2" stroke-width="4"/>
+<line x1="391.25" y1="821.685" x2="391.25" y2="817.248" stroke="#0072B2" stroke-width="4"/>
+<line x1="517.5" y1="662.678" x2="517.5" y2="656.704" stroke="#0072B2" stroke-width="4"/>
+<line x1="643.75" y1="409.837" x2="643.75" y2="395.102" stroke="#0072B2" stroke-width="4"/>
+<line x1="770" y1="241.813" x2="770" y2="233.598" stroke="#0072B2" stroke-width="4"/>
+<circle cx="265" cy="888.996" r="14" fill="#0072B2" stroke="#ffffff" stroke-width="3"/>
+<circle cx="391.25" cy="819.531" r="14" fill="#0072B2" stroke="#ffffff" stroke-width="3"/>
+<circle cx="517.5" cy="659.472" r="14" fill="#0072B2" stroke="#ffffff" stroke-width="3"/>
+<circle cx="643.75" cy="402.553" r="14" fill="#0072B2" stroke="#ffffff" stroke-width="3"/>
+<circle cx="770" cy="235.867" r="14" fill="#0072B2" stroke="#ffffff" stroke-width="3"/>
+<path d="M 265.0 891.9 L 391.2 801.0 L 517.5 622.9 L 643.8 431.2 L 770.0 390.4" fill="none" stroke="#E69F00" stroke-width="4"/>
+<line x1="265" y1="892.197" x2="265" y2="891.634" stroke="#E69F00" stroke-width="4"/>
+<line x1="391.25" y1="801.638" x2="391.25" y2="800.47" stroke="#E69F00" stroke-width="4"/>
+<line x1="517.5" y1="626.244" x2="517.5" y2="621.154" stroke="#E69F00" stroke-width="4"/>
+<line x1="643.75" y1="439.394" x2="643.75" y2="424.526" stroke="#E69F00" stroke-width="4"/>
+<line x1="770" y1="397.497" x2="770" y2="384.496" stroke="#E69F00" stroke-width="4"/>
+<rect x="251" y="877.906" width="28" height="28" fill="#E69F00" stroke="#ffffff" stroke-width="3"/>
+<rect x="377.25" y="787.042" width="28" height="28" fill="#E69F00" stroke="#ffffff" stroke-width="3"/>
+<rect x="503.5" y="608.894" width="28" height="28" fill="#E69F00" stroke="#ffffff" stroke-width="3"/>
+<rect x="629.75" y="417.208" width="28" height="28" fill="#E69F00" stroke="#ffffff" stroke-width="3"/>
+<rect x="756" y="376.439" width="28" height="28" fill="#E69F00" stroke="#ffffff" stroke-width="3"/>
+<path d="M 265.0 890.2 L 391.2 803.3 L 517.5 651.2 L 643.8 609.2 L 770.0 609.5" fill="none" stroke="#009E73" stroke-width="4"/>
+<line x1="265" y1="907.235" x2="265" y2="869.504" stroke="#009E73" stroke-width="4"/>
+<line x1="391.25" y1="833.396" x2="391.25" y2="763.606" stroke="#009E73" stroke-width="4"/>
+<line x1="517.5" y1="710.152" x2="517.5" y2="577.099" stroke="#009E73" stroke-width="4"/>
+<line x1="643.75" y1="675.678" x2="643.75" y2="529.06" stroke="#009E73" stroke-width="4"/>
+<line x1="770" y1="672.481" x2="770" y2="530.577" stroke="#009E73" stroke-width="4"/>
+<path d="M 265 872.729 L 282.5 904.229 L 247.5 904.229 Z" fill="#009E73" stroke="#ffffff" stroke-width="3"/>
+<path d="M 391.25 785.79 L 408.75 817.29 L 373.75 817.29 Z" fill="#009E73" stroke="#ffffff" stroke-width="3"/>
+<path d="M 517.5 633.707 L 535 665.207 L 500 665.207 Z" fill="#009E73" stroke="#ffffff" stroke-width="3"/>
+<path d="M 643.75 591.665 L 661.25 623.165 L 626.25 623.165 Z" fill="#009E73" stroke="#ffffff" stroke-width="3"/>
+<path d="M 770 592.001 L 787.5 623.501 L 752.5 623.501 Z" fill="#009E73" stroke="#ffffff" stroke-width="3"/>
+<path d="M 265.0 889.7 L 391.2 810.5 L 517.5 671.2 L 643.8 673.6 L 770.0 668.9" fill="none" stroke="#CC79A7" stroke-width="4"/>
+<line x1="265" y1="891.34" x2="265" y2="887.982" stroke="#CC79A7" stroke-width="4"/>
+<line x1="391.25" y1="818.535" x2="391.25" y2="806.13" stroke="#CC79A7" stroke-width="4"/>
+<line x1="517.5" y1="683.255" x2="517.5" y2="664.77" stroke="#CC79A7" stroke-width="4"/>
+<line x1="643.75" y1="690.536" x2="643.75" y2="665.736" stroke="#CC79A7" stroke-width="4"/>
+<line x1="770" y1="691.531" x2="770" y2="662.252" stroke="#CC79A7" stroke-width="4"/>
+<path d="M 265 871.492 L 283.2 889.692 L 265 907.892 L 246.8 889.692 Z" fill="#CC79A7" stroke="#ffffff" stroke-width="3"/>
+<path d="M 391.25 792.255 L 409.45 810.455 L 391.25 828.655 L 373.05 810.455 Z" fill="#CC79A7" stroke="#ffffff" stroke-width="3"/>
+<path d="M 517.5 653.018 L 535.7 671.218 L 517.5 689.418 L 499.3 671.218 Z" fill="#CC79A7" stroke="#ffffff" stroke-width="3"/>
+<path d="M 643.75 655.383 L 661.95 673.583 L 643.75 691.783 L 625.55 673.583 Z" fill="#CC79A7" stroke="#ffffff" stroke-width="3"/>
+<path d="M 770 650.663 L 788.2 668.863 L 770 687.063 L 751.8 668.863 Z" fill="#CC79A7" stroke="#ffffff" stroke-width="3"/>
+<text x="822" y="248.867" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="39" font-weight="400" fill="#111111" text-anchor="start">i7 desktop 7.9×</text>
+<text x="822" y="403.439" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="39" font-weight="400" fill="#111111" text-anchor="start">Ryzen VM 6.2×</text>
+<text x="822" y="622.501" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="39" font-weight="400" fill="#111111" text-anchor="start">Pixel 9a 3.9×</text>
+<text x="822" y="681.863" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="39" font-weight="400" fill="#111111" text-anchor="start">i5 laptop 3.3×</text>
+<text x="1260" y="130" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="78" font-weight="700" fill="#111111" text-anchor="start">B</text><text x="1341" y="125" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="49" font-weight="700" fill="#111111" text-anchor="start">Same result on every machine and P</text>
+<text x="1701" y="213" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="39" font-weight="400" fill="#555555" text-anchor="middle">P=1</text>
+<text x="1839" y="213" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="39" font-weight="400" fill="#555555" text-anchor="middle">P=2</text>
+<text x="1977" y="213" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="39" font-weight="400" fill="#555555" text-anchor="middle">P=4</text>
+<text x="2115" y="213" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="39" font-weight="400" fill="#555555" text-anchor="middle">P=8</text>
+<text x="2253" y="213" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="39" font-weight="400" fill="#555555" text-anchor="middle">P=16</text>
+<circle cx="1286" cy="309" r="13" fill="#0072B2" stroke="#ffffff" stroke-width="3"/>
+<text x="1322" y="322" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="39" font-weight="400" fill="#111111" text-anchor="start">i7 desktop</text>
+<rect x="1637" y="234" width="128" height="150" rx="4" fill="#126e55"/>
+<path d="M 1683.0 309.0 l 12 12 l 23 -23" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="1775" y="234" width="128" height="150" rx="4" fill="#126e55"/>
+<path d="M 1821.0 309.0 l 12 12 l 23 -23" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="1913" y="234" width="128" height="150" rx="4" fill="#126e55"/>
+<path d="M 1959.0 309.0 l 12 12 l 23 -23" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="2051" y="234" width="128" height="150" rx="4" fill="#126e55"/>
+<path d="M 2097.0 309.0 l 12 12 l 23 -23" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="2189" y="234" width="128" height="150" rx="4" fill="#126e55"/>
+<path d="M 2235.0 309.0 l 12 12 l 23 -23" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="1273" y="456" width="26" height="26" fill="#E69F00" stroke="#ffffff" stroke-width="3"/>
+<text x="1322" y="482" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="39" font-weight="400" fill="#111111" text-anchor="start">Ryzen VM</text>
+<rect x="1637" y="394" width="128" height="150" rx="4" fill="#126e55"/>
+<path d="M 1683.0 469.0 l 12 12 l 23 -23" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="1775" y="394" width="128" height="150" rx="4" fill="#126e55"/>
+<path d="M 1821.0 469.0 l 12 12 l 23 -23" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="1913" y="394" width="128" height="150" rx="4" fill="#126e55"/>
+<path d="M 1959.0 469.0 l 12 12 l 23 -23" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="2051" y="394" width="128" height="150" rx="4" fill="#126e55"/>
+<path d="M 2097.0 469.0 l 12 12 l 23 -23" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="2189" y="394" width="128" height="150" rx="4" fill="#126e55"/>
+<path d="M 2235.0 469.0 l 12 12 l 23 -23" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M 1286 612.75 L 1302.25 642 L 1269.75 642 Z" fill="#009E73" stroke="#ffffff" stroke-width="3"/>
+<text x="1322" y="642" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="39" font-weight="400" fill="#111111" text-anchor="start">Pixel 9a</text>
+<rect x="1637" y="554" width="128" height="150" rx="4" fill="#126e55"/>
+<path d="M 1683.0 629.0 l 12 12 l 23 -23" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="1775" y="554" width="128" height="150" rx="4" fill="#126e55"/>
+<path d="M 1821.0 629.0 l 12 12 l 23 -23" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="1913" y="554" width="128" height="150" rx="4" fill="#126e55"/>
+<path d="M 1959.0 629.0 l 12 12 l 23 -23" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="2051" y="554" width="128" height="150" rx="4" fill="#126e55"/>
+<path d="M 2097.0 629.0 l 12 12 l 23 -23" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="2189" y="554" width="128" height="150" rx="4" fill="#126e55"/>
+<path d="M 2235.0 629.0 l 12 12 l 23 -23" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M 1286 772.1 L 1302.9 789 L 1286 805.9 L 1269.1 789 Z" fill="#CC79A7" stroke="#ffffff" stroke-width="3"/>
+<text x="1322" y="802" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="39" font-weight="400" fill="#111111" text-anchor="start">i5 laptop</text>
+<rect x="1637" y="714" width="128" height="150" rx="4" fill="#126e55"/>
+<path d="M 1683.0 789.0 l 12 12 l 23 -23" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="1775" y="714" width="128" height="150" rx="4" fill="#126e55"/>
+<path d="M 1821.0 789.0 l 12 12 l 23 -23" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="1913" y="714" width="128" height="150" rx="4" fill="#126e55"/>
+<path d="M 1959.0 789.0 l 12 12 l 23 -23" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="2051" y="714" width="128" height="150" rx="4" fill="#126e55"/>
+<path d="M 2097.0 789.0 l 12 12 l 23 -23" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="2189" y="714" width="128" height="150" rx="4" fill="#126e55"/>
+<path d="M 2235.0 789.0 l 12 12 l 23 -23" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="1260" y="931" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="39" font-weight="700" fill="#111111" text-anchor="start">20/20 runs end at inertia 4531798.747970126, bit for bit.</text>
+<text x="1260" y="991" font-family="Arimo, Arial, Helvetica, sans-serif" font-size="39" font-weight="400" fill="#555555" text-anchor="start">Spin: 3/3 injected concurrency bugs detected.</text>
 </svg>
