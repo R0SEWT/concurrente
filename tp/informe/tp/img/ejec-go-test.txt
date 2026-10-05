@@ -1,5 +1,0 @@
-$ go vet ./... && go test -race -count=1 ./...
-ok      upc.edu.pe/concurrente/kmeans   159.484s
-?       upc.edu.pe/concurrente/kmeans/cmd/benchmark     [no test files]
-ok      upc.edu.pe/concurrente/kmeans/cmd/kmeans        1.016s
-?       upc.edu.pe/concurrente/kmeans/cmd/resumen_zonas [no test files]

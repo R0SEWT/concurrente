@@ -86,10 +86,10 @@ búsqueda exhaustiva sobre SPIN 6.5.2; la tabla se genera desde la salida de la 
 Figura~\ref{fig:ejec-spin-check} es la ejecución de esa regresión: cada caso compara el número de
 errores contra el esperado.
 
-\begin{figure}[H]
+\begin{figure}[tbp]
 \caption{Ejecución de la regresión de Spin: los siete casos}\label{fig:ejec-spin-check}
 \centering
-\includegraphics[width=\textwidth]{img/ejec-spin-check.png}
+\includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{img/ejec-spin-check.png}
 \end{figure}
 
 \begin{table}[H]
@@ -111,10 +111,10 @@ menos estados.\par}
 (Figura~\ref{fig:spin-termina}).
 
 \needspace{21\baselineskip}
-\begin{figure}[H]
+\begin{figure}[tbp]
 \caption{Ejecución de \texttt{pan -a -f -N termina} sobre el modelo correcto}\label{fig:spin-termina}
 \centering
-\includegraphics[width=0.88\textwidth]{img/ejec-spin-termina.png}
+\includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{img/ejec-spin-termina.png}
 \end{figure}
 
 \paragraph{El deadlock aparece en la primera iteración.} Con el \texttt{wg.Done} perdido, Spin
@@ -127,10 +127,10 @@ en la línea 113, la guarda \texttt{pendientes == 0}, que no lo es. Nadie puede 
 trabajo se hizo y el programa no termina: es exactamente el síntoma de un \texttt{wg.Done} perdido.
 
 \needspace{30\baselineskip}
-\begin{figure}[H]
+\begin{figure}[tbp]
 \caption{Estado final del contraejemplo de \texttt{MUTANTE\_DEADLOCK} (\texttt{spin -t -g -l -p})}\label{fig:traza-deadlock}
 \centering
-\includegraphics[width=0.86\textwidth]{img/ejec-traza-deadlock.png}
+\includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{img/ejec-traza-deadlock.png}
 \end{figure}
 
 El mismo mutante viola también la fórmula de progreso: \texttt{pan -a -f -N termina} encuentra un

@@ -26,22 +26,16 @@ latexmk                                                  # pdflatex + biber, APA
   `tp/reports/*.json` por `tp/scripts/tablas_informe.py`.
 - **Cifras en prosa**: `generado/cifras.tex` define `\cifra{speedup-p4}`, `\cifra{n-equilibrio}`,
   etc. Si se vuelve a medir, el texto cambia solo.
-- **Capturas de la CLI**: `img/cli-*.txt` es la salida real de `tp/kmeans/cmd/kmeans`;
-  `img/cli-*.png` se renderiza con `tp/scripts/capturas_terminal.py`. Para rehacerlas:
-
-  ```bash
-  cd ../../kmeans && go build -o /tmp/kmeans ./cmd/kmeans
-  /tmp/kmeans -modo seq  -k 8 -iter 10 -centroides /tmp/c.json | tee ../informe/pc2/img/cli-secuencial.txt
-  /tmp/kmeans -modo conc -workers 8 -chunk 16384 -k 8 -iter 10 -centroides /tmp/c.json | tee ../informe/pc2/img/cli-concurrente.txt
-  uv run python ../scripts/capturas_terminal.py ../informe/pc2/img/cli-*.txt
-  ```
-
-  (la primera línea `$ ...` de cada `.txt` es el comando, agregada a mano para la figura).
-- **Capturas de cada ejecución** (`img/ejec-*.png`): el docente pide una captura de cada
-  ejecución, no un listado ni una mención. `tp/scripts/capturar_ejecuciones.sh` corre el pipeline,
-  `pytest`, `go vet` + `go test -race`, la regresión de Spin, un benchmark reducido y los checks de
-  CI, guarda la salida real en `img/ejec-*.txt` (primera línea: el comando) y la renderiza. Se
-  puede rehacer un solo grupo: `capturar_ejecuciones.sh spin`.
+- **Capturas de pantalla de cada ejecución** (`img/cli-*.png`, `img/ejec-*.png`): el docente pide
+  una captura de cada ejecución, no un listado ni una mención. `tp/scripts/capturar_ejecuciones.sh`
+  abre una ventana de kitty flotante en Hyprland, teclea cada comando en el shell (pruebas con
+  `-v`), espera a que termine y fotografía la ventana con grim: CLI secuencial y concurrente, pipeline,
+  `pytest`, `go vet` + `go test -race`, la regresión y las corridas de Spin, un benchmark reducido y
+  los checks de CI. Se puede rehacer un solo grupo: `capturar_ejecuciones.sh spin`. Mientras corre no
+  hay que tocar el teclado. (Las de la PC2, en `../pc2/img/`, siguen renderizadas desde texto con
+  `tp/scripts/capturas_terminal.py`.)
+- **Tarjeta del resumen** (`img/concurrente-card.png`): la misma imagen del README del perfil
+  (R0SEWT/R0SEWT, `assets/concurrente.png`), que se genera allí con `make-concurrente-card.sh`.
 - **Todo lo de Spin**: `cd tp/spin && make informe`. Deja en `generado/` las salidas de `pan`
   (`spin-*.txt`), el estado final del contraejemplo de deadlock (`traza-deadlock.txt`), la tabla
   de los siete casos de la regresión (`spin-casos.tsv` → `tabla-spin-casos.tex`) y las figuras

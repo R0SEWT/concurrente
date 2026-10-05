@@ -5,6 +5,16 @@ Este informe presenta el tercer y último entregable del Trabajo Parcial de Prog
 y Distribuida y, como pide el enunciado, conserva los dos anteriores con sus correcciones. El caso es
 el mismo: K-means sobre los viajes del taxi amarillo de Nueva York \parencite{nyctlc} para
 caracterizar patrones de movilidad urbana, en línea con el Objetivo de Desarrollo Sostenible~11.
+La Figura~\ref{fig:tarjeta} resume el resultado en una imagen: el tipo de viaje dominante en cada
+zona de taxi en cuatro momentos de la semana.
+
+\begin{figure}[H]
+\caption{Cómo se mueve Nueva York en taxi: tipo de viaje dominante por zona en cuatro momentos de la
+semana, entre los ocho clusters del K-means concurrente sobre los \cifra{n}~viajes de enero de 2024}
+\label{fig:tarjeta}
+\centering
+\includegraphics[width=\textwidth]{img/concurrente-card.png}
+\end{figure}
 
 Los entregables anteriores dejaron un K-means en Go, sin librerías de terceros, en una versión
 secuencial y una concurrente con un \emph{worker pool} persistente, acumuladores privados por bloque
@@ -26,3 +36,39 @@ commit que los produjo.
 
 \textit{Palabras clave:} K-means, programación concurrente, Go, worker pool, Promela, Spin, LTL,
 verificación formal, deadlock, exclusión mutua, NYC TLC.
+
+\subsection*{Guía de lectura para la evaluación}
+
+La Tabla~\ref{tab:guia-rubrica} indica dónde está la evidencia de cada criterio del Entregable~3.
+Cada ejecución que cita el informe tiene su captura de pantalla de la terminal, con el comando a la
+vista: el pipeline y las pruebas de datos (Sección~\ref{sec:limpieza}), \texttt{pan}
+(Sección~\ref{sec:promela}), la CLI y \texttt{go test -race -v} (Sección~\ref{sec:go}), el benchmark
+(Sección~\ref{sec:speedup}), la integración continua (Sección~\ref{sec:github}) y la regresión de
+Spin (Sección~\ref{sec:verificacion}).
+
+\begin{table}[H]
+\caption{Dónde está la evidencia de cada criterio del Entregable~3}\label{tab:guia-rubrica}
+\small
+\begin{tabularx}{\textwidth}{@{}L{4.6cm}Yr@{}}
+\toprule
+\textbf{Criterio (puntos)} & \textbf{Evidencia} & \textbf{Pág.} \\
+\midrule
+Verificación formal en Spin: ausencia de deadlocks y exclusión mutua (4) &
+  Sección~\ref{sec:verificacion}: siete casos en la Tabla~\ref{tab:spin-casos}, regresión en la
+  Figura~\ref{fig:ejec-spin-check}, progreso en la Figura~\ref{fig:spin-termina} y contraejemplo del
+  deadlock en la Figura~\ref{fig:traza-deadlock} & \pageref{sec:verificacion} \\ \addlinespace[3pt]
+Análisis del código con IA e informe de GAPs en Markdown (5) &
+  Sección~\ref{sec:gaps}; el informe \texttt{.md}, en el Anexo~\ref{anexo:gaps} & \pageref{sec:gaps} \\ \addlinespace[3pt]
+Conclusiones y recomendaciones del alumno (4) &
+  Sección~\ref{sec:conclusiones}; las de cada integrante, en la
+  Sección~\ref{sec:conclusiones-integrantes} & \pageref{sec:conclusiones} \\ \addlinespace[3pt]
+Sustentación del informe final y video (5) &
+  Video en el Anexo~\ref{anexo:video}; cierre del caso de uso en la
+  Sección~\ref{sec:interpretacion-clusters} & \pageref{anexo:video} \\ \addlinespace[3pt]
+Historial Git Flow con todos los integrantes (2) &
+  Sección~\ref{sec:github}: pull requests en la Tabla~\ref{tab:prs} e integración continua en la
+  Figura~\ref{fig:ejec-ci} & \pageref{sec:github} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+

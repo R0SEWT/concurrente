@@ -15,7 +15,7 @@
    - PDF del informe: `tp/informe/tp/build/main.pdf` en la página/figura correspondiente.
    - Terminal para comandos en vivo (`make check` en Spin).
    - Navegador para la demo de la app móvil (`http://localhost:8080/` o capturas de la Sección 16).
-4. **Edición:** Rody une las tres pistas, verifica que el tiempo total no exceda los 6:00, sube el archivo a Google Drive o YouTube (acceso no listado / público) y coloca el enlace y los tiempos en el Anexo A del informe (`tp/informe/tp/secciones/19-anexos.tex`).
+4. **Edición:** Dayana une las tres pistas (acordado el sáb 3), verifica que el tiempo total no exceda los 6:00, sube el archivo a Google Drive o YouTube (acceso no listado / público) y coloca el enlace y los tiempos en el Anexo A del informe (`tp/informe/tp/secciones/19-anexos.tex`).
 
 ---
 
@@ -23,42 +23,61 @@
 
 | Parte | Integrante | Intervalo | Duración | Temas Clave |
 |---|---|---|---|---|
-| **1** | **Rody** | 0:00 – 1:45 | 1m 45s | Problema ODS 11, Worker Pool en Go, determinismo y Speedup fuerte |
-| **2** | **Dayana** | 1:45 – 3:30 | 1m 45s | Verificación formal en Spin/Promela, LTL, mutantes y demo `make check` |
-| **3** | **Julio** | 3:30 – 5:35 | 2m 05s | GAPs con IA, cierre de clusters ODS 11, demo de la App y discusión crítica |
-| — | *Margen* | 5:35 – 6:00 | 25s | Colchón de seguridad para transiciones y cierre |
+| **1** | **Rody** | 0:00 – 2:00 | 2m 00s | Problema ODS 11, worker pool en Go, CLI, `go test -race` y benchmark en vivo, speedup fuerte |
+| **2** | **Dayana** | 2:00 – 3:45 | 1m 45s | Verificación formal en Spin/Promela, LTL, mutantes y demo `make check` |
+| **3** | **Julio** | 3:45 – 5:50 | 2m 05s | GAPs con IA, cierre de clusters ODS 11, demo de la App y discusión crítica |
+| — | *Margen* | 5:50 – 6:00 | 10s | Colchón de seguridad para transiciones y cierre |
 
 ---
 
-## Parte 1 · Rody · 0:00 – 1:45 · Caso, Algoritmo Concurrente y Speedup
+## Parte 1 · Rody · 0:00 – 2:00 · Caso, Algoritmo Concurrente y Speedup
 
-**En pantalla:**
-1. Carátula del informe (`build/main.pdf`, pág. 1).
-2. Diagrama del Worker Pool (`build/main.pdf`, Sección 8, pág. 40, Fig. 5).
-3. Tabla de Speedup fuerte (`build/main.pdf`, Sección 9, pág. 43, Tabla 24).
+*Las páginas son las impresas al pie del PDF (en Evince, `Ctrl+L` y el número).*
+
+**Antes de grabar** (terminal en `~/Code/cursos/concurrente/tp/kmeans`, fuente grande con `Ctrl +`):
+correr una vez cada comando para que el CSV quede en la caché del disco y `go run` ya esté compilado.
+El docente pide ver cada ejecución en pantalla: las tres van en vivo, no en captura.
+
+**En pantalla, en orden:**
+1. Carátula del informe (`tp/informe/tp/build/main.pdf`, pág. 1).
+2. Diagrama del worker pool (Sección 8, Figura 14, pág. 47).
+3. **Terminal 1 · CLI en vivo** (secuencial y luego concurrente, mismos centroides):
+   ```bash
+   go run ./cmd/kmeans -modo seq -k 8 -iter 10 -centroides /tmp/centroides_k8.json
+   go run ./cmd/kmeans -modo conc -workers 8 -chunk 16384 -k 8 -iter 10 -centroides /tmp/centroides_k8.json -progreso
+   ```
+   Señalar: `clustering` baja de ~3,4 s a ~0,8 s y la `inercia` es la misma (4,531799e+06). Con
+   `-progreso` se ve cada iteración de Lloyd con la inercia J bajando.
+4. **Terminal 1 · pruebas con el detector de carreras** (1 s):
+   ```bash
+   go test -race -short -count=1 -v -run Concurrente .
+   ```
+5. Tabla de speedup fuerte (Sección 9, Tabla 25, pág. 51).
+6. **Terminal 2 · benchmark reducido** (~30 s; arrancarlo mientras se habla de la tabla):
+   ```bash
+   go run ./cmd/benchmark -repes 3 -workers 1,4,8 -experimentos fijas -bootstrap 200 -salida /tmp/benchmark-demo.json
+   ```
 
 **Texto sugerido:**
-> «Buenos días profesor. Somos el equipo del Trabajo Parcial. Nuestro caso de uso analiza **2,83 millones de registros limpios** del taxi amarillo de Nueva York (enero 2024) mediante K-means, alineado con el **ODS 11** de ciudades y comunidades sostenibles.
+> **[Carátula]** «Buenos días, profesor. Somos el grupo 4. Nuestro caso analiza **2,83 millones de viajes limpios** del taxi amarillo de Nueva York, enero de 2024, con K-means, alineado con el **ODS 11**, ciudades sostenibles.
 >
-> Para procesar este volumen sin depender de librerías externas, implementamos el algoritmo de Lloyd en Go bajo dos contratos idénticos: secuencial y concurrente.
+> **[Figura 14]** Implementamos Lloyd en Go, sin librerías externas, en dos versiones con el mismo contrato: secuencial y concurrente. La concurrente es un **worker pool persistente**: las goroutines se crean una sola vez, un canal reparte bloques de viajes, cada bloque acumula en su propia memoria sin contención, y una barrera con `sync.WaitGroup` cierra cada iteración. La reducción suma los bloques **siempre en el mismo orden**, por eso el resultado es idéntico con cualquier número de workers.
 >
-> La versión concurrente utiliza un **Worker Pool persistente**: las goroutines se instancian una sola vez para toda la corrida. Un canal distribuye bloques de viajes; cada bloque acumula sumas y conteos en su propia memoria privada sin contención; y una barrera con `sync.WaitGroup` sincroniza el fin de cada iteración.
+> **[CLI]** Acá lo corro sobre el dataset completo. La secuencial tarda unos 3,4 segundos en el clustering; la concurrente con 8 workers, menos de un segundo, y llega a la **misma inercia**: es la misma solución, más rápido. Con la barra se ve cada iteración.
 >
-> Un detalle crítico de diseño es que la reducción final agrega los bloques **siempre en orden determinista**. Esto garantiza reproducibilidad numérica exacta bit a bit, independientemente del número de hilos o de la máquina.
+> **[go test]** Las pruebas corren con el **detector de carreras**: verifican que la versión concurrente da lo mismo que la secuencial con cualquier número de workers.
 >
-> Evaluamos el rendimiento con un protocolo riguroso: 20 repeticiones barajadas y media recortada al 10 %. Con 4 workers alcanzamos un **speedup de 3,80x** y con 8 workers, **5,82x**.
+> **[Tabla 25 + benchmark]** Para medir, el benchmark baraja las configuraciones, repite y usa media recortada. Esta es una corrida corta en la laptop; la oficial, con 20 repeticiones, da **3,80×** con 4 workers y **5,82×** con 8. El techo no lo pone una parte secuencial del algoritmo sino el **costo de coordinar la barrera**, y por debajo de unos **20 000 viajes** sincronizar cuesta más que calcular.
 >
-> Descubrimos que la fracción serial efectiva crece con la cantidad de hilos: el techo de escalabilidad no lo impone una sección secuencial del algoritmo, sino el **costo de coordinación de la barrera**. Asimismo, determinamos que por debajo de unos **20 000 viajes**, el costo de sincronización supera al cómputo y la concurrencia no conviene.
->
-> Doy el pase a Dayana para la verificación formal del diseño.»
+> Le doy el pase a Dayana para la verificación formal.»
 
 ---
 
-## Parte 2 · Dayana · 1:45 – 3:30 · Verificación Formal en Spin y Mutantes
+## Parte 2 · Dayana · 2:00 – 3:45 · Verificación Formal en Spin y Mutantes
 
 **En pantalla:**
-1. Sección 14 del informe (`build/main.pdf`, pág. 53, Verificación formal).
-2. Tabla 33 (`build/main.pdf`, pág. 57, Tabla comparativa de modelo y mutantes).
+1. Sección 14 del informe (`build/main.pdf`, pág. 61, Verificación formal); la regresión corriendo está en la Figura 16 (pág. 63).
+2. Tabla 34 (`build/main.pdf`, pág. 64, modelo correcto y mutantes).
 3. Terminal con la ejecución en vivo: `cd tp/spin && make check`.
 
 **Texto sugerido:**
@@ -81,12 +100,12 @@
 
 ---
 
-## Parte 3 · Julio · 3:30 – 5:35 · GAPs con IA, Interpretación ODS 11, Demo App y Crítica
+## Parte 3 · Julio · 3:45 – 5:50 · GAPs con IA, Interpretación ODS 11, Demo App y Crítica
 
 **En pantalla:**
-1. Tabla 34 de GAPs con IA (`build/main.pdf`, Sección 15, pág. 62).
-2. Tabla 35 de Arquetipos y Figura 8 de la App Móvil (`build/main.pdf`, Sección 16, págs. 64–66) o ventana del navegador con `http://localhost:8080/`.
-3. Sección 18 (Conclusiones y Recomendaciones, pág. 70).
+1. Tabla 35 de GAPs con IA (`build/main.pdf`, Sección 15, pág. 69).
+2. Tabla 36 de arquetipos y Figura 19 de la app móvil (`build/main.pdf`, Sección 16, págs. 71–73) o ventana del navegador con `http://localhost:8080/`.
+3. Sección 18 (Conclusiones y recomendaciones, pág. 79).
 
 **Texto sugerido:**
 > «Gracias Dayana. En la implementación verificamos ausencia de carreras con `go test -race` y casos borde calculados a mano.
@@ -119,7 +138,7 @@
   \begin{itemize}
     \item \textbf{URL:} \url{https://...}
     \item \textbf{Duración:} 05:32
-    \item \textbf{Partes:} Rody Vilchez (0:00, Algoritmo y Speedup), Dayana Gómez (1:45, Spin y Mutantes), Julio Meza (3:30, IA, Clusters ODS 11 y Discusión Crítica).
+    \item \textbf{Partes:} Rody Vilchez (0:00, Algoritmo y Speedup), Dayana Gómez (2:00, Spin y Mutantes), Julio Meza (3:45, IA, Clusters ODS 11 y Discusión Crítica).
   \end{itemize}
   ```
 - [ ] Recompilar el informe con `./compilar.sh` y validar que el Anexo A quede sin marcas de `\pendiente`.
