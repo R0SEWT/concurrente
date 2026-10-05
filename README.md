@@ -6,11 +6,8 @@
 
 <p>
   <strong>K-means concurrente en Go sobre 2,8 millones de viajes de taxi de Nueva York</strong>,<br>
-  verificado con Promela/Spin y medido en cuatro máquinas, del servidor al celular.
-</p>
-
-<p>
-  Cuaderno del curso <em>Programación Concurrente y Distribuida</em> (UPC 1ACC0065, ciclo 2026-20)
+  verificado con Promela/Spin, medido en cuatro máquinas (del servidor al celular)<br>
+  y explorado en un visor web interactivo para el ODS 11.
 </p>
 
 <p>
@@ -21,11 +18,14 @@
 </p>
 
 <p>
+  <a href="#que-es">Qué es</a> ·
   <a href="#resultados">Resultados</a> ·
+  <a href="#movilidad">Movilidad urbana (ODS 11)</a> ·
+  <a href="#como-esta-hecho">Cómo está hecho</a> ·
   <a href="#empezar">Empezar</a> ·
-  <a href="tp/docs/analisis-pc2.md">Análisis de la PC2</a> ·
-  <a href="tp/docs/analisis-gpu.md">Contraste en GPU</a> ·
-  <a href="tp/docs/pixel.md">En un celular</a>
+  <a href="#mapa">Mapa del repo</a> ·
+  <a href="#convenciones">Convenciones</a> ·
+  <a href="#equipo">Equipo</a>
 </p>
 
 </div>
@@ -35,10 +35,10 @@
   <ol>
     <li><a href="#que-es">Qué es</a></li>
     <li><a href="#resultados">Resultados</a></li>
+    <li><a href="#movilidad">Movilidad urbana (ODS 11)</a></li>
     <li><a href="#como-esta-hecho">Cómo está hecho</a></li>
     <li><a href="#empezar">Empezar</a></li>
     <li><a href="#mapa">Mapa del repo</a></li>
-    <li><a href="#curso">El curso</a></li>
     <li><a href="#convenciones">Convenciones</a></li>
     <li><a href="#equipo">Equipo</a></li>
   </ol>
@@ -52,19 +52,20 @@
   <img src="tp/informe/pc2/img/cli-concurrente.png" alt="La CLI del K-means con 8 workers sobre el dataset completo" width="780">
 </p>
 
-El Trabajo Parcial agrupa los viajes del taxi amarillo de Nueva York de enero de 2024 (datos abiertos
-de la TLC) en tipos de viaje según hora, día, duración y distancia, para caracterizar la movilidad
-urbana en línea con el ODS 11. El algoritmo es K-means de Lloyd, en dos versiones que comparten el
-mismo contrato numérico:
+El proyecto agrupa los viajes del taxi amarillo de Nueva York de enero de 2024 (datos abiertos de la TLC)
+en tipos de viaje según hora, día, duración y distancia, para caracterizar la movilidad urbana en línea con
+el ODS 11 (meta 11.2). El algoritmo es K-means de Lloyd, en dos versiones que comparten el mismo contrato
+numérico:
 
 | Versión | Cómo reparte el trabajo | Sincronización |
 |---|---|---|
 | Secuencial | Un solo hilo recorre los 2,8 M viajes | Ninguna |
 | Concurrente | *Worker pool* persistente; un canal reparte bloques de viajes | Acumuladores privados por bloque y una barrera `sync.WaitGroup` por iteración |
 
-Sin librerías de terceros, como exige el curso. Alrededor del algoritmo hay un pipeline de datos en
-Python (bronze → silver → gold con auditoría en SQL), un modelo en Promela que Spin verifica sobre
-todos los entrelazados, y un benchmark con protocolo estadístico fijado en código.
+Sin librerías de terceros, implementado desde cero en Go. Alrededor del algoritmo hay un pipeline de datos
+en Python (bronze → silver → gold con auditoría en SQL con DuckDB), un modelo en Promela que Spin verifica
+formalmente sobre todos los entrelazados (LTL, deadlocks y mutantes), un benchmark con protocolo estadístico
+fijado en código, y un visor web interactivo para explorar los patrones de movilidad resultantes.
 
 <p align="right">(<a href="#inicio">volver arriba</a>)</p>
 
@@ -100,12 +101,40 @@ clustering, 10 iteraciones sobre los 2,8 M viajes; la carga del CSV queda fuera.
 - **El límite es coordinar, no una sección secuencial.** La fracción serial efectiva crece con los
   workers, así que el techo de Amdahl no sirve como predicción.
 - **La GPU de consumo no le gana a 16 hilos en doble precisión** (0,55×). En simple precisión gana
-  por poco y cambia de cluster el 0,2 % de los viajes.
+  por poco y cambia de cluster el 0,2 % de los viajes. Además, las sumas en GPU no son deterministas:
+  en 21 repeticiones iguales la inercia toma 8 valores distintos en `float64`.
 
 <p align="center">
   <img src="tp/reports/figuras/pixel/01-barra-secuencial-50.png" alt="El K-means corriendo en un Pixel 9a con Termux" width="420">
   <br><sub>El mismo binario, compilado para Android, a mitad de corrida en un Pixel 9a.</sub>
 </p>
+
+<p align="right">(<a href="#inicio">volver arriba</a>)</p>
+
+<a id="movilidad"></a>
+
+## Movilidad urbana (ODS 11)
+
+El modelo final con $K = 8$ arquetipos se interpreta en unidades físicas reales (minutos, millas y mph)
+y se proyecta espaciotemporalmente sobre las 263 zonas de la ciudad. Los 2,83 M de asignaciones se agregan
+con una herramienta en Go (`tp/kmeans/cmd/resumen_zonas`), generando un archivo compacto de 735 KB que
+alimenta un visor web interactivo (`tp/app/`):
+
+<p align="center">
+  <img src="tp/informe/tp/img/app-movil-demo.gif" alt="Simulación interactiva de Elena (Planificadora Urbana NYCDOT)" width="340">
+  <br><sub>Simulación de usuaria sintética: <b>Elena</b> (planificadora NYCDOT) completa el onboarding, analiza la sustituibilidad peatonal (41,2 %) en Midtown al mediodía y audita el pico aeroportuario en JFK (<a href="tp/informe/tp/img/app-movil-demo.mp4">video MP4</a>).</sub>
+</p>
+
+- **Sustituibilidad peatonal (meta 11.2):** en Midtown Center al mediodía (12:00 Lun–Vie), el **41,2 % de los viajes
+  mide una milla o menos** (Clusters 2 y 7), con una velocidad media de 8,1 mph. En cuadrícula urbana, la caminata
+  (12–15 min) o Citi Bike (5–7 min) ofrecen tiempos competitivos frente al taxi saturado en el tráfico corporativo,
+  aportando respaldo empírico directo a la tarificación por congestión (*CBD Tolling Program*).
+- **Corredores aeroportuarios y asimetría de demanda:** el Cluster 5 (aeropuertos) alcanza su pico a las 15:00 en
+  JFK (92,4 % de los viajes de la terminal) y LaGuardia (90,8 %). Manhattan genera a las 14:00 más de 7 700 viajes hacia
+  aeropuertos, permitiendo anticipar la reubicación de flotas para reducir el rodaje en vacío (*deadheading*).
+- **Principio InWatch de honestidad cartográfica:** las zonas sin registros de taxis amarillos (como áreas suburbanas
+  o parques periféricos) no se interpolan falsamente; la interfaz las declara explícitamente como servidas por transporte
+  público masivo (Metro MTA) o flotas locales.
 
 <p align="right">(<a href="#inicio">volver arriba</a>)</p>
 
@@ -121,17 +150,22 @@ TLC (Parquet) ──► bronze ──► silver ──► gold (CSV, 6 features)
                             │                                           │
                      tp/spin (Promela)                        tp/scripts ──► tablas del informe
                      verifica la sincronización               (ninguna cifra a mano)
+                     (LTL, deadlock, mutantes)                          │
+                                                                        ▼
+                                                  tp/app ◄── resumen_zonas (Go)
+                                                  (visor web interactivo offline)
 ```
 
 > [!NOTE]
 > **Verificar y probar son cosas distintas, y hacen falta las dos.** Spin recorre todos los
-> entrelazados de un modelo reducido y confirma que ningún punto se pierde ni se duplica; un mutante
-> con un acumulador compartido demuestra que el modelo detecta la carrera. `go test -race` prueba la
+> entrelazados de un modelo reducido y confirma ausencia de deadlocks, progreso y exclusión mutua
+> mediante LTL ($\Box \neg(\text{publicando} \land \text{leyendo})$). Tres mutantes comprueban que el chequeo
+> detecta las violaciones cuando se introducen fallas deliberadas (`make check`). `go test -race` prueba la
 > implementación en cada pull request.
 
 > [!IMPORTANT]
 > Los datos no se versionan. `tp/data/` se genera con el pipeline, y `materials/` (el material del
-> Aula Virtual, que es del profesor) se reconstruye desde el índice de `manifest.json`.
+> Aula Virtual) se reconstruye desde el índice de `manifest.json`.
 
 <p align="right">(<a href="#inicio">volver arriba</a>)</p>
 
@@ -172,10 +206,17 @@ centroides iniciales en `/tmp/c.txt` y la segunda los reusa.
 go run ./cmd/benchmark      # escribe tp/reports/benchmark_<máquina>_<fecha>.json
 ```
 
-**4. La verificación.**
+**4. La verificación formal.**
 
 ```bash
-cd tp/spin && make check    # 0 errores en el modelo correcto, 1 en el mutante
+cd tp/spin && make check    # 0 errores en el modelo correcto; 1 en cada mutante
+```
+
+**5. El visor web interactivo.**
+
+```bash
+python3 -m http.server 8080 --directory tp/app
+# abrir http://localhost:8080/ en el navegador (o en el celular vía adb reverse tcp:8080 tcp:8080)
 ```
 
 <p align="right">(<a href="#inicio">volver arriba</a>)</p>
@@ -186,32 +227,12 @@ cd tp/spin && make check    # 0 errores en el modelo correcto, 1 en el mutante
 
 | Ruta | Qué hay |
 |------|---------|
-| `tp/` | Trabajo Parcial: pipeline de datos, `kmeans/` en Go, `spin/`, benchmarks, informes en LaTeX y documentación en `docs/`. Contexto completo en [`tp/CLAUDE.md`](tp/CLAUDE.md). |
+| `tp/` | Trabajo Parcial: pipeline de datos, `kmeans/` en Go, `spin/`, benchmarks, app web interactiva en `app/`, informes en LaTeX y documentación en `docs/`. Contexto completo en [`tp/CLAUDE.md`](tp/CLAUDE.md). |
 | `labs/go/` | Laboratorios de Go, un paquete por semana. |
 | `labs/spin/` | Laboratorios de Promela verificados con Spin. |
 | `notes/` | Apuntes por sesión. |
 | `manifest.json` | Inventario del curso: temario, cronograma de evaluación y el índice del material del Aula Virtual. |
 | `docs/` | Propuestas de caso de uso del TP. |
-
-<p align="right">(<a href="#inicio">volver arriba</a>)</p>
-
-<a id="curso"></a>
-
-## El curso
-
-| Unidad | Semanas | Tema |
-|--------|---------|------|
-| 1 | 1 a 8 | Construcción y verificación de aplicaciones concurrentes: Go, sección crítica, semáforos, patrones, model checking con Spin |
-| 2 | 9 a 16 | Computación distribuida: canales, servicios y algoritmos distribuidos, exclusión mutua distribuida, consenso, tiempo real |
-
-| Evaluación | Semana | Peso |
-|------------|--------|------|
-| PC1, PC2 | 3, 5 | 10 % cada una |
-| TB1 | 7 | 5 % |
-| EA1 | 8 | 10 % |
-| PC3, PC4 | 11, 13 | 10 % cada una |
-| TB2, DD1 | 15 | 15 % cada una |
-| EB1 | 16 | 15 % |
 
 <p align="right">(<a href="#inicio">volver arriba</a>)</p>
 
@@ -224,8 +245,8 @@ cd tp/spin && make check    # 0 errores en el modelo correcto, 1 en el mutante
   revisada, y una fusión a `main` por entregable, con tag (`pc1`, `pc2`, …).
 - **Ninguna cifra a mano**: las tablas de los informes se generan desde `tp/reports/*.json`.
 - **Tareas en beads** (`bd ready`), no en TODOs sueltos.
-- **IA como herramienta del curso**: el sílabo incorpora prompt engineering para diseñar algoritmos
-  concurrentes e interpretar Spin, siempre contrastando contra la teoría; el uso se registra en el TP.
+- **IA como herramienta**: prompt engineering estructurado para auditar código e interpretar Spin,
+  contrastando siempre cada hallazgo contra la teoría y la implementación.
 
 Las reglas completas están en [`CLAUDE.md`](CLAUDE.md).
 
@@ -260,6 +281,6 @@ Las reglas completas están en [`CLAUDE.md`](CLAUDE.md).
 </table>
 </div>
 
-<p align="center"><sub>Programación Concurrente y Distribuida · UPC · 2026-20 · Docente: Carlos Alberto Jara García</sub></p>
+<p align="center"><sub>Programación Concurrente y Distribuida · UPC · Ciclo 2026-20</sub></p>
 
 <p align="right">(<a href="#inicio">volver arriba</a>)</p>

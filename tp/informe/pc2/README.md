@@ -1,5 +1,9 @@
 # Informe PC2 (LaTeX)
 
+> **Congelado.** Esta es la versión entregada el 27 de septiembre de 2026 (tag `pc2`). El informe
+> que sigue es `../tp/`. Compilarlo desde `develop` ya no reproduce lo entregado: el modelo de
+> `tp/spin/kmeans.pml` creció para el TP. Para recompilarlo, hacerlo desde el tag `pc2`.
+
 Informe del Entregable 2 del Trabajo Parcial. Empieza con el Entregable 1 y sus correcciones
 (Parte I) y sigue el orden de la rúbrica de la PC2 (Parte II): algoritmo y modelo en Promela,
 implementación en Go con capturas, explicación de la sincronización, speedup con media recortada,

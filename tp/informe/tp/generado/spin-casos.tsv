@@ -1,0 +1,8 @@
+variante	corrida	errores	estados	transiciones	profundidad	error	que
+correcto	sin-ltl	0	2412	3234	181		seguridad: aserciones y estados finales válidos (sin deadlock)
+correcto	-a -N exclusion	0	2412	3239	362		LTL: nadie publica centroides mientras hay lectores
+correcto	-a -f -N termina	0	2412	22700	361		LTL: las dos iteraciones terminan (weak fairness)
+MUTANTE	sin-ltl	1	393	435	209	assertion violated (compartido==4) (at depth 205)	acumulador compartido sin mutex: incremento perdido
+MUTANTE_DEADLOCK	sin-ltl	1	65	65	65	invalid end state (at depth 64)	un worker pierde el wg.Done: deadlock en la barrera
+MUTANTE_DEADLOCK	-a -f -N termina	1	65	68	132	acceptance cycle (at depth 131)	el mismo wg.Done perdido: la corrida nunca termina
+MUTANTE_SIN_BARRERA	-a -N exclusion	1	206	217	354	assertion violated  !( !( !((escribiendo&&(lectores>0))))) (at depth 295)	el coordinador publica sin esperar la barrera

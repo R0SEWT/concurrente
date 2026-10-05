@@ -2,21 +2,29 @@
 # requires-python = ">=3.11"
 # dependencies = ["matplotlib>=3.8"]
 # ///
-"""Figuras del modelo Promela para el informe de la PC2.
+"""Figuras y tabla del modelo Promela para el informe (PC2 y TP).
 
 Dibujan exactamente lo que devuelve Spin, sin retocar los datos:
 
     cd tp/spin && make figuras     # regenera las entradas con Spin y llama a este script
+    cd tp/spin && make informe     # además, las salidas de pan y la tabla de los 7 casos
+
+`--informe` elige el directorio tp/informe/<informe>/ (por defecto tp; el de la PC2 quedó
+congelado en el tag pc2).
 
   automata-worker.pdf  el autómata del proctype worker, de `pan -D` (dot de Graphviz);
                        solo se abrevian las etiquetas: (4/2) → TAM, x = (x+1) → x++
   traza-mutante.pdf    compartido después de cada lectura y escritura en la ronda donde
                        falla el mutante, de `spin -t -p -l -g -DMUTANTE`
+  tabla-spin-casos.tex los 7 casos de check.sh (variante, corrida, errores, estados, qué
+                       encontró pan), de generado/spin-casos.tsv
 
 El estilo repite el de labs/spin/week05/grafico/trazas.py (incremento.svg), que dibuja el
 mismo incremento perdido en el ejercicio de clase.
 """
 
+import argparse
+import csv
 import re
 import subprocess
 import sys
@@ -29,9 +37,10 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 
-INFORME = Path(__file__).resolve().parent.parent / "informe" / "pc2"
-GENERADO = INFORME / "generado"
-IMG = INFORME / "img"
+INFORMES = Path(__file__).resolve().parent.parent / "informe"
+# Los fija main() según --informe.
+GENERADO = INFORMES / "tp" / "generado"
+IMG = INFORMES / "tp" / "img"
 
 # Paleta de trazas.py: slots 1 y 2 validados; la forma repite la identidad del worker.
 COLOR = ["#2a78d6", "#eb6834"]
@@ -248,6 +257,87 @@ def traza() -> None:
     print(f"escrito {IMG / 'traza-mutante.pdf'}")
 
 
-if __name__ == "__main__":
+# --- tabla de los casos de check.sh ---------------------------------------------
+
+VARIANTE = {
+    "correcto": "correcto",
+    "MUTANTE": r"\texttt{MUTANTE}",
+    "MUTANTE_DEADLOCK": r"\texttt{MUTANTE\_DEADLOCK}",
+    "MUTANTE_SIN_BARRERA": r"\texttt{MUTANTE\_SIN\_BARRERA}",
+}
+
+
+def _tex(texto: str) -> str:
+    return re.sub(r"([&%$#_{}])", r"\\\1", texto)
+
+
+def _corrida(corrida: str) -> str:
+    if corrida == "sin-ltl":
+        return r"seguridad (\texttt{-DNOCLAIM})"
+    return rf"\texttt{{{_tex(corrida)}}}"
+
+
+def _resultado(fila: dict) -> str:
+    if fila["errores"] == "0":
+        return "sin errores"
+    error = re.sub(r"\s*\(at depth \d+\)$", "", fila["error"]).strip()
+    # Una fórmula de seguridad se viola como el assert de su never claim: se nombra la fórmula.
+    if error.startswith("assertion violated") and "!( !(" in error:
+        m = re.search(r"-N (\w+)", fila["corrida"])
+        return rf"viola la fórmula \texttt{{{m[1]}}}"
+    return rf"\texttt{{{_tex(error)}}}"
+
+
+def tabla() -> None:
+    with (GENERADO / "spin-casos.tsv").open(newline="") as f:
+        filas = list(csv.DictReader(f, delimiter="\t"))
+    if len(filas) != 7:
+        sys.exit(f"spin-casos.tsv trae {len(filas)} casos y check.sh define 7: ¿cambió la matriz?")
+    lineas = [
+        "% Generado por tp/scripts/figuras_spin.py desde spin-casos.tsv (make informe). No editar.",
+        r"\begin{tabularx}{\textwidth}{@{}L{4.1cm}L{3.1cm}rrrY@{}}",
+        r"\toprule",
+        (
+            r"\textbf{Variante} & \textbf{Corrida de \texttt{pan}} & \textbf{Err.} & \textbf{Estados}"
+            r" & \textbf{Prof.} & \textbf{Resultado} \\"
+        ),
+        r"\midrule",
+    ]
+    for fila in filas:
+        estados = f"{int(fila['estados']):,}".replace(",", r"\,")
+        celdas = [
+            VARIANTE[fila["variante"]],
+            _corrida(fila["corrida"]),
+            fila["errores"],
+            estados,
+            fila["profundidad"],
+            _resultado(fila),
+        ]
+        lineas.append(" & ".join(celdas) + r" \\")
+        lineas.append(
+            rf"\multicolumn{{6}}{{@{{}}l}}{{\footnotesize\textit{{{_tex(fila['que'])}}}}} \\"
+        )
+        lineas.append(r"\addlinespace")
+    lineas[-1] = r"\bottomrule"
+    lineas.append(r"\end{tabularx}")
+    (GENERADO / "tabla-spin-casos.tex").write_text("\n".join(lineas) + "\n")
+    print(f"escrito {GENERADO / 'tabla-spin-casos.tex'}")
+
+
+def main() -> None:
+    global GENERADO, IMG
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("--informe", default="tp", help="directorio en tp/informe/ (tp, pc2)")
+    ap.add_argument("--solo-tabla", action="store_true", help="solo tabla-spin-casos.tex")
+    args = ap.parse_args()
+    GENERADO = INFORMES / args.informe / "generado"
+    IMG = INFORMES / args.informe / "img"
+    if args.solo_tabla:
+        tabla()
+        return
     automata()
     traza()
+
+
+if __name__ == "__main__":
+    main()

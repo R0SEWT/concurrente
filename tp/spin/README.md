@@ -5,10 +5,15 @@ Verifica el *algoritmo* de sincronización de `tp/kmeans/concurrente.go` sobre
 Spin verifica el diseño. El curso pide las dos cosas y ninguna reemplaza a la otra.
 
 ```bash
-make check     # regresión completa: 0 errores en el correcto, 1 en el mutante
-make verify    # solo el modelo correcto
-make trail     # lee el contraejemplo del mutante
+make check     # regresión completa: 7 casos, cada uno con su número y tipo de error esperado
+make verify    # el modelo correcto sin fórmulas: aserciones y deadlock
+make ltl       # el modelo correcto contra las fórmulas exclusion y termina
+make trail     # lee el contraejemplo del mutante de la carrera
+make informe   # salidas de pan, tabla de los 7 casos y figuras para tp/informe/tp/
 ```
+
+`make figuras` y `make informe` escriben en el informe del TP. El de la PC2 quedó congelado en el
+tag `pc2`: si hiciera falta regenerarlo, `make figuras INFORME=pc2`, desde ese tag.
 
 ## Qué se modela
 
@@ -51,10 +56,11 @@ también pasara, el modelo no estaría probando nada.
 
 | | Estados | Transiciones | Profundidad | Errores |
 |---|---|---|---|---|
-| Correcto | 2407 | 3229 | 180 | **0** |
-| Mutante | 391 | 433 | 208 | **1** |
+| Correcto | 2412 | 3234 | 181 | **0** |
+| Mutante | 393 | 435 | 209 | **1** |
 
-Vector de estado de 56 bytes; 0,4 MB de memoria para estados. La búsqueda
+Corridas sin fórmulas LTL (`-DNOCLAIM`). La PC2 midió 2407 y 391 estados, antes de sumar la
+variable `fin` del Entregable 3. Vector de estado de 56 bytes; 0,4 MB de memoria para estados. La búsqueda
 termina sin recortes: no hace falta `bitstate` ni aproximaciones.
 
 ## Hasta dónde llega esta prueba
@@ -66,5 +72,67 @@ duplicación de puntos, escritura de centroides durante la lectura, barrera mal
 reutilizada— sobre todos los entrelazados de ese dominio, que es exactamente lo
 que ningún test puede hacer, porque el test observa un entrelazado por corrida.
 
-Para el Entregable 3 quedan pendientes las propiedades de progreso (que toda
-iteración termine), que necesitan declarar sus hipótesis de fairness.
+## Entregable 3: deadlock, exclusión mutua y progreso
+
+El enunciado del TP pide verificar formalmente la **ausencia de deadlocks** y la
+**exclusión mutua**. El modelo lo hace de dos formas complementarias: las aserciones
+de arriba y dos fórmulas LTL.
+
+```promela
+ltl exclusion { [] !(escribiendo && lectores > 0) }   /* nunca se publica con lectores */
+ltl termina   { <> fin }                              /* las ITERS iteraciones terminan */
+```
+
+- **Deadlock.** Es un estado final inválido: algún proceso quedó bloqueado fuera de
+  una etiqueta `end`. Los workers esperando trabajo están bajo `end:`, que marca como
+  legítima esa espera. Si la barrera nunca llega a cero, el que queda bloqueado es
+  `init`, y `pan` lo reporta.
+- **Exclusión mutua.** El escritor es el coordinador, que publica centroides con
+  `escribiendo = 1`. Los lectores son los workers mientras asignan, contados en
+  `lectores`. La fórmula exige que las dos cosas no pasen nunca a la vez, en ningún
+  entrelazado.
+- **Progreso.** `<> fin` con **weak fairness** (`pan -a -f`): ningún proceso que queda
+  habilitado para siempre se posterga para siempre. Es la hipótesis que da el
+  planificador de Go para goroutines ejecutables.
+
+### Cada propiedad con su mutante
+
+| Variante | Corrida | Errores | Qué encuentra Spin |
+|---|---|---|---|
+| correcto | sin LTL (`-DNOCLAIM`) | **0** | 2412 estados; aserciones y estados finales válidos |
+| correcto | `-a -N exclusion` | **0** | 2412 estados |
+| correcto | `-a -f -N termina` | **0** | 2412 estados, 12 643 visitados con fairness |
+| `MUTANTE` | sin LTL | **1** | `assertion violated (compartido==4)`: incremento perdido |
+| `MUTANTE_DEADLOCK` | sin LTL | **1** | `invalid end state` a profundidad 64: la barrera queda en `pendientes = 1` y `init` bloqueado |
+| `MUTANTE_DEADLOCK` | `-a -f -N termina` | **1** | `acceptance cycle`: la corrida nunca llega a `fin` |
+| `MUTANTE_SIN_BARRERA` | `-a -N exclusion` | **1** | la fórmula `exclusion` se viola a profundidad 295 |
+
+- `MUTANTE_DEADLOCK`: un worker se salta el `wg.Done` del último chunk, que en Go es un
+  `return` temprano antes del `Done`.
+- `MUTANTE_SIN_BARRERA`: el coordinador publica sin `wg.Wait`.
+
+`make check` (`check.sh`) corre los siete casos. Para cada uno exige el número de errores
+**y** el tipo de error: que un mutante falle por otra razón también es una falla del
+modelo.
+
+### Tres trampas de pan que check.sh deja cubiertas
+
+1. **Con fórmulas LTL en el archivo, `pan` sin `-N` usa la primera** y desactiva la
+   búsqueda de estados finales inválidos (`invalid end states - (disabled by never
+   claim)`). Una corrida de «seguridad» dejaba entonces de detectar deadlocks sin avisar.
+   `pan -noclaim` no existe y se ignora en silencio. Lo que sí sirve es compilar con
+   `-DNOCLAIM`.
+2. **`pan -N nombre` con un nombre que no existe no verifica nada y da `errors: 0`.**
+   Pasó al escribir `check.sh` antes que las fórmulas: los casos del modelo correcto
+   «pasaban». Ahora el script exige que la fórmula figure como el never claim activo.
+3. **`-A` también apaga la fórmula.** Spin traduce una propiedad de seguridad `[] p` a
+   un never claim con un `assert` adentro (`spin -f '!([] p)'` lo muestra). Para aislar
+   la fórmula del resto de las aserciones, el mutante sin barrera se salta también su
+   `assert(lectores == 0)`, y el tipo de error esperado nombra la fórmula.
+
+### Hasta dónde llega
+
+Las mismas cotas de arriba: 4 puntos, 2 chunks, 2 workers, 2 iteraciones. El progreso
+se prueba bajo weak fairness, no para cualquier planificador. El cierre del pool
+(`close(trabajos)` y `pool.Wait()`) no está modelado: los workers terminan bloqueados
+en el canal, lo que el modelo declara legítimo con `end:`.

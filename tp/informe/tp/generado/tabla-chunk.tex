@@ -1,0 +1,19 @@
+% Generado por tp/scripts/tablas_informe.py desde tp/reports/*.json. No editar a mano.
+\begin{table}[H]
+\caption{Barrido del tamaño de chunk con $P=8$ sobre el dataset completo}\label{tab:chunk}
+\small
+\begin{tabular}{@{}rrrl@{}}
+\toprule
+\textbf{Chunk (viajes)} & \textbf{Cantidad de chunks} & \textbf{Tiempo (ms)} & \textbf{Speedup [IC 95\,\%]} \\
+\midrule
+1.024 & 2.766 & 190,0 & 5,84$\times$ [5,79; 5,88] \\
+4.096 & 692 & 188,5 & 5,87$\times$ [5,80; 5,93] \\
+16.384 & 173 & 196,0 & 5,71$\times$ [5,63; 5,83] \\
+65.536 & 44 & 199,5 & 5,56$\times$ [5,49; 5,63] \\
+262.144 & 11 & 232,4 & 4,79$\times$ [4,65; 4,91] \\
+1.048.576 & 3 & 439,0 & 2,54$\times$ [2,52; 2,56] \\
+\bottomrule
+\end{tabular}
+
+{\footnotesize\textit{Nota.} Mismo protocolo que la Tabla~\ref{tab:speedup-fuerte}; solo cambia el tamaño de chunk. Con 3 chunks y 8 workers, cinco workers se quedan sin trabajo.\par}
+\end{table}

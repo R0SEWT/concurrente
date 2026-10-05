@@ -1,0 +1,31 @@
+pan: ltl formula exclusion
+pan:1: assertion violated  !( !( !((escribiendo&&(lectores>0))))) (at depth 295)
+pan: wrote kmeans.pml.trail
+
+(Spin Version 6.5.2 -- 18 September 2025)
+Warning: Search not completed
+	+ Partial Order Reduction
+
+Full statespace search for:
+	never claim         	+ (exclusion)
+	assertion violations	+ (if within scope of claim)
+	acceptance   cycles 	+ (fairness disabled)
+	invalid end states	- (disabled by never claim)
+
+State-vector 64 byte, depth reached 354, errors: 1
+      206 states, stored
+       11 states, matched
+      217 transitions (= stored+matched)
+        1 atomic steps
+hash conflicts:         0 (resolved)
+
+Stats on memory usage (in Megabytes):
+    0.018	equivalent memory usage for states (stored*(State-vector + overhead))
+    0.284	actual memory usage for states
+  128.000	memory used for hash table (-w24)
+    0.534	memory used for DFS stack (-m10000)
+  128.730	total actual memory usage
+
+
+
+pan: elapsed time 0 seconds

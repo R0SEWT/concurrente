@@ -1,0 +1,29 @@
+% Conclusiones y recomendaciones de \nombreRody (rúbrica del Entregable 3: 4 puntos, «del alumno»).
+% Escribirlas en primera persona, con tus palabras: 2 o 3 párrafos alcanzan. Reemplaza la línea
+% \pendiente{...} de abajo por tu texto. Preguntas guía, no hace falta responderlas todas:
+%   - ¿Qué aprendiste sobre concurrencia con este trabajo (worker pool, barrera, Spin, speedup)?
+%   - ¿Qué resultado te sorprendió y por qué?
+%   - ¿Qué limitación ves en el trabajo y qué recomendarías para mejorarlo o escalarlo?
+%   - En lo que hiciste tú (tu PR), ¿qué harías distinto?
+% Para compilar y ver el PDF: cd tp/informe/tp && ./compilar.sh  (sale en build/main.pdf).
+\subsubsection*{\nombreRody}
+
+Lo que más me dejó este trabajo es que en concurrencia el costo real no está donde uno lo busca.
+Esperaba que el límite del speedup fuera una parte secuencial del algoritmo, y resultó ser el costo
+de coordinar: repartir bloques y esperar la barrera en cada iteración pesa más a medida que agrego
+workers. Eso explica por qué con ocho workers el speedup es \cifra{speedup-p8} y no ocho, y por
+qué por debajo de unos \cifra{n-equilibrio}~viajes la versión concurrente no conviene. La
+granularidad importó al revés de lo que suponía: trocear fino casi no cuesta, lo que castiga es
+dejar workers sin trabajo.
+
+La segunda lección fue sobre verificar. Un \texttt{errors: 0} de Spin no dice nada si el mismo
+chequeo no es capaz de dar \texttt{errors: 1} cuando el algoritmo está mal. Construir un mutante
+por propiedad me obligó a entender qué verifica exactamente cada búsqueda, y en ese proceso la
+herramienta me dio tres resultados falsos sin avisar. Desde entonces desconfío de cualquier
+verificación que nunca vi fallar, sea un test, un modelo o una medición.
+
+Como recomendación, mantendría el modelo Promela junto al código y en la integración continua, y
+modelaría el cierre del pool antes de reutilizarlo en un programa de larga vida. Para escalar,
+extendería la medición a varios meses de datos, donde coordinar pesa menos frente al trabajo, y
+para pasar a varias máquinas repartiría los bloques por red manteniendo la reducción en orden fijo,
+que es lo que hace reproducible el resultado.

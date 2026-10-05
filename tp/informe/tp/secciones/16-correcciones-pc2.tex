@@ -1,0 +1,64 @@
+% ========================================================
+% CORRECCIONES DEL ENTREGABLE 2
+% ========================================================
+\section{Correcciones del Entregable 2}\label{sec:correcciones-pc2}
+
+Al 29 de septiembre de 2026 el docente no había publicado la revisión de la PC2, así que las
+correcciones de esta sección son las que el propio trabajo del Entregable 3 hizo necesarias.
+
+\subsection{Cifras del modelo Promela}
+
+El modelo de \texttt{tp/spin/kmeans.pml} creció para este entregable: una variable \texttt{fin} que
+marca el final de la corrida, dos fórmulas LTL y dos mutantes nuevos, activados por compilación
+condicional (Sección~\ref{sec:verificacion}). El modelo correcto sigue siendo el mismo algoritmo,
+pero \texttt{fin} agrega estados, así que las cifras de la Sección~\ref{sec:promela} se regeneraron
+con la versión actual: 2\,412 estados y 3\,234 transiciones en vez de 2\,407 y 3\,229, y
+profundidad 181 en vez de 180; el mutante del acumulador compartido llega a profundidad 209 en vez
+de 208 y sigue violando \texttt{compartido == 4} en el paso 205. El autómata del \texttt{worker}
+(Figura~\ref{fig:automata}) no cambió, y el contraejemplo de la Figura~\ref{fig:traza-mutante}
+cuenta la misma historia: los dos workers leen 1, los dos escriben 2 y la ronda cierra con 3.
+
+Las salidas de \texttt{pan} que cita este informe ya no se copian a mano: \texttt{make informe} en
+\texttt{tp/spin/} las regenera todas, junto con la tabla de la Sección~\ref{sec:verificacion}.
+
+\subsection{Estado del trabajo pendiente de la PC2}
+
+Las conclusiones de la PC2 dejaron una lista de trabajo para este entregable. La
+Tabla~\ref{tab:pendiente-pc2} dice qué pasó con cada punto.
+
+\begin{table}[H]
+\caption{Trabajo que la PC2 dejó para el Entregable 3}\label{tab:pendiente-pc2}
+\small
+\begin{tabularx}{\textwidth}{@{}L{5.4cm}L{2.2cm}Y@{}}
+\toprule
+\textbf{Punto} & \textbf{Estado} & \textbf{Dónde} \\
+\midrule
+Propiedades de progreso con \emph{fairness} declarada & Hecho & Sección~\ref{sec:verificacion} \\
+\addlinespace
+Contraste con una implementación en GPU & Medido & \texttt{tp/docs/analisis-gpu.md} y el
+  párrafo siguiente \\
+\addlinespace
+Elegir $k$ con un criterio de validación interna & Pendiente & --- \\
+\addlinespace
+Medir la variante con \texttt{sync.Mutex} & Pendiente & --- \\
+\addlinespace
+Extender la escala a varios meses & Pendiente & --- \\
+\addlinespace
+Interpretar los clusters & Resuelto & Sección~\ref{sec:interpretacion-clusters} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+El contraste en GPU compara configuraciones completas, no una sola variable: otra máquina (un
+i7-10700 de 8 núcleos con una RTX~4060), otro lenguaje (PyTorch sobre CUDA) y otra precisión. Con
+el mismo dataset, los mismos centroides iniciales y el mismo protocolo de medición, la GPU en
+\texttt{float64} calcula la misma inercia que Go, con una diferencia del orden de $10^{-14}$, pero es
+más lenta que el worker pool con 16 hilos en esa máquina (0{,}55$\times$), porque la RTX~4060 castiga
+la doble precisión. En \texttt{float32} la supera apenas (1{,}11$\times$), a cambio de asignar
+distinto el 0{,}21\,\% de los viajes. Estas cifras de equivalencia son de una sola corrida: el
+análisis con IA de la Sección~\ref{sec:gaps} encontró que la versión en GPU no es determinista, y en
+21 repeticiones iguales la inercia toma 8 valores distintos en \texttt{float64} y 9 en
+\texttt{float32} (hallazgo G4). En \texttt{float64} la variación es del orden de $10^{-15}$ y no
+cambia la conclusión; en \texttt{float32} es del mismo orden que la diferencia con la CPU. Sobre este volumen, entonces, el worker pool en CPU queda a la
+altura de la GPU, y el resultado de la comparación depende tanto de la precisión elegida como del
+paralelismo disponible.

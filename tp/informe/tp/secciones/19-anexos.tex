@@ -1,0 +1,66 @@
+% ========================================================
+% ANEXOS
+% ========================================================
+\section{Video de sustentación}\label{anexo:video}
+
+El enunciado pide un video de hasta seis minutos, publicado en la nube, en el que cada integrante
+demuestra conocimiento del tema, presenta los resultados y discute críticamente las limitaciones, la
+escalabilidad y las posibles mejoras.
+
+\begin{itemize}
+  \item \textbf{URL:} \url{https://drive.google.com/drive/folders/1S9Dq6RJhHhUIf5h-7miV-QW5wrrLKuQa}
+        (carpeta pública «Video TB» de Google Drive, con el video unido de los tres integrantes)
+  \item \textbf{Duración:} hasta 6:00, como pide el enunciado.
+  \item \textbf{Partes, en este orden:} Rody Vilchez (caso de uso, worker pool, ejecución de la CLI,
+        pruebas con \texttt{-race} y speedup), Dayana Gómez (verificación formal en Spin y
+        mutantes) y Julio Meza (GAPs con IA, interpretación de los clusters, la app y discusión
+        crítica).
+\end{itemize}
+
+\section{Informe de GAPs en Markdown}\label{anexo:gaps}
+
+El informe de GAPs de la Sección~\ref{sec:gaps} está en el repositorio, en la rama principal:
+\url{https://github.com/R0SEWT/concurrente/blob/main/tp/docs/gaps-ia.md}.
+
+\section{Declaración de uso de inteligencia artificial}\label{anexo:ia}
+
+El sílabo del curso incorpora la ingeniería de prompts como herramienta, siempre contrastada con la
+teoría. En este trabajo se usó IA generativa en las tareas que siguen, y todo lo producido con ella
+fue revisado por el grupo y validado contra el código, los tests y las salidas de Spin, que son la
+fuente de las cifras de este informe.
+
+\begin{table}[H]
+\caption{Uso de IA generativa en el Trabajo Parcial}\label{tab:uso-ia}
+\small
+\begin{tabularx}{\textwidth}{@{}L{3.6cm}L{3.8cm}Y@{}}
+\toprule
+\textbf{Tarea} & \textbf{Herramienta} & \textbf{Cómo se verificó} \\
+\midrule
+Código en Go, modelo Promela, scripts y pipeline de datos & Claude Code (Anthropic), modelos
+  Claude; en el Entregable 3, Claude Opus 5.5 & \texttt{go test -race}, la regresión de Spin con un
+  mutante por propiedad, \texttt{pytest} y la auditoría en SQL de la limpieza, todo en la
+  integración continua \\
+\addlinespace
+Redacción y maquetación del informe & Claude Code, mismo modelo & Revisión del grupo; las cifras
+  salen de tablas generadas desde los datos y las salidas de Spin, no de la redacción \\
+\addlinespace
+Análisis de GAPs (Sección~\ref{sec:gaps}) & Claude Opus 5.5 con el prompt de
+  \path{tp/docs/gaps-ia-prompt.md} & Cada hallazgo se contrastó contra el código antes de
+  incluirlo \\
+\addlinespace
+Coordinación del grupo por WhatsApp & Claude Code como asistente del coordinador & Cada
+  mensaje lleva la firma del modelo y el nombre de quien lo envía \\
+\addlinespace
+Consultas de apoyo de Dayana y de Julio (en el caso de Julio, sobre código) & ChatGPT (OpenAI) &
+  El código que entró al repositorio pasó por las mismas pruebas con \texttt{-race} y la misma
+  integración continua que el resto \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Entre el 26 y el 30 de septiembre de 2026, los commits hechos con Claude Code llevan la línea
+\texttt{Co-Authored-By: Claude}; desde el 1 de octubre el grupo dejó de marcar los commits y el uso
+de IA se declara únicamente en este anexo, así que el historial de la Sección~\ref{sec:github} no
+basta para rastrearlo. Las conclusiones de Dayana y de Julio
+(Sección~\ref{sec:conclusiones-integrantes}) son propias de cada uno; la de Rody partió de un
+borrador redactado con Claude a partir del trabajo hecho, que Rody revisó y aceptó.

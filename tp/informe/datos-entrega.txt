@@ -1,0 +1,34 @@
+CC65 · TP 2026-20 · Datos del Trabajo Parcial (K-means concurrente sobre NYC TLC)
+==================================================================================
+
+Descarga (ZIP con los datos originales y el CSV procesado que consume el K-means en Go):
+https://drive.google.com/file/d/1Fs2Akvdd-YA0nGLVUQXpntzbsrI-jKmv/view?usp=sharing
+Archivo: nyc_tlc_raw_gold_2024-01.zip (acceso público con el enlace)
+
+Qué contiene
+------------
+1. Datos originales (capa bronze), tal como los publica la NYC Taxi & Limousine Commission:
+   - yellow_tripdata_2024-01.parquet   2 964 624 viajes, 49 961 641 bytes
+     sha256 c4d59da7bbc8abaeeeb1727947ee93d9891a71acb42854bd80db1571b2030510
+     https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2024-01.parquet
+   - taxi_zone_lookup.csv              12 331 bytes
+     sha256 1a99e105092230f8620f301edcca7f80d3080642ff404d28ed957d3fa222c8ed
+
+2. CSV procesado (capa gold), entrada del K-means:
+   - yellow_2024-01_features.csv       2 831 486 viajes (+ encabezado), 196 MB
+     sha256 a3ad5205201b05dd9359e8352b9f79b46c5c3283579dfde49d49383c56a14750
+     columnas: viaje_id, PULocationID, DOLocationID, hora_sin, hora_cos, dia_sin, dia_cos,
+               log_duracion_z, log_distancia_z
+     Las 6 últimas son las features; las zonas no entran a la distancia.
+
+Por qué no va adjunto
+---------------------
+El CSV pesa 196 MB, más de lo que admite el Aula Virtual. El sha256 permite comprobar que el
+archivo descargado es exactamente el que usan los resultados del informe.
+
+Cómo regenerarlo sin el ZIP
+---------------------------
+Repositorio público: https://github.com/R0SEWT/concurrente (tag tp)
+    cd tp && uv sync && uv run nyc-tlc all
+Descarga los originales de TLC, aplica las 7 reglas de limpieza (sección de limpieza del
+informe) y escribe el mismo CSV en tp/data/gold/.

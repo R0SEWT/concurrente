@@ -1,0 +1,27 @@
+% Generado por tp/scripts/figuras_spin.py desde spin-casos.tsv (make informe). No editar.
+\begin{tabularx}{\textwidth}{@{}L{4.1cm}L{3.1cm}rrrY@{}}
+\toprule
+\textbf{Variante} & \textbf{Corrida de \texttt{pan}} & \textbf{Err.} & \textbf{Estados} & \textbf{Prof.} & \textbf{Resultado} \\
+\midrule
+correcto & seguridad (\texttt{-DNOCLAIM}) & 0 & 2\,412 & 181 & sin errores \\
+\multicolumn{6}{@{}l}{\footnotesize\textit{seguridad: aserciones y estados finales válidos (sin deadlock)}} \\
+\addlinespace
+correcto & \texttt{-a -N exclusion} & 0 & 2\,412 & 362 & sin errores \\
+\multicolumn{6}{@{}l}{\footnotesize\textit{LTL: nadie publica centroides mientras hay lectores}} \\
+\addlinespace
+correcto & \texttt{-a -f -N termina} & 0 & 2\,412 & 361 & sin errores \\
+\multicolumn{6}{@{}l}{\footnotesize\textit{LTL: las dos iteraciones terminan (weak fairness)}} \\
+\addlinespace
+\texttt{MUTANTE} & seguridad (\texttt{-DNOCLAIM}) & 1 & 393 & 209 & \texttt{assertion violated (compartido==4)} \\
+\multicolumn{6}{@{}l}{\footnotesize\textit{acumulador compartido sin mutex: incremento perdido}} \\
+\addlinespace
+\texttt{MUTANTE\_DEADLOCK} & seguridad (\texttt{-DNOCLAIM}) & 1 & 65 & 65 & \texttt{invalid end state} \\
+\multicolumn{6}{@{}l}{\footnotesize\textit{un worker pierde el wg.Done: deadlock en la barrera}} \\
+\addlinespace
+\texttt{MUTANTE\_DEADLOCK} & \texttt{-a -f -N termina} & 1 & 65 & 132 & \texttt{acceptance cycle} \\
+\multicolumn{6}{@{}l}{\footnotesize\textit{el mismo wg.Done perdido: la corrida nunca termina}} \\
+\addlinespace
+\texttt{MUTANTE\_SIN\_BARRERA} & \texttt{-a -N exclusion} & 1 & 206 & 354 & viola la fórmula \texttt{exclusion} \\
+\multicolumn{6}{@{}l}{\footnotesize\textit{el coordinador publica sin esperar la barrera}} \\
+\bottomrule
+\end{tabularx}

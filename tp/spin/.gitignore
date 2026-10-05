@@ -3,3 +3,5 @@ pan
 pan-mutante
 pan.*
 *.trail
+pan-*
+_spin_nvr.tmp

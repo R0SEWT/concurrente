@@ -1,0 +1,73 @@
+digraph p_worker {
+size="8,10";
+  GT [shape=box,style=dotted,label="worker"];
+  GT -> S18;
+	S18 -> S2  [color=black,style=bold,label="trabajos?idx"];
+  S18 [color=blue,style=bold,shape=box];
+	S2 -> S3  [color=black,style=bold,label="lectores = (lectores+1)"];
+	S3 -> S4  [color=black,style=bold,label="assert((escribiendo==0))"];
+	S4 -> S5  [color=black,style=bold,label="conteo[idx] = 0"];
+	S5 -> S13  [color=black,style=solid,label="i = 0"];
+	S13 -> S7  [color=black,style=solid,label="((i<(4/2)))"];
+	S13 -> S16  [color=black,style=solid,label="else"];
+	S7 -> S8  [color=black,style=bold,label="assert((escribiendo==0))"];
+	S8 -> S9  [color=black,style=bold,label="seen[((idx*(4/2))+i)] = (seen[((idx*(4/2))+i)]+1)"];
+	S9 -> S10  [color=black,style=bold,label="conteo[idx] = (conteo[idx]+1)"];
+	S10 -> S13  [color=black,style=solid,label="i = (i+1)"];
+	S16 -> S17  [color=black,style=bold,label="lectores = (lectores-1)"];
+	S17 -> S18  [color=black,style=bold,label="pendientes = (pendientes-1)"];
+}
+digraph init {
+size="8,10";
+  GT [shape=box,style=dotted,label="init"];
+  GT -> S3;
+	S3 -> S2  [color=black,style=dashed,label="(run worker())"];
+	S2 -> S4  [color=black,style=solid,label="(run worker())"];
+	S4 -> S52  [color=black,style=solid,label="it = 0"];
+	S52 -> S12  [color=black,style=solid,label="((it<2))"];
+	S52 -> S55  [color=black,style=solid,label="else"];
+	S12 -> S8  [color=black,style=solid,label="((i<4))"];
+	S12 -> S15  [color=black,style=solid,label="else"];
+	S8 -> S9  [color=black,style=bold,label="seen[i] = 0"];
+	S9 -> S12  [color=black,style=solid,label="i = (i+1)"];
+	S15 -> S16  [color=black,style=bold,label="total = 0"];
+	S16 -> S17  [color=black,style=bold,label="pendientes = 2"];
+	S17 -> S23  [color=black,style=solid,label="c = 0"];
+	S23 -> S19  [color=black,style=solid,label="((c<2))"];
+	S23 -> S26  [color=black,style=solid,label="else"];
+	S19 -> S20  [color=black,style=bold,label="trabajos!c"];
+	S20 -> S23  [color=black,style=solid,label="c = (c+1)"];
+	S26 -> S27  [color=black,style=bold,label="((pendientes==0))"];
+	S27 -> S28  [color=black,style=bold,label="assert((lectores==0))"];
+	S28 -> S29  [color=black,style=bold,label="escribiendo = 1"];
+	S29 -> S35  [color=black,style=solid,label="c = 0"];
+	S35 -> S31  [color=black,style=solid,label="((c<2))"];
+	S35 -> S38  [color=black,style=solid,label="else"];
+	S31 -> S32  [color=black,style=bold,label="total = (total+conteo[c])"];
+	S32 -> S35  [color=black,style=solid,label="c = (c+1)"];
+	S38 -> S39  [color=black,style=bold,label="escribiendo = 0"];
+	S39 -> S45  [color=black,style=solid,label="i = 0"];
+	S45 -> S41  [color=black,style=solid,label="((i<4))"];
+	S45 -> S48  [color=black,style=solid,label="else"];
+	S41 -> S42  [color=black,style=bold,label="assert((seen[i]==1))"];
+	S42 -> S45  [color=black,style=solid,label="i = (i+1)"];
+	S48 -> S49  [color=black,style=bold,label="assert((total==4))"];
+	S49 -> S52  [color=black,style=solid,label="it = (it+1)"];
+	S55 -> S56  [color=black,style=bold,label="fin = 1"];
+	S56 -> S0  [color=black,style=solid,label="-end-"];
+  S56 [color=blue,style=bold,shape=box];
+}
+digraph claim_exclusion {
+size="8,10";
+  GT [shape=box,style=dotted,label="exclusion"];
+  GT -> S6;
+	S6 -> S6  [color=black,style=bold,label="(!(!((escribiendo&&(lectores>0)))))"];
+	S6 -> S6  [color=black,style=bold,label="(1)"];
+}
+digraph claim_termina {
+size="8,10";
+  GT [shape=box,style=dotted,label="termina"];
+  GT -> S3;
+	S3 -> S3  [color=black,style=bold,label="(!(fin))"];
+  S3 [color=red,style=bold];
+}

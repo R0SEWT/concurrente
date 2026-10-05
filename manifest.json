@@ -234,12 +234,16 @@
       "attachments": [
         {
           "name": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608090-dt-content-rid-193719523_1/xid-193719523_1",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608090-dt-content-rid-193719523_1/xid-193719523_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608090-dt-content-rid-193719523_1/xid-193719523_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609143&3cCnGYSz89=aVn%2BLnxtV3c%2FbNEqzRkLh2QS1wJJfzHNtxS1RBJYs6c%3D",
           "status": "downloaded",
           "local_path": "materials/extra/xid-193719523_1",
           "size_bytes": 5454,
           "sha256": "f3ab38bfb6d34a515ef92a92974b10ef588024cf398d72b70ee52167955a4331",
-          "downloaded_at": "2026-09-07T07:20:15+00:00"
+          "downloaded_at": "2026-09-07T07:20:15+00:00",
+          "backup": {
+            "sha256": "f3ab38bfb6d34a515ef92a92974b10ef588024cf398d72b70ee52167955a4331",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         }
       ],
       "external_links": []
@@ -252,57 +256,81 @@
       "attachments": [
         {
           "name": "011cap 1.pdf",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608140-dt-content-rid-1266283048_1/xid-1266283048_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608140-dt-content-rid-1266283048_1/xid-1266283048_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609145&3cCnGYSz89=gEcBK4%2BPJRNi2TRa%2FhbBefvgEMWbmkRogRYgZs1J%2Fcg%3D",
           "status": "downloaded",
           "local_path": "materials/week-01/011cap 1.pdf",
           "size_bytes": 214097,
           "sha256": "981a21d1f1e7302f6746a301ce8db57fd8d660764d03bfa6f813a56647110797",
-          "downloaded_at": "2026-09-07T07:20:16+00:00"
+          "downloaded_at": "2026-09-07T07:20:16+00:00",
+          "backup": {
+            "sha256": "981a21d1f1e7302f6746a301ce8db57fd8d660764d03bfa6f813a56647110797",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "012Moore's_Law_Transistor_Count_1971-2018.png",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608140-dt-content-rid-1266283049_1/xid-1266283049_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608140-dt-content-rid-1266283049_1/xid-1266283049_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609145&3cCnGYSz89=4Zn9P8nj8drIj3eJ4WWf%2BQnp%2BcfGgpgEkl0g14HjW18%3D",
           "status": "downloaded",
           "local_path": "materials/week-01/012Moore's_Law_Transistor_Count_1971-2018.png",
           "size_bytes": 977504,
           "sha256": "dfdfe3f777370627bc8b3984d4c6bfc0c92050d70a1d1db00091dd354574fb19",
-          "downloaded_at": "2026-09-07T07:20:18+00:00"
+          "downloaded_at": "2026-09-07T07:20:18+00:00",
+          "backup": {
+            "sha256": "dfdfe3f777370627bc8b3984d4c6bfc0c92050d70a1d1db00091dd354574fb19",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "Ciencias_de_la_Computación_UPC___Introducción_PCD.pdf",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608140-dt-content-rid-1266283050_1/xid-1266283050_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608140-dt-content-rid-1266283050_1/xid-1266283050_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609145&3cCnGYSz89=4FpWqSjc1uJ03u9xY%2FseYe997X8Mny4v7s5i7CGn48k%3D",
           "status": "downloaded",
           "local_path": "materials/week-01/Ciencias_de_la_Computación_UPC___Introducción_PCD.pdf",
           "size_bytes": 1077346,
           "sha256": "cf43bba7a6013429dc9662a8313349d23d5cd5a007595a2f32596b9ecc7469d0",
-          "downloaded_at": "2026-09-07T07:20:19+00:00"
+          "downloaded_at": "2026-09-07T07:20:19+00:00",
+          "backup": {
+            "sha256": "cf43bba7a6013429dc9662a8313349d23d5cd5a007595a2f32596b9ecc7469d0",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "CPU-THREADS.gif",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608140-dt-content-rid-1266283051_1/xid-1266283051_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608140-dt-content-rid-1266283051_1/xid-1266283051_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609145&3cCnGYSz89=XqS5EKzxrT1v6OtnMISBTAQ46Qys84UzPrmnQt3eWKY%3D",
           "status": "downloaded",
           "local_path": "materials/week-01/CPU-THREADS.gif",
           "size_bytes": 1621594,
           "sha256": "471a9d5c304752039f5bba49d34dbf79886b7b3805cb924152af4e45ac572ba5",
-          "downloaded_at": "2026-09-07T07:20:20+00:00"
+          "downloaded_at": "2026-09-07T07:20:20+00:00",
+          "backup": {
+            "sha256": "471a9d5c304752039f5bba49d34dbf79886b7b3805cb924152af4e45ac572ba5",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "Go Cheat Sheet v1.0.2.pdf",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608140-dt-content-rid-1266283052_1/xid-1266283052_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608140-dt-content-rid-1266283052_1/xid-1266283052_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609145&3cCnGYSz89=EdXDbn1ZG48ABJuylWYptk%2BcMAKxWJPOBfS3UztgeFo%3D",
           "status": "downloaded",
           "local_path": "materials/week-01/Go Cheat Sheet v1.0.2.pdf",
           "size_bytes": 164067,
           "sha256": "b90a1044f545de07c6f62ddddb8beb25780556d6581759220f41e926460c3be1",
-          "downloaded_at": "2026-09-07T07:20:22+00:00"
+          "downloaded_at": "2026-09-07T07:20:22+00:00",
+          "backup": {
+            "sha256": "b90a1044f545de07c6f62ddddb8beb25780556d6581759220f41e926460c3be1",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "SintaxisGo.png",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608140-dt-content-rid-1266283053_1/xid-1266283053_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608140-dt-content-rid-1266283053_1/xid-1266283053_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609145&3cCnGYSz89=3DATClWFj95%2BC7wg%2BSsIV2zoYEt3KOvxYMCEY52%2BPrs%3D",
           "status": "downloaded",
           "local_path": "materials/week-01/SintaxisGo.png",
           "size_bytes": 1515077,
           "sha256": "8988716d57350ecc5cf5094b1883b9c93faac5441a3584bf335baf706685c64d",
-          "downloaded_at": "2026-09-07T07:20:23+00:00"
+          "downloaded_at": "2026-09-07T07:20:23+00:00",
+          "backup": {
+            "sha256": "8988716d57350ecc5cf5094b1883b9c93faac5441a3584bf335baf706685c64d",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         }
       ],
       "external_links": []
@@ -315,102 +343,146 @@
       "attachments": [
         {
           "name": "020Ben-Ari-slides.pdf",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608141-dt-content-rid-1266283056_1/xid-1266283056_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608141-dt-content-rid-1266283056_1/xid-1266283056_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609146&3cCnGYSz89=NvX0UVTKznxI4MBZHgMisB0fL%2B2yIXjKhhaXKR9FGkU%3D",
           "status": "downloaded",
           "local_path": "materials/week-02/020Ben-Ari-slides.pdf",
           "size_bytes": 126838,
           "sha256": "4b71cf6d4d9300e5cc81bd04626e4c0b54ffe75f5e867d1edef23a88ac9cdeac",
-          "downloaded_at": "2026-09-07T07:20:24+00:00"
+          "downloaded_at": "2026-09-07T07:20:24+00:00",
+          "backup": {
+            "sha256": "4b71cf6d4d9300e5cc81bd04626e4c0b54ffe75f5e867d1edef23a88ac9cdeac",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "021cap 2.pdf",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608141-dt-content-rid-1266283057_1/xid-1266283057_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608141-dt-content-rid-1266283057_1/xid-1266283057_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609146&3cCnGYSz89=FXlWgFWJq5N14Da73cAcro%2F48jBL3BtWrcWW%2BQYGegw%3D",
           "status": "downloaded",
           "local_path": "materials/week-02/021cap 2.pdf",
           "size_bytes": 1017741,
           "sha256": "db35d46c9dfcec0008313c4198d715058fb022ec496ed66895ffe9dddc2f1830",
-          "downloaded_at": "2026-09-07T07:20:27+00:00"
+          "downloaded_at": "2026-09-07T07:20:27+00:00",
+          "backup": {
+            "sha256": "db35d46c9dfcec0008313c4198d715058fb022ec496ed66895ffe9dddc2f1830",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "Matriz-Escenarios-ejercicio.xlsx",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608141-dt-content-rid-1266283058_1/xid-1266283058_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608141-dt-content-rid-1266283058_1/xid-1266283058_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609146&3cCnGYSz89=WtUgn9RGDCDhTHg4PZnMz2AlXuoW29lq5gpW1SkCuZE%3D",
           "status": "downloaded",
           "local_path": "materials/week-02/Matriz-Escenarios-ejercicio.xlsx",
           "size_bytes": 9506,
           "sha256": "f85fac1bbc404d0089d35d08e4b9a1b07510d18be730ade95575698833de5cca",
-          "downloaded_at": "2026-09-07T07:20:28+00:00"
+          "downloaded_at": "2026-09-07T07:20:28+00:00",
+          "backup": {
+            "sha256": "f85fac1bbc404d0089d35d08e4b9a1b07510d18be730ade95575698833de5cca",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "concurrente.go",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608141-dt-content-rid-1266283059_1/xid-1266283059_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608141-dt-content-rid-1266283059_1/xid-1266283059_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609146&3cCnGYSz89=9DHSEukhZgOIP49gzXV96pVlLotu0r2DJoTt6pZCdNc%3D",
           "status": "downloaded",
           "local_path": "materials/week-02/concurrente.go",
           "size_bytes": 318,
           "sha256": "d4f354646a6e010c1d12aa64351c822d0c42f1e74e63af573759a7b2925fb736",
-          "downloaded_at": "2026-09-07T07:20:29+00:00"
+          "downloaded_at": "2026-09-07T07:20:29+00:00",
+          "backup": {
+            "sha256": "d4f354646a6e010c1d12aa64351c822d0c42f1e74e63af573759a7b2925fb736",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "concurrente2.go",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608141-dt-content-rid-1266283060_1/xid-1266283060_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608141-dt-content-rid-1266283060_1/xid-1266283060_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609146&3cCnGYSz89=FXp%2BWBdpi7qrM20RJ7EOcLWPeDBq2Oih4yOFUWWfLXc%3D",
           "status": "downloaded",
           "local_path": "materials/week-02/concurrente2.go",
           "size_bytes": 388,
           "sha256": "1da61b11ac89c95171b942cd5a36044f31a9b88f1ae4e3f3f337066b32f344fc",
-          "downloaded_at": "2026-09-07T07:20:31+00:00"
+          "downloaded_at": "2026-09-07T07:20:31+00:00",
+          "backup": {
+            "sha256": "1da61b11ac89c95171b942cd5a36044f31a9b88f1ae4e3f3f337066b32f344fc",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "concurrente3.go",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608141-dt-content-rid-1266283061_1/xid-1266283061_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608141-dt-content-rid-1266283061_1/xid-1266283061_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609146&3cCnGYSz89=Dik%2BK84iGdfbYG6s3bxIb36DXf99WaOefBuAxOev6xo%3D",
           "status": "downloaded",
           "local_path": "materials/week-02/concurrente3.go",
           "size_bytes": 347,
           "sha256": "1defc513bdec2c61be53e00f9d5a623e979706f74cfa49bcde9821b5820d6ace",
-          "downloaded_at": "2026-09-07T07:20:33+00:00"
+          "downloaded_at": "2026-09-07T07:20:33+00:00",
+          "backup": {
+            "sha256": "1defc513bdec2c61be53e00f9d5a623e979706f74cfa49bcde9821b5820d6ace",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "contador.go",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608141-dt-content-rid-1266283062_1/xid-1266283062_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608141-dt-content-rid-1266283062_1/xid-1266283062_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609146&3cCnGYSz89=WX1FLD1hqSxtO5ObgEdHOMjwuFU8XNJTQOCzwQf0xME%3D",
           "status": "downloaded",
           "local_path": "materials/week-02/contador.go",
           "size_bytes": 495,
           "sha256": "412a7b28a7f5858310d6c4c68272eb9df69eb194be5968cb7a5984a73f550fb8",
-          "downloaded_at": "2026-09-07T07:20:34+00:00"
+          "downloaded_at": "2026-09-07T07:20:34+00:00",
+          "backup": {
+            "sha256": "412a7b28a7f5858310d6c4c68272eb9df69eb194be5968cb7a5984a73f550fb8",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "secuencial.go",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608141-dt-content-rid-1266283063_1/xid-1266283063_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608141-dt-content-rid-1266283063_1/xid-1266283063_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609146&3cCnGYSz89=%2FsHYVQLvLRNqacfWdW%2BkHymdb3zdFcA3dEnFte0xGLk%3D",
           "status": "downloaded",
           "local_path": "materials/week-02/secuencial.go",
           "size_bytes": 173,
           "sha256": "8226ec1f300a38081aefbb9ad133ff5ca3cb25348e1a3a8a89a36dd6ec3153f0",
-          "downloaded_at": "2026-09-07T07:20:36+00:00"
+          "downloaded_at": "2026-09-07T07:20:36+00:00",
+          "backup": {
+            "sha256": "8226ec1f300a38081aefbb9ad133ff5ca3cb25348e1a3a8a89a36dd6ec3153f0",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "Concurrente.drawio",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608141-dt-content-rid-1266283064_1/xid-1266283064_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608141-dt-content-rid-1266283064_1/xid-1266283064_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609146&3cCnGYSz89=bw%2FjfWCRcqnZ3Vir7Q6P31JcSKar1mxOkV6lU1yR3GQ%3D",
           "status": "downloaded",
           "local_path": "materials/week-02/Concurrente.drawio",
           "size_bytes": 20761,
           "sha256": "9690b888bb43c1b69d5a2f248f3f4ef4f6bfc89d1252f41b5748bb5f025ae9ca",
-          "downloaded_at": "2026-09-07T07:20:38+00:00"
+          "downloaded_at": "2026-09-07T07:20:38+00:00",
+          "backup": {
+            "sha256": "9690b888bb43c1b69d5a2f248f3f4ef4f6bfc89d1252f41b5748bb5f025ae9ca",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "Ejercicios Diagrama de estados.pdf",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608141-dt-content-rid-1287951435_1/xid-1287951435_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608141-dt-content-rid-1287951435_1/xid-1287951435_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609146&3cCnGYSz89=Gko57rijEEPybPjcCVJeCtkcs6Hzmnm6dmJdB3Vyt1E%3D",
           "status": "downloaded",
           "local_path": "materials/week-02/Ejercicios Diagrama de estados.pdf",
           "size_bytes": 97258,
           "sha256": "0cc744fd9a0ec0b88bc5467bee4a27a7340240c852935ba769254cf5d8d708e0",
-          "downloaded_at": "2026-09-07T07:20:40+00:00"
+          "downloaded_at": "2026-09-07T07:20:40+00:00",
+          "backup": {
+            "sha256": "0cc744fd9a0ec0b88bc5467bee4a27a7340240c852935ba769254cf5d8d708e0",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "Ejercicios Matriz de escenarios.pdf",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608141-dt-content-rid-1287951436_1/xid-1287951436_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608141-dt-content-rid-1287951436_1/xid-1287951436_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609146&3cCnGYSz89=ojcUORVpu7%2B3AkpS0Yj7M5kWFtWBcAd9nyMuoAf5Yeg%3D",
           "status": "downloaded",
           "local_path": "materials/week-02/Ejercicios Matriz de escenarios.pdf",
           "size_bytes": 60653,
           "sha256": "fdcd5f32f9ee426de6423a2ebced6eb1ce962a08393c43207ca050a20f2b74ed",
-          "downloaded_at": "2026-09-07T07:20:41+00:00"
+          "downloaded_at": "2026-09-07T07:20:41+00:00",
+          "backup": {
+            "sha256": "fdcd5f32f9ee426de6423a2ebced6eb1ce962a08393c43207ca050a20f2b74ed",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         }
       ],
       "external_links": []
@@ -423,30 +495,42 @@
       "attachments": [
         {
           "name": "Módulos en Go.pdf",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-75739469-dt-content-rid-1288120657_1/xid-1288120657_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-75739469-dt-content-rid-1288120657_1/xid-1288120657_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609147&3cCnGYSz89=WyLsGq800fSaFxd1VJ4vYgNIalIh2uhg50lU3YrN4w8%3D",
           "status": "downloaded",
           "local_path": "materials/week-02/Módulos en Go.pdf",
           "size_bytes": 721908,
           "sha256": "5d1b59c5f9d1a8c1da454cfa7e303d4154acb3340600d335c6e1a3a12e3d27d1",
-          "downloaded_at": "2026-09-07T07:20:43+00:00"
+          "downloaded_at": "2026-09-07T07:20:43+00:00",
+          "backup": {
+            "sha256": "5d1b59c5f9d1a8c1da454cfa7e303d4154acb3340600d335c6e1a3a12e3d27d1",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "Conceptos_Go_Basicos.pdf",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-75739469-dt-content-rid-1288123117_1/xid-1288123117_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-75739469-dt-content-rid-1288123117_1/xid-1288123117_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609147&3cCnGYSz89=6moVlgCboViF%2BFSxdTuH74JgbawK%2BWEg7RKpF9vlU2o%3D",
           "status": "downloaded",
           "local_path": "materials/week-02/Conceptos_Go_Basicos.pdf",
           "size_bytes": 186921,
           "sha256": "375646b455f3e4343b9b96f234c50c93e65097f7001ad8f698a2e8d5610e17c0",
-          "downloaded_at": "2026-09-07T07:20:44+00:00"
+          "downloaded_at": "2026-09-07T07:20:44+00:00",
+          "backup": {
+            "sha256": "375646b455f3e4343b9b96f234c50c93e65097f7001ad8f698a2e8d5610e17c0",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "Laboratorio_01.pdf",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-75739469-dt-content-rid-1288123118_1/xid-1288123118_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-75739469-dt-content-rid-1288123118_1/xid-1288123118_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609147&3cCnGYSz89=InGlNfViwZ0ODJWDlts1R%2FJ%2BtbMsRYPApHHzowxE%2B78%3D",
           "status": "downloaded",
           "local_path": "materials/week-02/Laboratorio_01.pdf",
           "size_bytes": 587616,
           "sha256": "536eb02ee78f927bfed7154ddfb424d08cbab07f5146009d24b25460c89c979a",
-          "downloaded_at": "2026-09-07T07:20:46+00:00"
+          "downloaded_at": "2026-09-07T07:20:46+00:00",
+          "backup": {
+            "sha256": "536eb02ee78f927bfed7154ddfb424d08cbab07f5146009d24b25460c89c979a",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         }
       ],
       "external_links": []
@@ -459,21 +543,81 @@
       "attachments": [
         {
           "name": "030Ben-Ari-slides.pdf",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608142-dt-content-rid-1266283067_1/xid-1266283067_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608142-dt-content-rid-1266283067_1/xid-1266283067_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609147&3cCnGYSz89=CEEP9929YYNhJCjD5aZag2QJPca7o1aAKsqoMEGH3zY%3D",
           "status": "downloaded",
           "local_path": "materials/week-03/030Ben-Ari-slides.pdf",
           "size_bytes": 132076,
           "sha256": "dc88fe3d5e0b13f825d6ee008e7eac1d6bd185362e4f501a2ff55e8c5fef6a36",
-          "downloaded_at": "2026-09-07T07:20:48+00:00"
+          "downloaded_at": "2026-09-07T07:20:48+00:00",
+          "backup": {
+            "sha256": "dc88fe3d5e0b13f825d6ee008e7eac1d6bd185362e4f501a2ff55e8c5fef6a36",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "Ciencias_de_la_Computación_UPC__PCD___Sección_Crítica.pdf",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608142-dt-content-rid-1266283068_1/xid-1266283068_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608142-dt-content-rid-1266283068_1/xid-1266283068_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609147&3cCnGYSz89=IvDjYAxlRW9tcfUqXgN0CvccI8XSKzheZNGnK%2FBb7mE%3D",
           "status": "downloaded",
           "local_path": "materials/week-03/Ciencias_de_la_Computación_UPC__PCD___Sección_Crítica.pdf",
           "size_bytes": 636540,
           "sha256": "2ca5278d8c1823bce7e1525db6ff43d8e424c40001b126746aee59f3da120d55",
-          "downloaded_at": "2026-09-07T07:20:50+00:00"
+          "downloaded_at": "2026-09-07T07:20:50+00:00",
+          "backup": {
+            "sha256": "2ca5278d8c1823bce7e1525db6ff43d8e424c40001b126746aee59f3da120d55",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
+        },
+        {
+          "name": "031cap 3.pdf",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608142-dt-content-rid-1290472739_1/xid-1290472739_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609147&3cCnGYSz89=xr15Qjfhu0NsHHVx147i3hTrXB0%2FMLuBWK9qKI9m7rM%3D",
+          "status": "downloaded",
+          "local_path": "materials/week-03/031cap 3.pdf",
+          "size_bytes": 596414,
+          "sha256": "d6ff52dd091055c28176aa978734a4619c9e0a796d42365351cbd4c86aaae817",
+          "downloaded_at": "2026-09-26T19:36:05+00:00",
+          "backup": {
+            "sha256": "d6ff52dd091055c28176aa978734a4619c9e0a796d42365351cbd4c86aaae817",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
+        },
+        {
+          "name": "El_problema_de_la_sección_crítica.mp4",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608142-dt-content-rid-1290472748_1/xid-1290472748_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609147&3cCnGYSz89=ODorOVVv5CjiZSOpJVXJBoKY5R7jK91XPGB1p313jTg%3D",
+          "status": "downloaded",
+          "local_path": "materials/week-03/El_problema_de_la_sección_crítica.mp4",
+          "size_bytes": 38989570,
+          "sha256": "0e4614a639a218b994c63caa9f18e9d5f673733a5553c5900526f53a49b4d693",
+          "downloaded_at": "2026-09-26T19:36:47+00:00",
+          "backup": {
+            "sha256": "0e4614a639a218b994c63caa9f18e9d5f673733a5553c5900526f53a49b4d693",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
+        },
+        {
+          "name": "Problemas de Sección Crítica - Go.pdf",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608142-dt-content-rid-1290472740_1/xid-1290472740_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609147&3cCnGYSz89=wq%2BDQfMN79PYVY1tdUxtILllkixS2mnuzZ7XfcdlQBE%3D",
+          "status": "downloaded",
+          "local_path": "materials/week-03/Problemas de Sección Crítica - Go.pdf",
+          "size_bytes": 653255,
+          "sha256": "a3319470997fd0ebe532875aa5d68cad133439a69733102e0a4f5f2af11aa76d",
+          "downloaded_at": "2026-09-26T19:36:50+00:00",
+          "backup": {
+            "sha256": "a3319470997fd0ebe532875aa5d68cad133439a69733102e0a4f5f2af11aa76d",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
+        },
+        {
+          "name": "Biblioteca SYNC - Go.pdf",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608142-dt-content-rid-1290472753_1/xid-1290472753_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609147&3cCnGYSz89=OUp4iTkoxCFSNoe8NZfT66V7Oz%2Fc%2BGxtI2iOxO74jjo%3D",
+          "status": "downloaded",
+          "local_path": "materials/week-03/Biblioteca SYNC - Go.pdf",
+          "size_bytes": 948620,
+          "sha256": "ec650bfad73b9ae0598cfba7b24af1e4c53f71561362e44d26421f7e55ec7f4c",
+          "downloaded_at": "2026-09-26T19:36:54+00:00",
+          "backup": {
+            "sha256": "ec650bfad73b9ae0598cfba7b24af1e4c53f71561362e44d26421f7e55ec7f4c",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         }
       ],
       "external_links": []
@@ -486,48 +630,68 @@
       "attachments": [
         {
           "name": "Arquitectura Spin.png",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608143-dt-content-rid-1266283071_1/xid-1266283071_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608143-dt-content-rid-1266283071_1/xid-1266283071_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609148&3cCnGYSz89=khpBPPiS97uQgjzVSo4J%2B3ZZOH5ajAZ8HMgDH1bgtW8%3D",
           "status": "downloaded",
           "local_path": "materials/week-04/Arquitectura Spin.png",
           "size_bytes": 27685,
           "sha256": "0ae3bfbedf958c9034b0b7720152d7099d303261ba863bb503d9f7d5bef7d4a5",
-          "downloaded_at": "2026-09-07T07:20:53+00:00"
+          "downloaded_at": "2026-09-07T07:20:53+00:00",
+          "backup": {
+            "sha256": "0ae3bfbedf958c9034b0b7720152d7099d303261ba863bb503d9f7d5bef7d4a5",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "cap 1-5.pdf",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608143-dt-content-rid-1266283072_1/xid-1266283072_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608143-dt-content-rid-1266283072_1/xid-1266283072_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609148&3cCnGYSz89=RdFVLpREuXS%2B17eziB3GCEg48lkvWaICsGg%2BltoxbxI%3D",
           "status": "downloaded",
           "local_path": "materials/week-04/cap 1-5.pdf",
           "size_bytes": 1983778,
           "sha256": "8696a54a3fca342ec3dc07685da3c357a9771e2c3e65b30fee7e914ca8cfa82d",
-          "downloaded_at": "2026-09-07T07:20:55+00:00"
+          "downloaded_at": "2026-09-07T07:20:55+00:00",
+          "backup": {
+            "sha256": "8696a54a3fca342ec3dc07685da3c357a9771e2c3e65b30fee7e914ca8cfa82d",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "cap 4.pdf",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608143-dt-content-rid-1266283073_1/xid-1266283073_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608143-dt-content-rid-1266283073_1/xid-1266283073_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609148&3cCnGYSz89=EXNImlgLfkvYZC8S1n0TvOuT6KdigVIFszAY6VlXFCk%3D",
           "status": "downloaded",
           "local_path": "materials/week-04/cap 4.pdf",
           "size_bytes": 730869,
           "sha256": "c30f478c2f0da3c5f86e1a067e7d511b62dfcd7369e0c6626e7a56d99294f550",
-          "downloaded_at": "2026-09-07T07:20:57+00:00"
+          "downloaded_at": "2026-09-07T07:20:57+00:00",
+          "backup": {
+            "sha256": "c30f478c2f0da3c5f86e1a067e7d511b62dfcd7369e0c6626e7a56d99294f550",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "Habilitar plataforma para verificación de programas concurrentes.pdf",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608143-dt-content-rid-1266283074_1/xid-1266283074_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608143-dt-content-rid-1266283074_1/xid-1266283074_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609148&3cCnGYSz89=Rd43xs1RSdc2F0aEOyiGluZ1kVCUtv%2BmtloJFYVAOIE%3D",
           "status": "downloaded",
           "local_path": "materials/week-04/Habilitar plataforma para verificación de programas concurrentes.pdf",
           "size_bytes": 1224932,
           "sha256": "e00871a222d22f57400a91cc9b7089b3109f34e0d4901e829fdd8522cd7df313",
-          "downloaded_at": "2026-09-07T07:20:59+00:00"
+          "downloaded_at": "2026-09-07T07:20:59+00:00",
+          "backup": {
+            "sha256": "e00871a222d22f57400a91cc9b7089b3109f34e0d4901e829fdd8522cd7df313",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "spin-card.pdf",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608143-dt-content-rid-1266283075_1/xid-1266283075_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608143-dt-content-rid-1266283075_1/xid-1266283075_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609148&3cCnGYSz89=Vv88OvRYCzhp3ZTOvbUBjIH9Abri614MF8gR6N0CpY0%3D",
           "status": "downloaded",
           "local_path": "materials/week-04/spin-card.pdf",
           "size_bytes": 75633,
           "sha256": "07a410c848dbd9ebfa30ee8f40a161e7bc3412c440913d11861c779ca9f000b3",
-          "downloaded_at": "2026-09-07T07:21:01+00:00"
+          "downloaded_at": "2026-09-07T07:21:01+00:00",
+          "backup": {
+            "sha256": "07a410c848dbd9ebfa30ee8f40a161e7bc3412c440913d11861c779ca9f000b3",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         }
       ],
       "external_links": []
@@ -540,30 +704,42 @@
       "attachments": [
         {
           "name": "052LittleBookOfSemaphores.pdf",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608144-dt-content-rid-1266283078_1/xid-1266283078_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608144-dt-content-rid-1266283078_1/xid-1266283078_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609148&3cCnGYSz89=XMow4eF97Wp566Es6tpnbMymAfrvL8PnzpgNFNF7mKs%3D",
           "status": "downloaded",
           "local_path": "materials/week-05/052LittleBookOfSemaphores.pdf",
           "size_bytes": 1153090,
           "sha256": "a2423e5f4f1713def91809acf6897303455b8a601c8b63e99c280158325ef3b0",
-          "downloaded_at": "2026-09-07T07:21:02+00:00"
+          "downloaded_at": "2026-09-07T07:21:02+00:00",
+          "backup": {
+            "sha256": "a2423e5f4f1713def91809acf6897303455b8a601c8b63e99c280158325ef3b0",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "cap 5.pdf",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608144-dt-content-rid-1266283079_1/xid-1266283079_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608144-dt-content-rid-1266283079_1/xid-1266283079_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609148&3cCnGYSz89=OCXfEGAIvdAVj3lvZLjSpYiY9QBzlpS1qmeWJ%2B9XYiM%3D",
           "status": "downloaded",
           "local_path": "materials/week-05/cap 5.pdf",
           "size_bytes": 403349,
           "sha256": "a9807a48e50679ee4d1c39eeaac71c3ef1bfebdb42983a8f4f9a10a9dea2a15e",
-          "downloaded_at": "2026-09-07T07:21:04+00:00"
+          "downloaded_at": "2026-09-07T07:21:04+00:00",
+          "backup": {
+            "sha256": "a9807a48e50679ee4d1c39eeaac71c3ef1bfebdb42983a8f4f9a10a9dea2a15e",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "Biblioteca SYNC.pdf",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608144-dt-content-rid-1266283080_1/xid-1266283080_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608144-dt-content-rid-1266283080_1/xid-1266283080_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609148&3cCnGYSz89=uuCGQVtLl7VAVwU0FM7F%2BOmHjhLzKcAgrPWUe0fCFvw%3D",
           "status": "downloaded",
           "local_path": "materials/week-05/Biblioteca SYNC.pdf",
           "size_bytes": 950735,
           "sha256": "7ed53c1475d1e98043f01af311ab676ea5d8f79b733311031331c80447bdb78a",
-          "downloaded_at": "2026-09-07T07:21:07+00:00"
+          "downloaded_at": "2026-09-07T07:21:07+00:00",
+          "backup": {
+            "sha256": "7ed53c1475d1e98043f01af311ab676ea5d8f79b733311031331c80447bdb78a",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         }
       ],
       "external_links": []
@@ -576,21 +752,68 @@
       "attachments": [
         {
           "name": "algoritmosincro1.go",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608145-dt-content-rid-1266283083_1/xid-1266283083_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608145-dt-content-rid-1266283083_1/xid-1266283083_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609149&3cCnGYSz89=9m8EpnixjXqSHhv%2B1HPmYPSuNiyB63CLRWgN%2FoKlnXc%3D",
           "status": "downloaded",
           "local_path": "materials/week-05/algoritmosincro1.go",
           "size_bytes": 720,
           "sha256": "ee40f21b056f9e8bac6b421d5162ca22a3b0b43f60949e4c439aa7d7a5fd6e9c",
-          "downloaded_at": "2026-09-07T07:21:08+00:00"
+          "downloaded_at": "2026-09-07T07:21:08+00:00",
+          "backup": {
+            "sha256": "ee40f21b056f9e8bac6b421d5162ca22a3b0b43f60949e4c439aa7d7a5fd6e9c",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "algoritmosincro2.go",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608145-dt-content-rid-1266283084_1/xid-1266283084_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608145-dt-content-rid-1266283084_1/xid-1266283084_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609149&3cCnGYSz89=coPCp8Mi%2BKv6siOYG%2FNlJr8wpV4jctFETw3ftnJJfhM%3D",
           "status": "downloaded",
           "local_path": "materials/week-05/algoritmosincro2.go",
           "size_bytes": 853,
           "sha256": "6be47a322e56b6daadb67be8e519f75aec86b26b3c2eb1638a34e7535ce18314",
-          "downloaded_at": "2026-09-07T07:21:10+00:00"
+          "downloaded_at": "2026-09-07T07:21:10+00:00",
+          "backup": {
+            "sha256": "6be47a322e56b6daadb67be8e519f75aec86b26b3c2eb1638a34e7535ce18314",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
+        },
+        {
+          "name": "EjercicioValidacionExclusionMutua.png",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608145-dt-content-rid-1295779510_1/xid-1295779510_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609149&3cCnGYSz89=NUsiuLqABtE1%2FXs9MTLEpad84WPFUV0qTlMOh%2FAX6hY%3D",
+          "status": "downloaded",
+          "local_path": "materials/week-05/EjercicioValidacionExclusionMutua.png",
+          "size_bytes": 106786,
+          "sha256": "1c0785fb4f66863708bc79d477e5c3548f23ee0fd0e68c6f2216566cf62aa591",
+          "downloaded_at": "2026-09-26T19:36:56+00:00",
+          "backup": {
+            "sha256": "1c0785fb4f66863708bc79d477e5c3548f23ee0fd0e68c6f2216566cf62aa591",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
+        },
+        {
+          "name": "Guia_Laboratorio_SPIN_Seccion_Critica.pdf",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608145-dt-content-rid-1295779513_1/xid-1295779513_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609149&3cCnGYSz89=EPj8KzxGeB%2FTHtJRbP%2Fs3iSMRKnjO2eRdUY%2FethBqFo%3D",
+          "status": "downloaded",
+          "local_path": "materials/week-05/Guia_Laboratorio_SPIN_Seccion_Critica.pdf",
+          "size_bytes": 4795844,
+          "sha256": "59d233a807a33197bc928408e8c4a1023cc293fdf2a4bfd6495463257c53e757",
+          "downloaded_at": "2026-09-26T19:37:00+00:00",
+          "backup": {
+            "sha256": "59d233a807a33197bc928408e8c4a1023cc293fdf2a4bfd6495463257c53e757",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
+        },
+        {
+          "name": "PRACTICAMOS CONCEPTOS DE VERIFICACIÓN DE ALGORITMOS.pdf",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608145-dt-content-rid-1295779511_1/xid-1295779511_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609149&3cCnGYSz89=OvOQDjqxszezG87Xk7pgZ3I3qxJUmxef3rS1hIPGUo8%3D",
+          "status": "downloaded",
+          "local_path": "materials/week-05/PRACTICAMOS CONCEPTOS DE VERIFICACIÓN DE ALGORITMOS.pdf",
+          "size_bytes": 480884,
+          "sha256": "2b8b4047142024540ab9726eb917b5665256509abd38081917fc0a3a59cb74f2",
+          "downloaded_at": "2026-09-26T19:37:03+00:00",
+          "backup": {
+            "sha256": "2b8b4047142024540ab9726eb917b5665256509abd38081917fc0a3a59cb74f2",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         }
       ],
       "external_links": []
@@ -603,30 +826,42 @@
       "attachments": [
         {
           "name": "060Ben-Ari-slides.pdf",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608146-dt-content-rid-1266283087_1/xid-1266283087_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608146-dt-content-rid-1266283087_1/xid-1266283087_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609149&3cCnGYSz89=9sQEEj1yG5G3kJtQCpUkaFeRzCtNr9qRxmUy5T%2B%2BzUs%3D",
           "status": "downloaded",
           "local_path": "materials/week-06/060Ben-Ari-slides.pdf",
           "size_bytes": 340414,
           "sha256": "25c1aae4ee9886092b2d8af16c47dbf52f211e3bebf73cb480650fb28e2b3696",
-          "downloaded_at": "2026-09-07T07:21:12+00:00"
+          "downloaded_at": "2026-09-07T07:21:12+00:00",
+          "backup": {
+            "sha256": "25c1aae4ee9886092b2d8af16c47dbf52f211e3bebf73cb480650fb28e2b3696",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "061cap 6.pdf",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608146-dt-content-rid-1266283088_1/xid-1266283088_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608146-dt-content-rid-1266283088_1/xid-1266283088_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609149&3cCnGYSz89=fjP6ERqDSsas0GmaGsvAvKm4c3D2IUjchwrtPwOatsU%3D",
           "status": "downloaded",
           "local_path": "materials/week-06/061cap 6.pdf",
           "size_bytes": 9619538,
           "sha256": "5957c6929395f163f840981a6e49e28b2fef0310b6d38d208f895c35230b1e77",
-          "downloaded_at": "2026-09-07T07:21:16+00:00"
+          "downloaded_at": "2026-09-07T07:21:16+00:00",
+          "backup": {
+            "sha256": "5957c6929395f163f840981a6e49e28b2fef0310b6d38d208f895c35230b1e77",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "052LittleBookOfSemaphores.pdf",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608146-dt-content-rid-1266283089_1/xid-1266283089_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608146-dt-content-rid-1266283089_1/xid-1266283089_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609149&3cCnGYSz89=Hfe3FGxrYdT1ApZW8zuuj9Vk717fLfbg2YZIyDtk1XY%3D",
           "status": "downloaded",
           "local_path": "materials/week-06/052LittleBookOfSemaphores.pdf",
           "size_bytes": 1140304,
           "sha256": "0f5c349f4b4a95b6db160947807cf2a6a8760e504cea408a126c7da97d519860",
-          "downloaded_at": "2026-09-07T07:21:18+00:00"
+          "downloaded_at": "2026-09-07T07:21:18+00:00",
+          "backup": {
+            "sha256": "0f5c349f4b4a95b6db160947807cf2a6a8760e504cea408a126c7da97d519860",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         }
       ],
       "external_links": []
@@ -639,39 +874,55 @@
       "attachments": [
         {
           "name": "algoritmo01.pml",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608147-dt-content-rid-1266283092_1/xid-1266283092_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608147-dt-content-rid-1266283092_1/xid-1266283092_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609150&3cCnGYSz89=wFezG63PCIvidE9aR8jOVJq1hUvyT8OClM%2F4Pw9Pc7Q%3D",
           "status": "downloaded",
           "local_path": "materials/week-06/algoritmo01.pml",
           "size_bytes": 755,
           "sha256": "3827e9bf53292accabfff3db1cd879808dd3bebbcfc35df7035c168c0a640d14",
-          "downloaded_at": "2026-09-07T07:21:20+00:00"
+          "downloaded_at": "2026-09-07T07:21:20+00:00",
+          "backup": {
+            "sha256": "3827e9bf53292accabfff3db1cd879808dd3bebbcfc35df7035c168c0a640d14",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "algoritmo02.pml",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608147-dt-content-rid-1266283093_1/xid-1266283093_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608147-dt-content-rid-1266283093_1/xid-1266283093_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609150&3cCnGYSz89=LsGEa%2BdvEhmoNEgfNAqAGXS%2FloODUa084Ou%2F0wbTyTA%3D",
           "status": "downloaded",
           "local_path": "materials/week-06/algoritmo02.pml",
           "size_bytes": 856,
           "sha256": "9e5626dd493a6673e9e04b4951d7fdef9c4836b2f508b62103c6f9b0606838c4",
-          "downloaded_at": "2026-09-07T07:21:21+00:00"
+          "downloaded_at": "2026-09-07T07:21:21+00:00",
+          "backup": {
+            "sha256": "9e5626dd493a6673e9e04b4951d7fdef9c4836b2f508b62103c6f9b0606838c4",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "algoritmo03.pml",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608147-dt-content-rid-1266283094_1/xid-1266283094_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608147-dt-content-rid-1266283094_1/xid-1266283094_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609150&3cCnGYSz89=koqoWDO8WgMHICKKR1QklbcBAGokdGbHOq%2FifwUaLH8%3D",
           "status": "downloaded",
           "local_path": "materials/week-06/algoritmo03.pml",
           "size_bytes": 477,
           "sha256": "a125ce91fc54c83e2e7470b91355fdc51bad8db5fa5e746c8f4a94650a849e36",
-          "downloaded_at": "2026-09-07T07:21:24+00:00"
+          "downloaded_at": "2026-09-07T07:21:24+00:00",
+          "backup": {
+            "sha256": "a125ce91fc54c83e2e7470b91355fdc51bad8db5fa5e746c8f4a94650a849e36",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "algoritmo04.pml",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608147-dt-content-rid-1266283095_1/xid-1266283095_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608147-dt-content-rid-1266283095_1/xid-1266283095_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609150&3cCnGYSz89=SqWKHbvqrG9Wq579HjIo74mHt0sVkgUMqpAc%2FA8Eq%2Fo%3D",
           "status": "downloaded",
           "local_path": "materials/week-06/algoritmo04.pml",
           "size_bytes": 585,
           "sha256": "b7fe09e335a073bda947b028152a27f8a14aa7eb06a913785af517c43885a304",
-          "downloaded_at": "2026-09-07T07:21:25+00:00"
+          "downloaded_at": "2026-09-07T07:21:25+00:00",
+          "backup": {
+            "sha256": "b7fe09e335a073bda947b028152a27f8a14aa7eb06a913785af517c43885a304",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         }
       ],
       "external_links": []
@@ -684,39 +935,55 @@
       "attachments": [
         {
           "name": "6-Ben-Ari-slides.pdf",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608148-dt-content-rid-1266283098_1/xid-1266283098_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608148-dt-content-rid-1266283098_1/xid-1266283098_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609150&3cCnGYSz89=Tpp964IvBHsAYoy2aUMj4fzU3JR6MDpqlhhXkm9Ev4g%3D",
           "status": "downloaded",
           "local_path": "materials/week-07/6-Ben-Ari-slides.pdf",
           "size_bytes": 340414,
           "sha256": "25c1aae4ee9886092b2d8af16c47dbf52f211e3bebf73cb480650fb28e2b3696",
-          "downloaded_at": "2026-09-07T07:21:27+00:00"
+          "downloaded_at": "2026-09-07T07:21:27+00:00",
+          "backup": {
+            "sha256": "25c1aae4ee9886092b2d8af16c47dbf52f211e3bebf73cb480650fb28e2b3696",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "Biblioteca SYNC.pdf",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608148-dt-content-rid-1266283099_1/xid-1266283099_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608148-dt-content-rid-1266283099_1/xid-1266283099_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609150&3cCnGYSz89=vF9ETkq5eWimaLdIRcwKbroP3l79Xav%2BQwdySU9eFBI%3D",
           "status": "downloaded",
           "local_path": "materials/week-07/Biblioteca SYNC.pdf",
           "size_bytes": 950735,
           "sha256": "7ed53c1475d1e98043f01af311ab676ea5d8f79b733311031331c80447bdb78a",
-          "downloaded_at": "2026-09-07T07:21:29+00:00"
+          "downloaded_at": "2026-09-07T07:21:29+00:00",
+          "backup": {
+            "sha256": "7ed53c1475d1e98043f01af311ab676ea5d8f79b733311031331c80447bdb78a",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "Actividades Propuestas.xlsx",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608148-dt-content-rid-1266283100_1/xid-1266283100_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608148-dt-content-rid-1266283100_1/xid-1266283100_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609150&3cCnGYSz89=obTdA1Xy2O4HeaWiIWnlWdCzas%2BNR8KdwnDcUbQnWU0%3D",
           "status": "downloaded",
           "local_path": "materials/week-07/Actividades Propuestas.xlsx",
           "size_bytes": 15475,
           "sha256": "ed96fa87a08b6dc45d30daa079c7345f87803b7310ebf0e0ece9cffea9bc3e85",
-          "downloaded_at": "2026-09-07T07:21:31+00:00"
+          "downloaded_at": "2026-09-07T07:21:31+00:00",
+          "backup": {
+            "sha256": "ed96fa87a08b6dc45d30daa079c7345f87803b7310ebf0e0ece9cffea9bc3e85",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "052LittleBookOfSemaphores.pdf",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608148-dt-content-rid-1266283402_1/xid-1266283402_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608148-dt-content-rid-1266283402_1/xid-1266283402_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609150&3cCnGYSz89=9V80J1Ec0ZoPtkWzlzRglAdI%2BFbFDo7XGlKmhqE5%2F98%3D",
           "status": "downloaded",
           "local_path": "materials/week-07/052LittleBookOfSemaphores.pdf",
           "size_bytes": 1153090,
           "sha256": "a2423e5f4f1713def91809acf6897303455b8a601c8b63e99c280158325ef3b0",
-          "downloaded_at": "2026-09-07T07:21:32+00:00"
+          "downloaded_at": "2026-09-07T07:21:32+00:00",
+          "backup": {
+            "sha256": "a2423e5f4f1713def91809acf6897303455b8a601c8b63e99c280158325ef3b0",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         }
       ],
       "external_links": []
@@ -729,48 +996,68 @@
       "attachments": [
         {
           "name": "068philosopher3.pml",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608149-dt-content-rid-1266283405_1/xid-1266283405_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608149-dt-content-rid-1266283405_1/xid-1266283405_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609150&3cCnGYSz89=D9dxTRdHha2IgyxZpsbrWJiaCiZ9msAdlNfHqQdxpeM%3D",
           "status": "downloaded",
           "local_path": "materials/week-07/068philosopher3.pml",
           "size_bytes": 528,
           "sha256": "e7f964a5ffb1ebfa6ca2a7598900db52e44c3e1654c256fe49a5db7fdfbc4aa9",
-          "downloaded_at": "2026-09-07T07:21:34+00:00"
+          "downloaded_at": "2026-09-07T07:21:34+00:00",
+          "backup": {
+            "sha256": "e7f964a5ffb1ebfa6ca2a7598900db52e44c3e1654c256fe49a5db7fdfbc4aa9",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "067philosopher2.pml",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608149-dt-content-rid-1266283406_1/xid-1266283406_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608149-dt-content-rid-1266283406_1/xid-1266283406_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609150&3cCnGYSz89=vZV6t0GUUell1bc53ILQXWEUgu2%2BqeYVvy3DSeW7cFI%3D",
           "status": "downloaded",
           "local_path": "materials/week-07/067philosopher2.pml",
           "size_bytes": 367,
           "sha256": "b198ec7acce42e44eafc12d58b1e32639350cd6849ea97426901ef145ed2c3f6",
-          "downloaded_at": "2026-09-07T07:21:36+00:00"
+          "downloaded_at": "2026-09-07T07:21:36+00:00",
+          "backup": {
+            "sha256": "b198ec7acce42e44eafc12d58b1e32639350cd6849ea97426901ef145ed2c3f6",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "066philosopher1.pml",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608149-dt-content-rid-1266283407_1/xid-1266283407_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608149-dt-content-rid-1266283407_1/xid-1266283407_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609150&3cCnGYSz89=ud5qfXFYc2w2zplFjybPbSrCHZxXaHV11FK6Z9Q5dWA%3D",
           "status": "downloaded",
           "local_path": "materials/week-07/066philosopher1.pml",
           "size_bytes": 326,
           "sha256": "37a190483bc5ad44efd2aee034727445aaf60119c42c24d1846e5c679bc6231e",
-          "downloaded_at": "2026-09-07T07:21:38+00:00"
+          "downloaded_at": "2026-09-07T07:21:38+00:00",
+          "backup": {
+            "sha256": "37a190483bc5ad44efd2aee034727445aaf60119c42c24d1846e5c679bc6231e",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "064readerswriters.pml",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608149-dt-content-rid-1266283408_1/xid-1266283408_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608149-dt-content-rid-1266283408_1/xid-1266283408_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609150&3cCnGYSz89=RUrZGeLHaNFNP%2B9dO6yQLOCRcjEM%2FeUq8GZj6GVLGD8%3D",
           "status": "downloaded",
           "local_path": "materials/week-07/064readerswriters.pml",
           "size_bytes": 565,
           "sha256": "dc47189b3e5628eaf677ed1e819dbbadde66e83558484ec6dcb5057558b49614",
-          "downloaded_at": "2026-09-07T07:21:39+00:00"
+          "downloaded_at": "2026-09-07T07:21:39+00:00",
+          "backup": {
+            "sha256": "dc47189b3e5628eaf677ed1e819dbbadde66e83558484ec6dcb5057558b49614",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "ejercicio03 (1).go",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608149-dt-content-rid-1266283409_1/xid-1266283409_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608149-dt-content-rid-1266283409_1/xid-1266283409_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609150&3cCnGYSz89=Z9%2Fw6RfMgA4GRIKo6mo8sUdbtRTITweDh%2BRqZSj4YYU%3D",
           "status": "downloaded",
           "local_path": "materials/week-07/ejercicio03 (1).go",
           "size_bytes": 717,
           "sha256": "00c68674b58143d34d09c93a251de93a66a88838f6057abebcdf655f14bc5137",
-          "downloaded_at": "2026-09-07T07:21:41+00:00"
+          "downloaded_at": "2026-09-07T07:21:41+00:00",
+          "backup": {
+            "sha256": "00c68674b58143d34d09c93a251de93a66a88838f6057abebcdf655f14bc5137",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         }
       ],
       "external_links": []
@@ -783,30 +1070,42 @@
       "attachments": [
         {
           "name": "090Ben-Ari-slides.pdf",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608150-dt-content-rid-1266283412_1/xid-1266283412_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608150-dt-content-rid-1266283412_1/xid-1266283412_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609151&3cCnGYSz89=M8rhRVc8UVUPR%2FsuVK%2F52uUv9CqJ1EB%2F5bzjQ2tax8U%3D",
           "status": "downloaded",
           "local_path": "materials/week-09/090Ben-Ari-slides.pdf",
           "size_bytes": 213689,
           "sha256": "12369afda68bbced55198e8cd8b82ad487cbbac3376f3df6dd918ea086be92ad",
-          "downloaded_at": "2026-09-07T07:21:43+00:00"
+          "downloaded_at": "2026-09-07T07:21:43+00:00",
+          "backup": {
+            "sha256": "12369afda68bbced55198e8cd8b82ad487cbbac3376f3df6dd918ea086be92ad",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "091cap 8.pdf",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608150-dt-content-rid-1266283413_1/xid-1266283413_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608150-dt-content-rid-1266283413_1/xid-1266283413_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609151&3cCnGYSz89=YPUluTvUzx64ZYJGqU8h5AFOF1AJNOZzM4R4jbUt3uQ%3D",
           "status": "downloaded",
           "local_path": "materials/week-09/091cap 8.pdf",
           "size_bytes": 506432,
           "sha256": "9051db64fdd6392eb957d0c6f425d58b2f70c54b0d8b242afd30d3b6561e4581",
-          "downloaded_at": "2026-09-07T07:21:45+00:00"
+          "downloaded_at": "2026-09-07T07:21:45+00:00",
+          "backup": {
+            "sha256": "9051db64fdd6392eb957d0c6f425d58b2f70c54b0d8b242afd30d3b6561e4581",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "Channel.png",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608150-dt-content-rid-1266283414_1/xid-1266283414_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608150-dt-content-rid-1266283414_1/xid-1266283414_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609151&3cCnGYSz89=VsMfvWscNtH53f%2Bd2wubyN2al%2BsMYG7y6RfESQaywkk%3D",
           "status": "downloaded",
           "local_path": "materials/week-09/Channel.png",
           "size_bytes": 189298,
           "sha256": "601e5d160de4f9afb9dbfb9edb5de71520f3aeaffc782fa096e3f67d7badbb89",
-          "downloaded_at": "2026-09-07T07:21:47+00:00"
+          "downloaded_at": "2026-09-07T07:21:47+00:00",
+          "backup": {
+            "sha256": "601e5d160de4f9afb9dbfb9edb5de71520f3aeaffc782fa096e3f67d7badbb89",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         }
       ],
       "external_links": []
@@ -819,48 +1118,68 @@
       "attachments": [
         {
           "name": "ejercicio01.go",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608151-dt-content-rid-1266283417_1/xid-1266283417_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608151-dt-content-rid-1266283417_1/xid-1266283417_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609151&3cCnGYSz89=xUHS8AKsYHndIfTa1SyacBeBYNHjCmqsZzj5fTJgOFY%3D",
           "status": "downloaded",
           "local_path": "materials/week-09/ejercicio01.go",
           "size_bytes": 290,
           "sha256": "4c1ce9ff9c34596e2c803026e5f0e92e633d03b9e430f0e84595cf42362bc009",
-          "downloaded_at": "2026-09-07T07:21:48+00:00"
+          "downloaded_at": "2026-09-07T07:21:48+00:00",
+          "backup": {
+            "sha256": "4c1ce9ff9c34596e2c803026e5f0e92e633d03b9e430f0e84595cf42362bc009",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "ejercicio02.go",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608151-dt-content-rid-1266283418_1/xid-1266283418_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608151-dt-content-rid-1266283418_1/xid-1266283418_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609151&3cCnGYSz89=JJM9CLBcFM9DAB9slc1obaJPEESZtPxV2Ohr%2FcVV%2F68%3D",
           "status": "downloaded",
           "local_path": "materials/week-09/ejercicio02.go",
           "size_bytes": 550,
           "sha256": "10b1ab069eb7ca6c9a2c8f8ce3c65ad08e6c46f0b21279847a40d1e3cecda4c5",
-          "downloaded_at": "2026-09-07T07:21:49+00:00"
+          "downloaded_at": "2026-09-07T07:21:49+00:00",
+          "backup": {
+            "sha256": "10b1ab069eb7ca6c9a2c8f8ce3c65ad08e6c46f0b21279847a40d1e3cecda4c5",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "ejercicio03.go",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608151-dt-content-rid-1266283419_1/xid-1266283419_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608151-dt-content-rid-1266283419_1/xid-1266283419_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609151&3cCnGYSz89=9PgcUgX9hAd0i9SfHEJqwOI405%2FgOxIFVu21yAufVhA%3D",
           "status": "downloaded",
           "local_path": "materials/week-09/ejercicio03.go",
           "size_bytes": 366,
           "sha256": "a3fe067852751bfecb4a3d0781af7f14b7046afbc2dae8c5fc9269cfa692cb06",
-          "downloaded_at": "2026-09-07T07:21:51+00:00"
+          "downloaded_at": "2026-09-07T07:21:51+00:00",
+          "backup": {
+            "sha256": "a3fe067852751bfecb4a3d0781af7f14b7046afbc2dae8c5fc9269cfa692cb06",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "ejercicio04.go",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608151-dt-content-rid-1266283420_1/xid-1266283420_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608151-dt-content-rid-1266283420_1/xid-1266283420_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609151&3cCnGYSz89=H9ffqiOHj0LfzqmX7rp0u3jaGvH0WawKdd6kJTmBOhE%3D",
           "status": "downloaded",
           "local_path": "materials/week-09/ejercicio04.go",
           "size_bytes": 352,
           "sha256": "748a3a74fa2595bc308a649042ffee8d2ac283ad6b8df1afe99114630cb0d1d4",
-          "downloaded_at": "2026-09-07T07:21:52+00:00"
+          "downloaded_at": "2026-09-07T07:21:52+00:00",
+          "backup": {
+            "sha256": "748a3a74fa2595bc308a649042ffee8d2ac283ad6b8df1afe99114630cb0d1d4",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "prodcons.go",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608151-dt-content-rid-1266283421_1/xid-1266283421_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608151-dt-content-rid-1266283421_1/xid-1266283421_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609151&3cCnGYSz89=0GEp2cqEn7kJ0nDMxa2GgO6LXyRaXAG%2BFrxkInyJNJY%3D",
           "status": "downloaded",
           "local_path": "materials/week-09/prodcons.go",
           "size_bytes": 481,
           "sha256": "985b015fd0f79eac131da882e0fa5f2a142fac49ddbd1f49f31b720b1df25f96",
-          "downloaded_at": "2026-09-07T07:21:54+00:00"
+          "downloaded_at": "2026-09-07T07:21:54+00:00",
+          "backup": {
+            "sha256": "985b015fd0f79eac131da882e0fa5f2a142fac49ddbd1f49f31b720b1df25f96",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         }
       ],
       "external_links": []
@@ -873,12 +1192,16 @@
       "attachments": [
         {
           "name": "Semana 10.pdf",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608152-dt-content-rid-1266283424_1/xid-1266283424_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608152-dt-content-rid-1266283424_1/xid-1266283424_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609152&3cCnGYSz89=YuS%2BpihNsYUOR%2B5ZvX0eScK7akVF%2Bp%2BtM%2FiUjdkBM2Y%3D",
           "status": "downloaded",
           "local_path": "materials/week-10/Semana 10.pdf",
           "size_bytes": 2655533,
           "sha256": "b15b37053c1974a24f4e58f7d7c6268a90e256b8d273f390cc3b807c6f0f7c86",
-          "downloaded_at": "2026-09-07T07:21:57+00:00"
+          "downloaded_at": "2026-09-07T07:21:57+00:00",
+          "backup": {
+            "sha256": "b15b37053c1974a24f4e58f7d7c6268a90e256b8d273f390cc3b807c6f0f7c86",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         }
       ],
       "external_links": []
@@ -891,129 +1214,185 @@
       "attachments": [
         {
           "name": "algoritmo01.go",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608153-dt-content-rid-1266283427_1/xid-1266283427_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608153-dt-content-rid-1266283427_1/xid-1266283427_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609152&3cCnGYSz89=HhOwtD5jatG%2BG%2FzEQsJcMlD6X18XutW2KparZzHgXAM%3D",
           "status": "downloaded",
           "local_path": "materials/week-10/algoritmo01.go",
           "size_bytes": 1102,
           "sha256": "89706cb4125914328d6a2d6904b82a63d028f6064e002e170f218e6713185467",
-          "downloaded_at": "2026-09-07T07:21:59+00:00"
+          "downloaded_at": "2026-09-07T07:21:59+00:00",
+          "backup": {
+            "sha256": "89706cb4125914328d6a2d6904b82a63d028f6064e002e170f218e6713185467",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "cliente1.go",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608153-dt-content-rid-1266283428_1/xid-1266283428_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608153-dt-content-rid-1266283428_1/xid-1266283428_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609152&3cCnGYSz89=3VbWbT4Zddkbs3u3PSxbCwOID5%2Bl2uZyh7dnp9AQCeE%3D",
           "status": "downloaded",
           "local_path": "materials/week-10/cliente1.go",
           "size_bytes": 288,
           "sha256": "5e4ef55452b57bb2ee6a16a8e2f42d4bb330281f175f7c7f4c2316654b1e9b17",
-          "downloaded_at": "2026-09-07T07:22:01+00:00"
+          "downloaded_at": "2026-09-07T07:22:01+00:00",
+          "backup": {
+            "sha256": "5e4ef55452b57bb2ee6a16a8e2f42d4bb330281f175f7c7f4c2316654b1e9b17",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "cliente2.go",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608153-dt-content-rid-1266283429_1/xid-1266283429_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608153-dt-content-rid-1266283429_1/xid-1266283429_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609152&3cCnGYSz89=S4FqS9uSdkOUHstG9416Xul8akKJfo3FN8Beqs2H90c%3D",
           "status": "downloaded",
           "local_path": "materials/week-10/cliente2.go",
           "size_bytes": 427,
           "sha256": "c1f976ee15994b882d0318b4dd47ee08d7fd5f8537e0a19e9934ccdc9b9695de",
-          "downloaded_at": "2026-09-07T07:22:03+00:00"
+          "downloaded_at": "2026-09-07T07:22:03+00:00",
+          "backup": {
+            "sha256": "c1f976ee15994b882d0318b4dd47ee08d7fd5f8537e0a19e9934ccdc9b9695de",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "cliente3.go",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608153-dt-content-rid-1266283430_1/xid-1266283430_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608153-dt-content-rid-1266283430_1/xid-1266283430_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609152&3cCnGYSz89=Fxydx%2Fw8ZZKIUOeu3pegozeWmWaBgXridnLNxGTLseQ%3D",
           "status": "downloaded",
           "local_path": "materials/week-10/cliente3.go",
           "size_bytes": 663,
           "sha256": "395ea99f9bcf8fb2dff3f7b47f5a308e90869eb84c9bd2fe1ba64bf8e263a20a",
-          "downloaded_at": "2026-09-07T07:22:05+00:00"
+          "downloaded_at": "2026-09-07T07:22:05+00:00",
+          "backup": {
+            "sha256": "395ea99f9bcf8fb2dff3f7b47f5a308e90869eb84c9bd2fe1ba64bf8e263a20a",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "codejson.go",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608153-dt-content-rid-1266283431_1/xid-1266283431_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608153-dt-content-rid-1266283431_1/xid-1266283431_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609152&3cCnGYSz89=cmvTD7Qm9mpvN23qKtRTveLrK6NxgUxhv%2F2C94gPXLY%3D",
           "status": "downloaded",
           "local_path": "materials/week-10/codejson.go",
           "size_bytes": 647,
           "sha256": "03d878e9922e22699303153cf119ef383bfb4f6ab6c4b729c6a19302881f3fa5",
-          "downloaded_at": "2026-09-07T07:22:06+00:00"
+          "downloaded_at": "2026-09-07T07:22:06+00:00",
+          "backup": {
+            "sha256": "03d878e9922e22699303153cf119ef383bfb4f6ab6c4b729c6a19302881f3fa5",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "servidor1.go",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608153-dt-content-rid-1266283432_1/xid-1266283432_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608153-dt-content-rid-1266283432_1/xid-1266283432_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609152&3cCnGYSz89=%2FmlY7ihfIt6c%2FLuWKnfS0P1cU1jzpZN2V2Uy2Ht10dE%3D",
           "status": "downloaded",
           "local_path": "materials/week-10/servidor1.go",
           "size_bytes": 649,
           "sha256": "713bda393eefda2905c96922d1c857c3a3c6a97fc1b33781e9b36726d7e2454e",
-          "downloaded_at": "2026-09-07T07:22:08+00:00"
+          "downloaded_at": "2026-09-07T07:22:08+00:00",
+          "backup": {
+            "sha256": "713bda393eefda2905c96922d1c857c3a3c6a97fc1b33781e9b36726d7e2454e",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "servidor2.go",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608153-dt-content-rid-1266283433_1/xid-1266283433_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608153-dt-content-rid-1266283433_1/xid-1266283433_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609152&3cCnGYSz89=%2B4eVamV9KplL9CotT2kONr8yYcodeQWOULSqim%2Fsdos%3D",
           "status": "downloaded",
           "local_path": "materials/week-10/servidor2.go",
           "size_bytes": 732,
           "sha256": "38fe66b709dae3a0ddb42b9597eb6d8e053c7711a2ef6efb7900004b66b80dea",
-          "downloaded_at": "2026-09-07T07:22:10+00:00"
+          "downloaded_at": "2026-09-07T07:22:10+00:00",
+          "backup": {
+            "sha256": "38fe66b709dae3a0ddb42b9597eb6d8e053c7711a2ef6efb7900004b66b80dea",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "servidor3.go",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608153-dt-content-rid-1266283434_1/xid-1266283434_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608153-dt-content-rid-1266283434_1/xid-1266283434_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609152&3cCnGYSz89=zmRjaRWWrCAXjCkQ%2BAWvkgaT5FXNN0745iKenL8S9T4%3D",
           "status": "downloaded",
           "local_path": "materials/week-10/servidor3.go",
           "size_bytes": 800,
           "sha256": "f4f91c6b991fdfe5a2f811ce90ff676ee9fbb8de114375fae7827b0d6f73b2f7",
-          "downloaded_at": "2026-09-07T07:22:12+00:00"
+          "downloaded_at": "2026-09-07T07:22:12+00:00",
+          "backup": {
+            "sha256": "f4f91c6b991fdfe5a2f811ce90ff676ee9fbb8de114375fae7827b0d6f73b2f7",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "webserver.go",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608153-dt-content-rid-1266283435_1/xid-1266283435_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608153-dt-content-rid-1266283435_1/xid-1266283435_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609152&3cCnGYSz89=oJHrgK%2FEdPVbOTgaAKzkKPCQtfKaQh7qNdYki9QP3UU%3D",
           "status": "downloaded",
           "local_path": "materials/week-10/webserver.go",
           "size_bytes": 475,
           "sha256": "b965d836868fac21b9b6f170351f67a99ea93cbec914b351c201062254a02281",
-          "downloaded_at": "2026-09-07T07:22:13+00:00"
+          "downloaded_at": "2026-09-07T07:22:13+00:00",
+          "backup": {
+            "sha256": "b965d836868fac21b9b6f170351f67a99ea93cbec914b351c201062254a02281",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "102chanphilosophers.go",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608153-dt-content-rid-1266283436_1/xid-1266283436_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608153-dt-content-rid-1266283436_1/xid-1266283436_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609152&3cCnGYSz89=B9BB7D1AI4l6rkuhrDMBVkNrjTIoeWYQiNB%2Fg0A4fio%3D",
           "status": "downloaded",
           "local_path": "materials/week-10/102chanphilosophers.go",
           "size_bytes": 750,
           "sha256": "0b942a0a72c331e4acf2c1c658d75428f20618982a9b13624c1e98069e672ffb",
-          "downloaded_at": "2026-09-07T07:22:15+00:00"
+          "downloaded_at": "2026-09-07T07:22:15+00:00",
+          "backup": {
+            "sha256": "0b942a0a72c331e4acf2c1c658d75428f20618982a9b13624c1e98069e672ffb",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "103pipelinesort.go",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608153-dt-content-rid-1266283437_1/xid-1266283437_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608153-dt-content-rid-1266283437_1/xid-1266283437_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609152&3cCnGYSz89=ppxo18Xvg3psOOu%2FJcmCprBgRmezW7zKN9yC%2Bm%2Fu9eQ%3D",
           "status": "downloaded",
           "local_path": "materials/week-10/103pipelinesort.go",
           "size_bytes": 685,
           "sha256": "af78b4acfc8c6aefed51dd0660ebec15d9f259ebd6d2c73f1365389a4d05a890",
-          "downloaded_at": "2026-09-07T07:22:17+00:00"
+          "downloaded_at": "2026-09-07T07:22:17+00:00",
+          "backup": {
+            "sha256": "af78b4acfc8c6aefed51dd0660ebec15d9f259ebd6d2c73f1365389a4d05a890",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "094multiplier.go",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608153-dt-content-rid-1266283438_1/xid-1266283438_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608153-dt-content-rid-1266283438_1/xid-1266283438_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609152&3cCnGYSz89=MKYLZDSpFxAeF0eqCvy17cd5a26DTsr0RBFfU3SJyk0%3D",
           "status": "downloaded",
           "local_path": "materials/week-10/094multiplier.go",
           "size_bytes": 1805,
           "sha256": "ab79bc1541a370aa622e7ff88ef689154bf7594d9d4bccd67f752df119c8a185",
-          "downloaded_at": "2026-09-07T07:22:18+00:00"
+          "downloaded_at": "2026-09-07T07:22:18+00:00",
+          "backup": {
+            "sha256": "ab79bc1541a370aa622e7ff88ef689154bf7594d9d4bccd67f752df119c8a185",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "095select.go",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608153-dt-content-rid-1266283439_1/xid-1266283439_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608153-dt-content-rid-1266283439_1/xid-1266283439_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609152&3cCnGYSz89=5DYYwAprjUWWDYLMX6sBQA%2FsrBccDLHQ1bY%2B26%2FetnE%3D",
           "status": "downloaded",
           "local_path": "materials/week-10/095select.go",
           "size_bytes": 523,
           "sha256": "71e0cf1008abf505b3ede1cbcb47c26a17476c891c0f01bf928045b260f60366",
-          "downloaded_at": "2026-09-07T07:22:20+00:00"
+          "downloaded_at": "2026-09-07T07:22:20+00:00",
+          "backup": {
+            "sha256": "71e0cf1008abf505b3ede1cbcb47c26a17476c891c0f01bf928045b260f60366",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "096multiplier2.go",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608153-dt-content-rid-1266283440_1/xid-1266283440_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608153-dt-content-rid-1266283440_1/xid-1266283440_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609152&3cCnGYSz89=FCFaXhlwPUTudyK8XLkC2vwk5jUIMQ%2FoOf0p9n6iqro%3D",
           "status": "downloaded",
           "local_path": "materials/week-10/096multiplier2.go",
           "size_bytes": 1910,
           "sha256": "1b0b319e460776c43ca3a51146b5cfff2ed9e9e031f9af1c461e4fcef6392684",
-          "downloaded_at": "2026-09-07T07:22:22+00:00"
+          "downloaded_at": "2026-09-07T07:22:22+00:00",
+          "backup": {
+            "sha256": "1b0b319e460776c43ca3a51146b5cfff2ed9e9e031f9af1c461e4fcef6392684",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         }
       ],
       "external_links": []
@@ -1026,39 +1405,55 @@
       "attachments": [
         {
           "name": "111cap 10.pdf",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608154-dt-content-rid-1266283443_1/xid-1266283443_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608154-dt-content-rid-1266283443_1/xid-1266283443_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609152&3cCnGYSz89=PKrkzuWEQHcq3Ukwuac1aCFnQkQKE1dJf%2BbGoG54Eyg%3D",
           "status": "downloaded",
           "local_path": "materials/week-11/111cap 10.pdf",
           "size_bytes": 691109,
           "sha256": "67fb39df8b8aa50d9de926443e65873598cbfe494a1db3c496459a468e6f47a7",
-          "downloaded_at": "2026-09-07T07:22:24+00:00"
+          "downloaded_at": "2026-09-07T07:22:24+00:00",
+          "backup": {
+            "sha256": "67fb39df8b8aa50d9de926443e65873598cbfe494a1db3c496459a468e6f47a7",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "Explicación del Dockerfile y su estructura.pdf",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608154-dt-content-rid-1266283444_1/xid-1266283444_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608154-dt-content-rid-1266283444_1/xid-1266283444_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609152&3cCnGYSz89=t2LlSHL5OUXjmfqasWtgAqvRXO4QX98oav%2BroYErj8Y%3D",
           "status": "downloaded",
           "local_path": "materials/week-11/Explicación del Dockerfile y su estructura.pdf",
           "size_bytes": 4023718,
           "sha256": "5f1397a7cf443e19133856ee3030b0e5f56e6b8333b8ea62e91731b5537cce93",
-          "downloaded_at": "2026-09-07T07:22:26+00:00"
+          "downloaded_at": "2026-09-07T07:22:26+00:00",
+          "backup": {
+            "sha256": "5f1397a7cf443e19133856ee3030b0e5f56e6b8333b8ea62e91731b5537cce93",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "centinela.go",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608154-dt-content-rid-1266283445_1/xid-1266283445_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608154-dt-content-rid-1266283445_1/xid-1266283445_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609152&3cCnGYSz89=vy2lGnkBOlMQC9NVPb7YMC2dSCBXX5Y4tpGhHziCYRM%3D",
           "status": "downloaded",
           "local_path": "materials/week-11/centinela.go",
           "size_bytes": 290,
           "sha256": "a1de411683c933e379062c697a6c4d6487ffbdcd917cf1bf5efa432de12d80a0",
-          "downloaded_at": "2026-09-07T07:22:28+00:00"
+          "downloaded_at": "2026-09-07T07:22:28+00:00",
+          "backup": {
+            "sha256": "a1de411683c933e379062c697a6c4d6487ffbdcd917cf1bf5efa432de12d80a0",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "ordenamiento-dist.go",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608154-dt-content-rid-1266283446_1/xid-1266283446_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608154-dt-content-rid-1266283446_1/xid-1266283446_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609152&3cCnGYSz89=ynXIXhbdOfm8i05ryqsE%2F33OUO8p7SRINVak%2BcVMsME%3D",
           "status": "downloaded",
           "local_path": "materials/week-11/ordenamiento-dist.go",
           "size_bytes": 2413,
           "sha256": "402ce23cd2102c44662c69b7ed4473970deda82e05806c38e3034aca065a1fed",
-          "downloaded_at": "2026-09-07T07:22:29+00:00"
+          "downloaded_at": "2026-09-07T07:22:29+00:00",
+          "backup": {
+            "sha256": "402ce23cd2102c44662c69b7ed4473970deda82e05806c38e3034aca065a1fed",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         }
       ],
       "external_links": []
@@ -1071,21 +1466,29 @@
       "attachments": [
         {
           "name": "ordenamiento-dist.go",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608155-dt-content-rid-1266283449_1/xid-1266283449_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608155-dt-content-rid-1266283449_1/xid-1266283449_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609153&3cCnGYSz89=OOly%2F5tnv4uFVmo%2Be7Ijsi2gwA4AhW13sL04VHTyEP0%3D",
           "status": "downloaded",
-          "local_path": "materials/week-11/ordenamiento-dist.go",
+          "local_path": "materials/week-11/ordenamiento-dist-laboratorio.go",
           "size_bytes": 2413,
           "sha256": "402ce23cd2102c44662c69b7ed4473970deda82e05806c38e3034aca065a1fed",
-          "downloaded_at": "2026-09-07T07:22:31+00:00"
+          "downloaded_at": "2026-09-26T19:37:06+00:00",
+          "backup": {
+            "sha256": "402ce23cd2102c44662c69b7ed4473970deda82e05806c38e3034aca065a1fed",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "centinela (1).go",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608155-dt-content-rid-1266283450_1/xid-1266283450_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608155-dt-content-rid-1266283450_1/xid-1266283450_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609153&3cCnGYSz89=hl1H5CsjCs4a5OnAr9%2BKgJ7yLaf1vudeQLt4FMkVx4k%3D",
           "status": "downloaded",
           "local_path": "materials/week-11/centinela (1).go",
           "size_bytes": 290,
           "sha256": "a1de411683c933e379062c697a6c4d6487ffbdcd917cf1bf5efa432de12d80a0",
-          "downloaded_at": "2026-09-07T07:22:33+00:00"
+          "downloaded_at": "2026-09-07T07:22:33+00:00",
+          "backup": {
+            "sha256": "a1de411683c933e379062c697a6c4d6487ffbdcd917cf1bf5efa432de12d80a0",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         }
       ],
       "external_links": []
@@ -1098,21 +1501,29 @@
       "attachments": [
         {
           "name": "131cap 11.pdf",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608156-dt-content-rid-1266283453_1/xid-1266283453_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608156-dt-content-rid-1266283453_1/xid-1266283453_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609153&3cCnGYSz89=5gHCCqf7trlL2rjI5rizcmtYgo4oqTvlqbknGvDs9rk%3D",
           "status": "downloaded",
           "local_path": "materials/week-12/131cap 11.pdf",
           "size_bytes": 603474,
           "sha256": "d41fda9878e198d761c61deb536961e724a07538216a99d5ad05269952f2f20e",
-          "downloaded_at": "2026-09-07T07:22:35+00:00"
+          "downloaded_at": "2026-09-07T07:22:35+00:00",
+          "backup": {
+            "sha256": "d41fda9878e198d761c61deb536961e724a07538216a99d5ad05269952f2f20e",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "docker-tutorial.pdf",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608156-dt-content-rid-1266283454_1/xid-1266283454_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608156-dt-content-rid-1266283454_1/xid-1266283454_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609153&3cCnGYSz89=mf7JKipBvEjQR8b69BVzkcW0NtHAlnGbXCWlSx1VQA8%3D",
           "status": "downloaded",
           "local_path": "materials/week-12/docker-tutorial.pdf",
           "size_bytes": 3163100,
           "sha256": "b7ce039997eecfe907543f183b327814f8387a683a44757186068fe936c9fde7",
-          "downloaded_at": "2026-09-07T07:22:36+00:00"
+          "downloaded_at": "2026-09-07T07:22:36+00:00",
+          "backup": {
+            "sha256": "b7ce039997eecfe907543f183b327814f8387a683a44757186068fe936c9fde7",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         }
       ],
       "external_links": []
@@ -1125,30 +1536,42 @@
       "attachments": [
         {
           "name": "codeLanzador.go",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608157-dt-content-rid-1266283457_1/xid-1266283457_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608157-dt-content-rid-1266283457_1/xid-1266283457_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609153&3cCnGYSz89=tcQb7NAsGSMy1lFVjJMQXzVBdJWChsqWnTBFeLj8PTs%3D",
           "status": "downloaded",
           "local_path": "materials/week-12/codeLanzador.go",
           "size_bytes": 721,
           "sha256": "186048b28830b5bd28cd689285284106a302f563427cf72aa00ee74b745b149b",
-          "downloaded_at": "2026-09-07T07:22:38+00:00"
+          "downloaded_at": "2026-09-07T07:22:38+00:00",
+          "backup": {
+            "sha256": "186048b28830b5bd28cd689285284106a302f563427cf72aa00ee74b745b149b",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "codeHotPotato.go",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608157-dt-content-rid-1266283458_1/xid-1266283458_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608157-dt-content-rid-1266283458_1/xid-1266283458_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609153&3cCnGYSz89=rm%2BUPKdLnwyVHUYH%2FpY5LcAHKonA9KLmGF7UBFk%2BiXY%3D",
           "status": "downloaded",
           "local_path": "materials/week-12/codeHotPotato.go",
           "size_bytes": 2008,
           "sha256": "e1fe846083084821d056b52b9c7d01c891a8b8fe43521a5d76b96263185050aa",
-          "downloaded_at": "2026-09-07T07:22:40+00:00"
+          "downloaded_at": "2026-09-07T07:22:40+00:00",
+          "backup": {
+            "sha256": "e1fe846083084821d056b52b9c7d01c891a8b8fe43521a5d76b96263185050aa",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "PRYH2P (1).zip",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608157-dt-content-rid-1266283459_1/xid-1266283459_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608157-dt-content-rid-1266283459_1/xid-1266283459_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609153&3cCnGYSz89=c4nhb00Hb9banaDz2xsp73AYe0hhMcGUxNCdfdU9G9g%3D",
           "status": "downloaded",
           "local_path": "materials/week-12/PRYH2P (1).zip",
           "size_bytes": 6304,
           "sha256": "0ea9136b778b9176a6f36d502ec85bffac667b8453f17508f5e86572d48f97fb",
-          "downloaded_at": "2026-09-07T07:22:41+00:00"
+          "downloaded_at": "2026-09-07T07:22:41+00:00",
+          "backup": {
+            "sha256": "0ea9136b778b9176a6f36d502ec85bffac667b8453f17508f5e86572d48f97fb",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         }
       ],
       "external_links": []
@@ -1161,21 +1584,29 @@
       "attachments": [
         {
           "name": "141cap 13.pdf",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608158-dt-content-rid-1266283462_1/xid-1266283462_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608158-dt-content-rid-1266283462_1/xid-1266283462_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609154&3cCnGYSz89=ZHB7Pb0pW0YHDj7ZY3MiQqSxMa4wZMu2sUxWMdoe87Q%3D",
           "status": "downloaded",
           "local_path": "materials/week-13/141cap 13.pdf",
           "size_bytes": 900812,
           "sha256": "f77a6df43c5ec7280fc5983e16d5c55fe23a6f016ab93b028d9b272430ec8139",
-          "downloaded_at": "2026-09-07T07:22:43+00:00"
+          "downloaded_at": "2026-09-07T07:22:43+00:00",
+          "backup": {
+            "sha256": "f77a6df43c5ec7280fc5983e16d5c55fe23a6f016ab93b028d9b272430ec8139",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "AlgoritmosDistribuidos-Algoritmo de Agrawala.pdf",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608158-dt-content-rid-1266283463_1/xid-1266283463_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608158-dt-content-rid-1266283463_1/xid-1266283463_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609154&3cCnGYSz89=xYcAdjexb4EaAV%2FIUk9rLEdIs%2B21yk0lExT6vISxQMI%3D",
           "status": "downloaded",
           "local_path": "materials/week-13/AlgoritmosDistribuidos-Algoritmo de Agrawala.pdf",
           "size_bytes": 573694,
           "sha256": "54785c13a7f271ee4f7827d95d7d05059e404547d8c5d58848a751ce538eb68a",
-          "downloaded_at": "2026-09-07T07:22:45+00:00"
+          "downloaded_at": "2026-09-07T07:22:45+00:00",
+          "backup": {
+            "sha256": "54785c13a7f271ee4f7827d95d7d05059e404547d8c5d58848a751ce538eb68a",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         }
       ],
       "external_links": []
@@ -1188,39 +1619,55 @@
       "attachments": [
         {
           "name": "codehpp3.go",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608159-dt-content-rid-1266283466_1/xid-1266283466_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608159-dt-content-rid-1266283466_1/xid-1266283466_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609154&3cCnGYSz89=T5T0i%2FjLFtBnS%2BBSLBIuvoUxa8DoBigBQZ3TYOrDNWw%3D",
           "status": "downloaded",
           "local_path": "materials/week-13/codehpp3.go",
           "size_bytes": 5204,
           "sha256": "1d9214b89127328e4085538b58c54dfdb5ae1057f9c854bc2e67a7af9b855277",
-          "downloaded_at": "2026-09-07T07:22:47+00:00"
+          "downloaded_at": "2026-09-07T07:22:47+00:00",
+          "backup": {
+            "sha256": "1d9214b89127328e4085538b58c54dfdb5ae1057f9c854bc2e67a7af9b855277",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "PRYH2P2.zip",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608159-dt-content-rid-1266283467_1/xid-1266283467_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608159-dt-content-rid-1266283467_1/xid-1266283467_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609154&3cCnGYSz89=aPT0JWiriodB8dXhZkD3CUcWQazaeThiBxE0CY4JQKA%3D",
           "status": "downloaded",
           "local_path": "materials/week-13/PRYH2P2.zip",
           "size_bytes": 6731,
           "sha256": "7eb2d03c389a760254719ad001248b938a843719f00c43667ec10b8ed9062a7a",
-          "downloaded_at": "2026-09-07T07:22:49+00:00"
+          "downloaded_at": "2026-09-07T07:22:49+00:00",
+          "backup": {
+            "sha256": "7eb2d03c389a760254719ad001248b938a843719f00c43667ec10b8ed9062a7a",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "codehpp2p-start.go",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608159-dt-content-rid-1266283468_1/xid-1266283468_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608159-dt-content-rid-1266283468_1/xid-1266283468_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609154&3cCnGYSz89=PblBtvaOPph6JPkinuVy2igIWDJdiU%2F7IyXDTNLy29I%3D",
           "status": "downloaded",
           "local_path": "materials/week-13/codehpp2p-start.go",
           "size_bytes": 3476,
           "sha256": "9a476d45fb8a3b9a1252f34badbf1d9057294f74163c42a5b829cb3dd4c495c0",
-          "downloaded_at": "2026-09-07T07:22:51+00:00"
+          "downloaded_at": "2026-09-07T07:22:51+00:00",
+          "backup": {
+            "sha256": "9a476d45fb8a3b9a1252f34badbf1d9057294f74163c42a5b829cb3dd4c495c0",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "centinela (1).go",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608159-dt-content-rid-1266283469_1/xid-1266283469_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608159-dt-content-rid-1266283469_1/xid-1266283469_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609154&3cCnGYSz89=ML7oSvCvLPzhlEXWV9MAdbwALys2444GX%2BmAXe8FJ0A%3D",
           "status": "downloaded",
           "local_path": "materials/week-13/centinela (1).go",
           "size_bytes": 402,
           "sha256": "cbbd3474fda94908f11497556c3ac03b838824ea5360880a901121b937597586",
-          "downloaded_at": "2026-09-07T07:22:52+00:00"
+          "downloaded_at": "2026-09-07T07:22:52+00:00",
+          "backup": {
+            "sha256": "cbbd3474fda94908f11497556c3ac03b838824ea5360880a901121b937597586",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         }
       ],
       "external_links": []
@@ -1233,21 +1680,29 @@
       "attachments": [
         {
           "name": "131cap 12.pdf",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608160-dt-content-rid-1266283472_1/xid-1266283472_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608160-dt-content-rid-1266283472_1/xid-1266283472_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609154&3cCnGYSz89=L2JxoU9ztrkxcfoI6fxcVpCPyQo1HdttU6G7g5gOu9Q%3D",
           "status": "downloaded",
           "local_path": "materials/week-14/131cap 12.pdf",
           "size_bytes": 703153,
           "sha256": "5d2585513a14acec086c0561fc9bf402f283018c3262486fad023e13dcccaf21",
-          "downloaded_at": "2026-09-07T07:22:54+00:00"
+          "downloaded_at": "2026-09-07T07:22:54+00:00",
+          "backup": {
+            "sha256": "5d2585513a14acec086c0561fc9bf402f283018c3262486fad023e13dcccaf21",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "Video - Algoritmo de Consenso.txt",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608160-dt-content-rid-1266283473_1/xid-1266283473_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608160-dt-content-rid-1266283473_1/xid-1266283473_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609154&3cCnGYSz89=9A8WjjIaDWayTr8u%2Fku1137kNkFQHAUYoTm2LXsrwsE%3D",
           "status": "downloaded",
           "local_path": "materials/week-14/Video - Algoritmo de Consenso.txt",
           "size_bytes": 43,
           "sha256": "f6fdce562402e882aa37303ce5c2d1cff414f5d93e6f8f8ba9e784b1fc559f92",
-          "downloaded_at": "2026-09-07T07:22:57+00:00"
+          "downloaded_at": "2026-09-07T07:22:57+00:00",
+          "backup": {
+            "sha256": "f6fdce562402e882aa37303ce5c2d1cff414f5d93e6f8f8ba9e784b1fc559f92",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         }
       ],
       "external_links": []
@@ -1260,30 +1715,42 @@
       "attachments": [
         {
           "name": "1-start-agrawala.go",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608161-dt-content-rid-1266283476_1/xid-1266283476_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608161-dt-content-rid-1266283476_1/xid-1266283476_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609155&3cCnGYSz89=HFzQRCXeju%2FoQ4Kyn97y8QnimO9NrIhNkq1FbFy3IOA%3D",
           "status": "downloaded",
           "local_path": "materials/week-14/1-start-agrawala.go",
           "size_bytes": 2403,
           "sha256": "5ec0738423fbce9df9817c2ac8e00da25148836418fffbed1c075c1152afa7e6",
-          "downloaded_at": "2026-09-07T07:22:59+00:00"
+          "downloaded_at": "2026-09-07T07:22:59+00:00",
+          "backup": {
+            "sha256": "5ec0738423fbce9df9817c2ac8e00da25148836418fffbed1c075c1152afa7e6",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "2-start-consenso.go",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608161-dt-content-rid-1266283477_1/xid-1266283477_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608161-dt-content-rid-1266283477_1/xid-1266283477_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609155&3cCnGYSz89=00G%2BVn3l9cEnaFhgddTWb4C1Rh5zvF6RoNPfNNR3%2BU8%3D",
           "status": "downloaded",
           "local_path": "materials/week-14/2-start-consenso.go",
           "size_bytes": 2857,
           "sha256": "ea9b00a692a267237b1c65d733b2f12402eca653893416de2a7ab98cd7059ddf",
-          "downloaded_at": "2026-09-07T07:23:00+00:00"
+          "downloaded_at": "2026-09-07T07:23:00+00:00",
+          "backup": {
+            "sha256": "ea9b00a692a267237b1c65d733b2f12402eca653893416de2a7ab98cd7059ddf",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         },
         {
           "name": "Laboratorio 14-Implementando Web Sockets con Golang (1).pdf",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608161-dt-content-rid-1266283478_1/xid-1266283478_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608161-dt-content-rid-1266283478_1/xid-1266283478_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609155&3cCnGYSz89=iQUAkOJvpwHvgKA8EH735DeQz5b5xYfPAmRtu8mNkzw%3D",
           "status": "downloaded",
           "local_path": "materials/week-14/Laboratorio 14-Implementando Web Sockets con Golang (1).pdf",
           "size_bytes": 845589,
           "sha256": "1c975e11a72c36652b2c7c34202ddc2a59fdeb4d4c39eb96c3c2b1c412a47113",
-          "downloaded_at": "2026-09-07T07:23:03+00:00"
+          "downloaded_at": "2026-09-07T07:23:03+00:00",
+          "backup": {
+            "sha256": "1c975e11a72c36652b2c7c34202ddc2a59fdeb4d4c39eb96c3c2b1c412a47113",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         }
       ],
       "external_links": []
@@ -1296,15 +1763,249 @@
       "attachments": [
         {
           "name": "CASO-REPASO-EF.docx",
-          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608162-dt-content-rid-1266283481_1/xid-1266283481_1",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-72608162-dt-content-rid-1266283481_1/xid-1266283481_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609155&3cCnGYSz89=SbnbqU79eq3fW7N%2FkdkcSERw1qQycPlJ7C5tkqVk28Q%3D",
           "status": "downloaded",
           "local_path": "materials/week-15/CASO-REPASO-EF.docx",
           "size_bytes": 19694,
           "sha256": "d342c35e8de9cde3a7111651b293bdd213a0b4a24cd951bd6f5adf971bde3ca5",
-          "downloaded_at": "2026-09-07T07:23:04+00:00"
+          "downloaded_at": "2026-09-07T07:23:04+00:00",
+          "backup": {
+            "sha256": "d342c35e8de9cde3a7111651b293bdd213a0b4a24cd951bd6f5adf971bde3ca5",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
+        }
+      ],
+      "external_links": []
+    },
+    {
+      "unit": null,
+      "week": null,
+      "title": "Información general",
+      "source_url": "https://aulavirtual.upc.edu.pe/ultra/courses/_546160_1/document/_72608039_1?view=content&state=view",
+      "attachments": [
+        {
+          "name": "ABET Student Outcome 4.pptx",
+          "url": "https://aulavirtual.upc.edu.pe/learn/api/public/v1/courses/_546160_1/contents/_75739448_1/attachments/_50250862_1/download",
+          "status": "downloaded",
+          "local_path": "materials/extra/ABET Student Outcome 4.pptx",
+          "size_bytes": 2991688,
+          "sha256": "0eabd5015d61204976c34480cffca0843920782a7d8b96e786563fb8527efefc",
+          "downloaded_at": "2026-09-26T19:37:10+00:00",
+          "backup": {
+            "sha256": "0eabd5015d61204976c34480cffca0843920782a7d8b96e786563fb8527efefc",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
+        }
+      ],
+      "external_links": []
+    },
+    {
+      "unit": 1,
+      "week": 1,
+      "title": "Semana 01",
+      "source_url": "https://aulavirtual.upc.edu.pe/ultra/courses/_546160_1/document/_72608054_1?view=content&state=view",
+      "attachments": [
+        {
+          "name": "El_malabarista_invisible.mp4",
+          "url": "https://aulavirtual.upc.edu.pe/learn/api/public/v1/courses/_546160_1/contents/_72608111_1/attachments/_49632930_1/download",
+          "status": "downloaded",
+          "local_path": "materials/week-01/El_malabarista_invisible.mp4",
+          "size_bytes": 39278270,
+          "sha256": "96b46a1db10594b9a38d52a43f824f25b33ac7bbbe53df2ac51113b2f654245f",
+          "downloaded_at": "2026-09-26T19:37:36+00:00",
+          "backup": {
+            "sha256": "96b46a1db10594b9a38d52a43f824f25b33ac7bbbe53df2ac51113b2f654245f",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
+        },
+        {
+          "name": "Ejercicios de calentamiento_01.pdf",
+          "url": "https://aulavirtual.upc.edu.pe/learn/api/public/v1/courses/_546160_1/contents/_72608112_1/attachments/_49632931_1/download",
+          "status": "downloaded",
+          "local_path": "materials/week-01/Ejercicios de calentamiento_01.pdf",
+          "size_bytes": 79345,
+          "sha256": "20ba0cf834d8529c9e728823b945e16e3a2aca4968e05a33f97e72d609264768",
+          "downloaded_at": "2026-09-26T19:37:40+00:00",
+          "backup": {
+            "sha256": "20ba0cf834d8529c9e728823b945e16e3a2aca4968e05a33f97e72d609264768",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
+        }
+      ],
+      "external_links": []
+    },
+    {
+      "unit": 1,
+      "week": 2,
+      "title": "Semana 02",
+      "source_url": "https://aulavirtual.upc.edu.pe/ultra/courses/_546160_1/document/_72608055_1?view=content&state=view",
+      "attachments": [
+        {
+          "name": "Concurrencia__La_Abstracción.mp4",
+          "url": "https://aulavirtual.upc.edu.pe/learn/api/public/v1/courses/_546160_1/contents/_72608118_1/attachments/_49632927_1/download",
+          "status": "downloaded",
+          "local_path": "materials/week-02/Concurrencia__La_Abstracción.mp4",
+          "size_bytes": 42835584,
+          "sha256": "5bb3c1938be6aefd2ac112a4108607cb23dc1826064729fc911e71975faa1aae",
+          "downloaded_at": "2026-09-26T19:38:12+00:00",
+          "backup": {
+            "sha256": "5bb3c1938be6aefd2ac112a4108607cb23dc1826064729fc911e71975faa1aae",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
+        }
+      ],
+      "external_links": []
+    },
+    {
+      "unit": 1,
+      "week": 4,
+      "title": "Laboratorio",
+      "source_url": "https://aulavirtual.upc.edu.pe/ultra/courses/_546160_1/document/_75832664_1?view=content&state=view",
+      "attachments": [
+        {
+          "name": "Práctica de problemas de sección crítica - 2.pdf",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-75832665-dt-content-rid-1291296587_1/xid-1291296587_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609148&3cCnGYSz89=WzZ6YIbE10HnW1n%2BHqIXE1OeMys57ww4oOT2helSnaY%3D",
+          "status": "downloaded",
+          "local_path": "materials/week-04/Práctica de problemas de sección crítica - 2.pdf",
+          "size_bytes": 136534,
+          "sha256": "71bbe2194b60473c44e1d37df75fd5a82bbc66a16694fdf089526f2ac8e1b869",
+          "downloaded_at": "2026-09-26T19:38:14+00:00",
+          "backup": {
+            "sha256": "71bbe2194b60473c44e1d37df75fd5a82bbc66a16694fdf089526f2ac8e1b869",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
+        },
+        {
+          "name": "01-hola.pml",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-75832665-dt-content-rid-1291299127_1/xid-1291299127_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609148&3cCnGYSz89=ihwWbljzw2Fl%2BBIOo7GQLCwC2jHl9iYNg%2FSkaroI4x8%3D",
+          "status": "downloaded",
+          "local_path": "materials/week-04/01-hola.pml",
+          "size_bytes": 64,
+          "sha256": "c8e5c29d1a99b6bb8ccb36f11e2f09b5e567d6e3a8a11193165788c7035c8e7d",
+          "downloaded_at": "2026-09-26T19:38:17+00:00",
+          "backup": {
+            "sha256": "c8e5c29d1a99b6bb8ccb36f11e2f09b5e567d6e3a8a11193165788c7035c8e7d",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
+        },
+        {
+          "name": "02-proceso.pml",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-75832665-dt-content-rid-1291299128_1/xid-1291299128_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609148&3cCnGYSz89=0hYxsf6o0CgHUe3CU4ZHII8RZxIpABYWRY9itUGLIvQ%3D",
+          "status": "downloaded",
+          "local_path": "materials/week-04/02-proceso.pml",
+          "size_bytes": 132,
+          "sha256": "8d6596f2288e26a2c1c1ec58ae1031114dc1b8da727c7bf78409cabcbc0693e7",
+          "downloaded_at": "2026-09-26T19:38:20+00:00",
+          "backup": {
+            "sha256": "8d6596f2288e26a2c1c1ec58ae1031114dc1b8da727c7bf78409cabcbc0693e7",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
+        },
+        {
+          "name": "03-simple.pml",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-75832665-dt-content-rid-1291299130_1/xid-1291299130_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609148&3cCnGYSz89=lrgYFMHwTmQdielQGMUyV9ZOBoG8waVal7rxIx%2Fl2No%3D",
+          "status": "downloaded",
+          "local_path": "materials/week-04/03-simple.pml",
+          "size_bytes": 205,
+          "sha256": "a29dccb8097f879d4f423dee9faa3391e1c650f40f8ca182fcb3dfe88d8b7b5a",
+          "downloaded_at": "2026-09-26T19:38:24+00:00",
+          "backup": {
+            "sha256": "a29dccb8097f879d4f423dee9faa3391e1c650f40f8ca182fcb3dfe88d8b7b5a",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
+        },
+        {
+          "name": "04-counter.pml",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-75832665-dt-content-rid-1291299129_1/xid-1291299129_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609148&3cCnGYSz89=XQmIBnC6XbTmpGscvJCfF%2BbmI9ora2S6xX0nNIUXNcs%3D",
+          "status": "downloaded",
+          "local_path": "materials/week-04/04-counter.pml",
+          "size_bytes": 335,
+          "sha256": "3f5cc7115aecd6215e1309dac51208ad35839c3dbb19f56a739ec0cdd44fc2e0",
+          "downloaded_at": "2026-09-26T19:38:27+00:00",
+          "backup": {
+            "sha256": "3f5cc7115aecd6215e1309dac51208ad35839c3dbb19f56a739ec0cdd44fc2e0",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
+        },
+        {
+          "name": "04-lights.pml",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-75832665-dt-content-rid-1291299126_1/xid-1291299126_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609148&3cCnGYSz89=dG%2FM%2BDgktrBeCw4IXOxnwPlHsDId39oAbhCjJEU4SAc%3D",
+          "status": "downloaded",
+          "local_path": "materials/week-04/04-lights.pml",
+          "size_bytes": 317,
+          "sha256": "079e9d376d810864525f94083972f661ac3f88074e53715d74afc58b9f7f884b",
+          "downloaded_at": "2026-09-26T19:38:31+00:00",
+          "backup": {
+            "sha256": "079e9d376d810864525f94083972f661ac3f88074e53715d74afc58b9f7f884b",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
+        },
+        {
+          "name": "05-crit1.pml",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-75832665-dt-content-rid-1291299133_1/xid-1291299133_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609148&3cCnGYSz89=cSxYUQ07j4Tujqsn5%2BLoZ8AHiVhAvVG1yUOAHAmF9fA%3D",
+          "status": "downloaded",
+          "local_path": "materials/week-04/05-crit1.pml",
+          "size_bytes": 534,
+          "sha256": "b71730146261d72c040374b1023871463c0096768e2561540121d56cf6df9754",
+          "downloaded_at": "2026-09-26T19:38:35+00:00",
+          "backup": {
+            "sha256": "b71730146261d72c040374b1023871463c0096768e2561540121d56cf6df9754",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
+        },
+        {
+          "name": "06-crit1b.pml",
+          "url": "https://aulavirtual.upc.edu.pe/bbcswebdav/pid-75832665-dt-content-rid-1291299134_1/xid-1291299134_1?Kq3cZcYS15=3f78efa54e6b4188af2544a482826c09&VxJw3wfC56=1790609148&3cCnGYSz89=2XH%2FeC3%2BLYBXgi5md4d3Mz8fV2g3UHEVriciqxfj7kQ%3D",
+          "status": "downloaded",
+          "local_path": "materials/week-04/06-crit1b.pml",
+          "size_bytes": 296,
+          "sha256": "c840fd8c9596df0cc0b3940abfed5aecf486ec2897da18d15820058ee3474897",
+          "downloaded_at": "2026-09-26T19:38:38+00:00",
+          "backup": {
+            "sha256": "c840fd8c9596df0cc0b3940abfed5aecf486ec2897da18d15820058ee3474897",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
+        }
+      ],
+      "external_links": []
+    },
+    {
+      "unit": null,
+      "week": null,
+      "title": "TB1-Trabajo Parcial",
+      "source_url": "https://aulavirtual.upc.edu.pe/ultra/courses/_546160_1/document/_72608083_1?view=content&state=view",
+      "attachments": [
+        {
+          "name": "CC65_PCs_TP-202620.pdf",
+          "url": "https://aulavirtual.upc.edu.pe/learn/api/public/v1/courses/_546160_1/contents/_72608105_1/attachments/_49837804_1/download",
+          "status": "downloaded",
+          "local_path": "materials/extra/CC65_PCs_TP-202620.pdf",
+          "size_bytes": 602863,
+          "sha256": "3679ec8bf3532adef190585500e3aef048482fcb499dc3c674a385e4ad19cbfc",
+          "downloaded_at": "2026-09-26T19:38:41+00:00",
+          "backup": {
+            "sha256": "3679ec8bf3532adef190585500e3aef048482fcb499dc3c674a385e4ad19cbfc",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
+        },
+        {
+          "name": "report_performance_1ACC0065-202610.docx",
+          "url": "https://aulavirtual.upc.edu.pe/learn/api/public/v1/courses/_546160_1/contents/_72608106_1/attachments/_49632926_1/download",
+          "status": "downloaded",
+          "local_path": "materials/extra/report_performance_1ACC0065-202610.docx",
+          "size_bytes": 3145874,
+          "sha256": "2aee773573f2a7291a83e86f49b29f6fd9c98f4074b382614812a5e91bf63eee",
+          "downloaded_at": "2026-09-26T19:38:46+00:00",
+          "backup": {
+            "sha256": "2aee773573f2a7291a83e86f49b29f6fd9c98f4074b382614812a5e91bf63eee",
+            "uploaded_at": "2026-09-30T01:12:49+00:00"
+          }
         }
       ],
       "external_links": []
     }
-  ]
+  ],
+  "backup": {
+    "remote": "gdrive:cursos/1ACC0065"
+  }
 }

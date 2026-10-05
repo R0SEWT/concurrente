@@ -25,6 +25,14 @@
  * Con -DMUTANTE se reemplaza el acumulador privado por uno compartido sin
  * exclusión mutua, con lectura y escritura separadas. Spin debe encontrar ahí
  * el contraejemplo; si no lo encuentra, el modelo no está probando nada.
+ *
+ * Entregable 3: las mismas propiedades como fórmulas LTL, más la de progreso.
+ *   exclusion  nadie publica centroides mientras un worker los lee;
+ *   termina    las ITERS iteraciones terminan (se verifica con weak fairness).
+ * Cada una tiene su mutante, que check.sh exige que falle:
+ *   -DMUTANTE_DEADLOCK     un worker pierde el wg.Done del último chunk: la
+ *                          barrera no llega a cero y todo queda bloqueado;
+ *   -DMUTANTE_SIN_BARRERA  el coordinador publica sin esperar la barrera.
  */
 
 #define N     4          /* puntos */
@@ -38,6 +46,7 @@ byte pendientes;         /* WaitGroup: chunks que faltan terminar */
 byte lectores;           /* workers dentro de la fase de asignación */
 bit  escribiendo;        /* el coordinador está publicando centroides */
 byte total;              /* resultado de la reducción */
+bit  fin;                /* init terminó las ITERS iteraciones */
 
 chan trabajos = [C] of { byte };
 
@@ -69,7 +78,14 @@ end:                     /* bloquearse acá esperando trabajo es legítimo */
         :: else -> break
         od;
         lectores--;
+#ifdef MUTANTE_DEADLOCK
+        if                            /* wg.Done olvidado en un camino, */
+        :: idx == C - 1 -> skip       /* p. ej. un return temprano      */
+        :: else -> pendientes--
+        fi
+#else
         pendientes--                  /* wg.Done() */
+#endif
     od
 }
 
@@ -93,8 +109,10 @@ init
         c = 0;
         do :: c < C -> trabajos ! c; c++ :: else -> break od;
 
+#ifndef MUTANTE_SIN_BARRERA
         pendientes == 0;              /* barrera: wg.Wait() */
         assert(lectores == 0);        /* recién ahora se puede escribir */
+#endif
 
         escribiendo = 1;
         c = 0;
@@ -109,5 +127,13 @@ init
 #endif
         it++
     :: else -> break
-    od
+    od;
+    fin = 1
 }
+
+/* Exclusión mutua entre el escritor (coordinador) y los lectores (workers). */
+ltl exclusion { [] !(escribiendo && lectores > 0) }
+
+/* Progreso: la corrida completa termina. Con -f (weak fairness) ningún proceso
+ * habilitado queda postergado para siempre. */
+ltl termina { <> fin }
